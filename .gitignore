@@ -5,3 +5,5 @@ develop-eggs
 eggs
 .installed.cfg
 downloads
+*.pyc
+*.pyo
