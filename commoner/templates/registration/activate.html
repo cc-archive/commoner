@@ -1,0 +1,12 @@
+<!-- displayed when trying to activate the account -->
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if account %}
+Activation successful!
+{% else %}
+Unable to activate.
+{% endif %}
+
+{% endblock %}
