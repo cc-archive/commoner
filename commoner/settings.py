@@ -52,6 +52,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.sites',
     'registration',
+    'profiles',
     'commoner.profiles',
 )
 
@@ -68,4 +69,5 @@ TEMPLATE_DIRS = (
 SITE_ID=1
 ACCOUNT_ACTIVATION_DAYS = 14
 
-
+AUTH_PROFILE_MODULE = "profiles.CommonerProfile"
+DEFAULT_FROM_EMAIL = "webmaster@commoner.cc"
