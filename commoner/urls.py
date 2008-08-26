@@ -16,6 +16,8 @@ urlpatterns = patterns(
     (r'^accounts/login/$', 'django.contrib.auth.views.login'),
     (r'^accounts/', include('registration.urls')),
     (r'^profiles/', include('profiles.urls')),
+    (r'^content/(?P<content_id>\d+)/$', 
+        'commoner.profiles.views.content_detail'),
     )
 
 if settings.DEBUG:
