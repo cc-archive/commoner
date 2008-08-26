@@ -10,6 +10,8 @@ admin.autodiscover()
 
 urlpatterns = patterns(
     '',
+    (r'^$', 'django.views.generic.simple.direct_to_template',
+     {'template':'index.html'}),
     (r'^admin/(.*)', admin.site.root),
     (r'^accounts/login/$', 'django.contrib.auth.views.login'),
     (r'^accounts/', include('registration.urls')),
