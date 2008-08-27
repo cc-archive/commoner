@@ -25,7 +25,9 @@ class CommonerProfile(models.Model):
     location = models.CharField(max_length=255, blank=True)
 
     def __unicode__(self):
-        return self.user
+        if self.nickname:
+            return u"%s (%s)" % (self.user.username, self.nickname)
+        return self.user.username
 
     @permalink
     def get_absolute_url(self):
