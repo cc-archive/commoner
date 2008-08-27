@@ -54,6 +54,7 @@ INSTALLED_APPS = (
     'registration',
     'profiles',
     'commoner.profiles',
+    'commoner.server',
 )
 
 TEMPLATE_LOADERS = (

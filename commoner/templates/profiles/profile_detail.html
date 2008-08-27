@@ -1,4 +1,11 @@
 {% extends "base.html" %}
+
+{% block head %}
+<link rel="openid.server" href="http://localhost:8000{% url commoner.server.views.endpoint %}">
+<link rel="openid2.provider" href="http://localhost:8000{% url commoner.server.views.endpoint %}">
+{% endblock %}
+
+
 {% block content %}
 
 <h2>{{ user.first_name}} {{user.last_name}}</h2>
