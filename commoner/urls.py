@@ -15,7 +15,7 @@ urlpatterns = patterns(
     (r'^admin/(.*)', admin.site.root),
     (r'^accounts/login/$', 'django.contrib.auth.views.login'),
     (r'^accounts/', include('registration.urls')),
-    (r'^p/', include('profiles.urls')),
+    (r'^p/', include('commoner.profiles.urls')),
 
     (r'^c/(?P<content_id>\d+)/$', 
         'commoner.profiles.views.content_detail'),

@@ -1,12 +1,15 @@
 <html>
-<head>
-{% block head %}
+  <head>
+    {% block header %}
 
-{% endblock %}
-</head>
+    {% endblock %}
+  </head>
+  
+  <body>
+    <h2>{% block page_header %}Hello, World{% endblock %}</h2>
 
-<body>
-{% block content %}
-{% endblock %}
-</body>
+    {% block body %}
+    {% endblock %}
+
+  </body>
 </html>
