@@ -3,14 +3,13 @@ Forms and validation code for user registration.
 
 """
 
+import re
 
 from django import forms
-from django.core.validators import alnum_re
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 
 from registration.models import RegistrationProfile
-
 
 # I put this on all required fields, because it's easier to pick up
 # on them with CSS or JavaScript if they have a class of "required"
@@ -44,13 +43,16 @@ class RegistrationForm(forms.Form):
     password2 = forms.CharField(widget=forms.PasswordInput(attrs=attrs_dict, render_value=False),
                                 label=_(u'password (again)'))
     
+
+    RE_ALNUM = re.compile(r'^\w+$')
+
     def clean_username(self):
         """
         Validate that the username is alphanumeric and is not already
         in use.
         
         """
-        if not alnum_re.search(self.cleaned_data['username']):
+        if not self.RE_ALNUM.search(self.cleaned_data['username']):
             raise forms.ValidationError(_(u'Usernames can only contain letters, numbers and underscores'))
         try:
             user = User.objects.get(username__iexact=self.cleaned_data['username'])
