@@ -27,6 +27,6 @@ def complete(request, key):
         form = CompleteRegistrationForm(partial)
     
     context = RequestContext(request)
-    return render_to_response('registration/complete.html',
+    return render_to_response('registration/complete_registration.html',
                               { 'form': form },
                               context_instance=context)
