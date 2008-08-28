@@ -1,0 +1,13 @@
+
+Thank you for supporting Creative Commons.  Your commoner.cc
+account is ready for you to activate.  To complete registration
+just visit this URL:
+
+  http://{{site.domain}}/{{registration.get_absolute_url}}
+
+This URL is good for a single registration, so don't forward it or
+share it.
+
+Thanks again for supporting the commons!
+
+-- Creative Commons

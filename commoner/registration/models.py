@@ -3,6 +3,32 @@ import random
 
 from django.db import models
 from django.db.models import permalink
+from django.contrib.sites.models import Site
+
+class RegistrationManager(models.Manager):
+
+    def create_registration(self, email, last, first,
+                            send_email = True):
+        registration = PartialRegistration(
+            email = email,
+            last_name = last,
+            first_name = first)
+
+        registration.save()
+
+        if send_email:
+            from django.core.mail import send_mail
+
+            current_site = Site.objects.get_current()
+            subject = render_to_string('registration/email/subject.txt',
+                                       {'site':current_site})
+            message = render_to_string('registration/email/welcome.txt',
+                                       {'site':current_site,
+                                        'registration':registration})
+
+            send_mail(subect, message, settings.DEFAULT_FROM_EMAIL, [email])
+
+        return registration
 
 class PartialRegistration(models.Model):
 
@@ -29,3 +55,4 @@ class PartialRegistration(models.Model):
         # call the real save method
         super(PartialRegistration, self).save()
 
+    objects = RegistrationManager()

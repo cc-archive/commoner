@@ -1,4 +1,0 @@
-
-http://{{site.name}}/activate/{{activation_key}}/
-
-This URL will expire in {{expiration_days}} days.
