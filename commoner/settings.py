@@ -1,4 +1,3 @@
-
 import os
 
 ADMINS = (
@@ -51,7 +50,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.admin',
     'django.contrib.sites',
-    'registration',
+    'commoner.registration',
     'commoner.profiles',
     'commoner.server',
 )
@@ -71,3 +70,7 @@ ACCOUNT_ACTIVATION_DAYS = 14
 
 AUTH_PROFILE_MODULE = "profiles.CommonerProfile"
 DEFAULT_FROM_EMAIL = "webmaster@commoner.cc"
+LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/a/login/'
+
+

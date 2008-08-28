@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block page_header %}Complete Registration{% endblock %}
+
+{% block body %}
+
+{{form.partial}}
+
+<form action="." method="POST">
+{{form.as_p}}
+
+    <input type="submit" value="save" />
+
+</form>
+
+{% endblock %}
