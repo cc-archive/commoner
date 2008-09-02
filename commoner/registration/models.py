@@ -1,7 +1,9 @@
 import sha
 import random
 
+from django.conf import settings
 from django.db import models
+from django.template.loader import render_to_string
 from django.db.models import permalink
 from django.contrib.sites.models import Site
 
@@ -21,12 +23,12 @@ class RegistrationManager(models.Manager):
 
             current_site = Site.objects.get_current()
             subject = render_to_string('registration/email/subject.txt',
-                                       {'site':current_site})
+                                       {'site':current_site}).strip()
             message = render_to_string('registration/email/welcome.txt',
                                        {'site':current_site,
                                         'registration':registration})
 
-            send_mail(subect, message, settings.DEFAULT_FROM_EMAIL, [email])
+            send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email])
 
         return registration
 
