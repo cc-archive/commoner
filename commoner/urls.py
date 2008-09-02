@@ -38,7 +38,8 @@ urlpatterns = patterns(
     (r'^o/endpoint/$', 'commoner.server.views.endpoint'),
 
     # Profile view
-    (r'^(?P<username>.*)/$', 'commoner.profiles.views.profile_view'),
+    url(r'^(?P<username>.*)/$', 'commoner.profiles.views.profile_view',
+        name='profile_view'),
 
 )
 

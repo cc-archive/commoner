@@ -73,8 +73,8 @@ def create_profile(request, form_class=None, success_url=None,
     except ObjectDoesNotExist:
         pass
     if success_url is None:
-        success_url = reverse('profile_edit',
-                              kwargs={ 'username': request.user.username })
+        success_url = reverse('profile_edit')
+
     if form_class is None:
         form_class = utils.get_profile_form()
     if request.method == 'POST':
@@ -142,6 +142,7 @@ def edit_profile(request, form_class=None, success_url=None,
         profile_obj = request.user.get_profile()
     except ObjectDoesNotExist:
         return HttpResponseRedirect(reverse('profile_create'))
+
     if success_url is None:
         success_url = reverse('profile_view',
                               kwargs={ 'username': request.user.username })
@@ -203,6 +204,11 @@ def profile_view(request, username, public_profile_field=None,
     try:
         profile_obj = user.get_profile()
     except ObjectDoesNotExist:
+        # see if the username requested is also logged in...
+	if request.user.username == username:
+	    # redirect to creation
+            return HttpResponseRedirect(reverse('profile_create'))
+
         raise Http404
     if public_profile_field is not None and \
        not getattr(profile_obj, public_profile_field):
