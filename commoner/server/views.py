@@ -18,7 +18,7 @@ Some code conventions used here:
 import cgi
 
 from commoner import util
-from commoner.util import getViewURL
+from commoner.util import getViewURL, getBaseURL
 
 from django import http
 from django.views.generic.simple import direct_to_template
@@ -144,7 +144,7 @@ def handleCheckIDRequest(request, openid_request):
 
     if not openid_request.idSelect():
 
-        id_url = "http://localhost:8000" +request.user.get_profile().get_absolute_url() #getViewURL(request, idPage)
+        id_url = getBaseURL(request) + request.user.get_profile().get_absolute_url() #getViewURL(request, idPage)
 
         print id_url
         print openid_request.identity
@@ -213,7 +213,7 @@ def processTrustResult(request):
     openid_request = getRequest(request)
 
     # The identifier that this server can vouch for
-    response_identity = "http://localhost:8000" +request.user.get_profile().get_absolute_url() #getViewURL(request, idPage)
+    response_identity = getBaseURL(request) + request.user.get_profile().get_absolute_url() #getViewURL(request, idPage)
 
     # If the decision was to allow the verification, respond
     # accordingly.

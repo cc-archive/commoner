@@ -64,6 +64,15 @@ TEMPLATE_DIRS = (
     os.path.join(os.path.dirname(__file__), "templates"),
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.core.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "commoner.util.base_url_context",
+    )
+
+
 # Registration Settings
 SITE_ID=1
 ACCOUNT_ACTIVATION_DAYS = 14

@@ -148,3 +148,10 @@ def renderXRDS(request, type_uris, endpoint_urls):
         {'type_uris':type_uris, 'endpoint_urls':endpoint_urls,})
     response['Content-Type'] = YADIS_CONTENT_TYPE
     return response
+
+
+def base_url_context(request):
+    """Django Context Processor which adds the {{base_url}} to the
+    context."""
+
+    return dict(base_url=getBaseURL(request)[:-1])
