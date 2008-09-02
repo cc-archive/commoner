@@ -8,3 +8,4 @@ downloads
 *.pyc
 *.pyo
 commoner.pid
+src/commoner.egg-info
