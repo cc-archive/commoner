@@ -1,22 +1,11 @@
 * partial registration
-** cmdline script to create
-** welcome email
 ** link created user to the registration
 ** add "re-send welcome" action to the admin?
-
-* navigation on homepage
-** login/logout
-** edit profile
 
 * logout template
 * password change/reset
 
 
-
-- home page
-- profile fields
-
-- admin for profiles
 
 * openid provider
 -* merge server code with commoner
@@ -36,15 +25,10 @@
 * password change templates
 * password reset templates
 
-- fix up form display in registration templates to avoid tables
-
 ----
-
-* deploy on commoner.cc
 
 * content claiming
 
-* admin UI tweak (header, at least)
 * send email re: site location
 
 
