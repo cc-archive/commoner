@@ -18,11 +18,13 @@ setup(
         
         'console_scripts' : [
             'register = commoner.registration.scripts:cli',
+            'django = commoner.scripts:manage',
             ]
         },
     
     install_requires = ['setuptools',
-                        # 'django',
+                        'Django',
+			'djangorecipe',
                         'python-openid',
                         'flup',
                         'MySQL-python',

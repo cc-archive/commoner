@@ -1,6 +1,9 @@
 import os
 
+DEBUG = TEMPLATE_DEBUG = True
+
 ADMINS = (
+    ('Nathan R. Yergler', 'nathan@creativecommons.org'),
     # ('Your Name', 'your_email@domain.com'),
 )
 
