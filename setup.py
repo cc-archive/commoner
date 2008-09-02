@@ -17,7 +17,7 @@ setup(
     entry_points = {
         
         'console_scripts' : [
-            'register = commoner.scripts:register',
+            'register = commoner.registration.scripts:cli',
             ]
         },
     
