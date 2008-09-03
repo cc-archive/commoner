@@ -16,12 +16,14 @@ Some code conventions used here:
 """
 
 import cgi
+import urllib
 
 from commoner import util
 from commoner.util import getViewURL, getBaseURL
 
 from django import http
 from django.views.generic.simple import direct_to_template
+from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 
 from openid.server.server import Server, ProtocolError, CheckIDRequest, \
@@ -121,6 +123,7 @@ def endpoint(request):
     # We got a request; if the mode is checkid_*, we will handle it by
     # getting feedback from the user or by checking the session.
     if openid_request.mode in ["checkid_immediate", "checkid_setup"]:
+        print openid_request
         return handleCheckIDRequest(request, openid_request)
     else:
         # We got some other kind of OpenID request, so we let the
@@ -128,7 +131,6 @@ def endpoint(request):
         openid_response = s.handleRequest(openid_request)
         return displayResponse(request, openid_response)
 
-@login_required
 def handleCheckIDRequest(request, openid_request):
     """
     Handle checkid_* requests.  Get input from the user to find out
@@ -136,6 +138,29 @@ def handleCheckIDRequest(request, openid_request):
     what Simple Registration information, if any, to send in the
     response.
     """
+
+    # Make sure the user is authenticated and active
+    if not(request.user.is_authenticated() and request.user.is_active):
+        # not both authenticated and active
+        
+        # determine what the next URL would be after logging in
+        query = util.normalDict(request.GET or request.POST)
+        query_string = urllib.urlencode(
+            [(k, v) 
+             for k, v in query.iteritems()
+             if k[:7] == 'openid.']
+            )
+        next_url = "%s?%s" % (
+            reverse('commoner.server.views.endpoint'), query_string)
+
+        # redirect to the login page
+        return http.HttpResponseRedirect("%s?%s" % (
+                reverse('django.contrib.auth.views.login'),
+                urllib.urlencode([('next', next_url)])
+                ))
+
+    # YYY if this user is authenticated but not the request user, do something?
+
     # If the request was an IDP-driven identifier selection request
     # (i.e., the IDP URL was entered at the RP), then return the
     # default identity URL for this server. In a full-featured
@@ -146,9 +171,6 @@ def handleCheckIDRequest(request, openid_request):
 
         id_url = request.user.get_profile().get_absolute_url(
             request=request)
-
-        print id_url
-        print openid_request.identity
 
         # Confirm that this server can actually vouch for that
         # identifier
@@ -241,7 +263,7 @@ def processTrustResult(request):
 
         sreg_req = sreg.SRegRequest.fromOpenIDRequest(openid_request)
         sreg_resp = sreg.SRegResponse.extractResponse(sreg_req, sreg_data)
-        openid_response.addExtension(sreg_resp)
+        # openid_response.addExtension(sreg_resp)
 
     return displayResponse(request, openid_response)
 
