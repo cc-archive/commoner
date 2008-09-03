@@ -31,5 +31,5 @@ class CommonerProfile(models.Model):
 
     @permalink
     def get_absolute_url(self):
-        return ('profiles.views.profile_detail', (str(self.user),))
+        return ('commoner.profiles.views.profile_view', (str(self.user),))
 
