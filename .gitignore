@@ -1,5 +1,8 @@
 *~
-bin
+bin/python
+bin/django
+bin/buildout
+bin/register
 parts
 develop-eggs
 eggs
