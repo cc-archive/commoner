@@ -144,7 +144,8 @@ def handleCheckIDRequest(request, openid_request):
 
     if not openid_request.idSelect():
 
-        id_url = getBaseURL(request) + request.user.get_profile().get_absolute_url() #getViewURL(request, idPage)
+        id_url = request.user.get_profile().get_absolute_url(
+            request=request)
 
         print id_url
         print openid_request.identity
@@ -213,7 +214,8 @@ def processTrustResult(request):
     openid_request = getRequest(request)
 
     # The identifier that this server can vouch for
-    response_identity = getBaseURL(request) + request.user.get_profile().get_absolute_url() #getViewURL(request, idPage)
+    response_identity = request.user.get_profile().get_absolute_url(
+        request=request)
 
     # If the decision was to allow the verification, respond
     # accordingly.
