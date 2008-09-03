@@ -6,9 +6,21 @@
 {% endblock %}
 
 
-{% block page_header %}{{ profile }}{% endblock %}
+{% block page_header %}{{ profile.display_name }}{% endblock %}
+
+{% block extra_nav %}
+{% if user.is_authenticated %}
+  {% ifequal user profile.user %}
+<li><a href="{% url profile_edit %}">edit</a></li>
+  {% endifequal %}{% endif %}
+{% endblock %}
 
 {% block body %}
-{{ profile.homepage }}
+
+{{ profile.user.first_name }} {{profile.user.last_name}}<br/>
+{{ profile.homepage }}<br/>
+{{ profile.location }}
+
+<!-- content block here -->
 
 {% endblock %}
