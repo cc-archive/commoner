@@ -20,7 +20,7 @@ urlpatterns = patterns(
     (r'^a/register/complete/$', 
      'django.views.generic.simple.direct_to_template',
      {'template':'registration/success.html'}),
-    (r'^a/register/(?P<key>.*)/', 'commoner.registration.views.complete'),
+    (r'^a/register/(?P<key>\w+)/', 'commoner.registration.views.complete'),
 
     # Profile management
     url(r'^p/edit/$', 'commoner.profiles.views.edit_profile', 
@@ -38,8 +38,10 @@ urlpatterns = patterns(
     (r'^o/endpoint/$', 'commoner.server.views.endpoint'),
 
     # Profile view
-    url(r'^(?P<username>.*)/$', 'commoner.profiles.views.profile_view',
+    url(r'^(?P<username>\w+)/$', 'commoner.profiles.views.profile_view',
         name='profile_view'),
+    (r'^(?P<username>\w+)$', 'django.views.generic.simple.redirect_to',
+        {'url':'/%(username)s/'}),
 
 )
 
