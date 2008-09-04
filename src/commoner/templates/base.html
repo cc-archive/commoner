@@ -9,6 +9,7 @@
     <h2>{% block page_header %}commoner.cc{% endblock %}</h2>
 
     <div id="navigation">
+      {% block nav_override %}
       <ul>
         {% if user.is_anonymous %}
         <li><a href="{% url django.contrib.auth.views.login %}">login</a></li>
@@ -21,6 +22,7 @@
 	{% endblock %}
 
       </ul>
+      {% endblock %}
     </div>
     
     {% block body %}
