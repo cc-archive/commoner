@@ -44,9 +44,15 @@ class CompleteRegistrationForm(forms.Form):
         field.
         
         """
-        if 'password1' in self.cleaned_data and 'password2' in self.cleaned_data:
+
+        if self.partial.complete:
+            raise forms.ValidationError(_(u'This registration code has already been used.'))
+
+        if 'password1' in self.cleaned_data and \
+                'password2' in self.cleaned_data:
             if self.cleaned_data['password1'] != self.cleaned_data['password2']:
                 raise forms.ValidationError(_(u'You must type the same password each time'))
+
         return self.cleaned_data
     
     def save(self):
@@ -59,7 +65,9 @@ class CompleteRegistrationForm(forms.Form):
         new_user.last_name = self.partial.last_name
         new_user.save()
 
-        # remove the partial registration
-        self.partial.delete()
+        # update the partial registration
+        self.partial.user = new_user
+        self.partial.complete = True
+        self.partial.save()
 
         return new_user
