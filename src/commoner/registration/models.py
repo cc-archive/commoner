@@ -6,6 +6,7 @@ from django.db import models
 from django.template.loader import render_to_string
 from django.db.models import permalink
 from django.contrib.sites.models import Site
+from django.contrib.auth.models import User
 
 class RegistrationManager(models.Manager):
 
@@ -40,6 +41,9 @@ class PartialRegistration(models.Model):
     last_name = models.CharField(max_length=30)
     first_name = models.CharField(max_length=30)
     email = models.EmailField()
+    complete = models.BooleanField(default=False)
+
+    user = models.ForeignKey(User, unique=True, blank=True, null=True)
 
     def __unicode__(self):
         return u"%s (%s, %s)" % (
@@ -50,9 +54,12 @@ class PartialRegistration(models.Model):
         return ('commoner.registration.views.complete', (self.key,))
 
     def save(self):
-        # set the SHA-1 hash
-        salt = sha.new(str(random.random())).hexdigest()[:5]
-        self.key = sha.new(salt+self.email+self.last_name).hexdigest()
+
+        # see if we already have a key
+        if not(self.key):
+            # set the SHA-1 hash
+            salt = sha.new(str(random.random())).hexdigest()[:5]
+            self.key = sha.new(salt+self.email+self.last_name).hexdigest()
         
         # call the real save method
         super(PartialRegistration, self).save()
