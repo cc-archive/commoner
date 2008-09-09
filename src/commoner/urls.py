@@ -28,9 +28,19 @@ urlpatterns = patterns(
     url(r'^p/create/$', 'commoner.profiles.views.create_profile', 
         name='profile_create'),
 
-    # Content details
-    #(r'^c/(?P<content_id>\d+)/$', 
-    #    'commoner.profiles.views.content_detail'),
+    # Content management
+    url(r'^(?P<username>\w+)/content/', 
+        'commoner.content.views.user_content',
+        name='user_content'),
+    url(r'^(?P<username>\w+)/content/add/', 
+        'commoner.content.views.add_content',
+        name='add_content'),
+    url(r'^(?P<username>\w+)/content/edit/(?P<id>\d+)/', 
+        'commoner.content.views.edit_content',
+        name='edit_content'),
+    url(r'^(?P<username>\w+)/content/delete/(?P<id>\d+)/', 
+        'commoner.content.views.delete',
+        name='delete_content'),
     
     # OpenID Support
     (r'^o/xrds/$', 'commoner.server.views.idpXrds'),
