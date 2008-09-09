@@ -29,14 +29,11 @@ urlpatterns = patterns(
         name='profile_create'),
 
     # Content management
-    url(r'^(?P<username>\w+)/content/', 
-        'commoner.content.views.user_content',
-        name='user_content'),
     url(r'^(?P<username>\w+)/content/add/', 
-        'commoner.content.views.add_content',
+        'commoner.content.views.add_or_edit',
         name='add_content'),
     url(r'^(?P<username>\w+)/content/edit/(?P<id>\d+)/', 
-        'commoner.content.views.edit_content',
+        'commoner.content.views.add_or_edit',
         name='edit_content'),
     url(r'^(?P<username>\w+)/content/delete/(?P<id>\d+)/', 
         'commoner.content.views.delete',
