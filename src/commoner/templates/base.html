@@ -27,7 +27,7 @@
         {% if user.is_anonymous %}
         <li><a href="{% url django.contrib.auth.views.login %}">Login</a></li>
 	{% else %}
-        <li><a href="{% url commoner.profiles.views.profile_view user.username %}">My Profile</a></li>
+        <li><a href="{% url profile_view user.username %}">My Profile</a></li>
         <li><a href="{% url django.contrib.auth.views.logout %}">Logout</a></li>
 	{% endif %}
 

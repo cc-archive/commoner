@@ -23,10 +23,8 @@ urlpatterns = patterns(
     (r'^a/register/(?P<key>\w+)/', 'commoner.registration.views.complete'),
 
     # Profile management
-    url(r'^p/edit/$', 'commoner.profiles.views.edit_profile', 
+    url(r'^p/edit/$', 'commoner.profiles.views.edit_or_create', 
         name='profile_edit'),
-    url(r'^p/create/$', 'commoner.profiles.views.create_profile', 
-        name='profile_create'),
 
     # Content management
     url(r'^(?P<username>\w+)/content/add/', 
@@ -45,7 +43,7 @@ urlpatterns = patterns(
     (r'^o/endpoint/$', 'commoner.server.views.endpoint'),
 
     # Profile view
-    url(r'^(?P<username>\w+)/$', 'commoner.profiles.views.profile_view',
+    url(r'^(?P<username>\w+)/$', 'commoner.profiles.views.view',
         name='profile_view'),
     (r'^(?P<username>\w+)$', 'django.views.generic.simple.redirect_to',
         {'url':'/%(username)s/'}),
