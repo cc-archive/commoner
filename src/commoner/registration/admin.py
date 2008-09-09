@@ -3,6 +3,6 @@ from commoner.registration.models import PartialRegistration
 
 class PartialRegistrationAdmin(admin.ModelAdmin):
 
-    pass
+    list_filter = ('complete',)
 
 admin.site.register(PartialRegistration, PartialRegistrationAdmin)

@@ -28,7 +28,10 @@ setup(
                         'python-openid',
                         'flup',
                         'MySQL-python',
+                        'PILwoTK',
                         ],
+
+    dependency_links=['http://download.zope.org/distribution/',],
 
     include_package_data = True,
     zip_safe = True,

@@ -2,15 +2,25 @@
 
 {% block page_header %}Complete Registration{% endblock %}
 
+{% block nav_override %}{% endblock %}
 {% block body %}
 
-{{form.partial}}
+<h2>{{form.partial.first_name}} {{form.partial.last_name}}</h2>
+<h3>{{form.partial.email}}</h3>
 
+{% if form.partial.complete %}
+<p class="error">
+This registration code has already been used.
+</p>
+
+{% else %}
 <form action="." method="POST">
 {{form.as_p}}
 
     <input type="submit" value="save" />
 
 </form>
+
+{% endif %}
 
 {% endblock %}
