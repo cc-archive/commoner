@@ -1,22 +1,20 @@
+* openid provider
+** verify that bob can't use alice's URL
+ 
 * partial registration
 ** link created user to the registration
 ** add "re-send welcome" action to the admin?
-
-* logout template
-* password change/reset
-
-
-
-* openid provider
--* merge server code with commoner
--* test with consumer code
-*** verify that bob can't use alice's URL
-** verify working in the /o/ ghetto
+** remove double-slash from welcome email
 
 * profile edit/create template
 ** link to password reset
 ** /accounts/profile
 ** 
+
+* logout template
+* password change/reset
+
+
 
 * register/invite script (+ admin ui?)
 ** remove registration views
@@ -33,3 +31,5 @@
 
 
 * 404, 500
+
+* provide option to return profile information
