@@ -1,6 +1,8 @@
-* partial registration
-** link created user to the registration
-** add "re-send welcome" action to the admin?
+
+* commoner profile
+** content claiming
+** photos
+** "your story""
 
 * logout template
 * password change/reset
@@ -33,3 +35,6 @@
 
 
 * 404, 500
+
+* partial registration
+** add "re-send welcome" action to the admin?
