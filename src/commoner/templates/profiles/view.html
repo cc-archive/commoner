@@ -7,6 +7,7 @@
 
 
 {% block page_header %}{{ profile.display_name }}{% endblock %}
+{% block page_sub_header %}Active Commoner{% endblock %}
 
 {% block extra_nav %}
 {% if user.is_authenticated %}
@@ -16,11 +17,35 @@
 {% endblock %}
 
 {% block body %}
+<div class="column-wide column profile-info">
+  <img src="" width="150" height="150" alt="[ {{ profile.user.first_name }}]" />
+  <p>
+    <ul>
+    <li>{{ profile.user.first_name }} {{ profile.user.last_name}}</li>
+    <li>{{ profile.homepage }}</li>
+    <li>{{ profile.location }}</li>
+    </ul>
+  </p>
+  <p class="clear">
+    <h2>Testimonial</h2>
+    I use CC because lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    
+  </p>
+</div>
 
-{{ profile.user.first_name }} {{profile.user.last_name}}<br/>
-{{ profile.homepage }}<br/>
-{{ profile.location }}
+<div class="column-narrow column">
+  <p>
+    <h4>Works I Have Licensed</h4>
+    <ul class="licensed-works">
+      <li><a href="">Photo Object</a> &mdash; 28-Aug-2008 &mdash; by&ndash;nc</li>
+      <li><a href="">Photo Object</a> &mdash; 28-Aug-2008 &mdash; by&ndash;nc</li>
+      <li><a href="">Photo Object</a> &mdash; 28-Aug-2008 &mdash; by&ndash;nc</li>
+      <li class="last"><a href="">Photo Object</a> &mdash; 28-Aug-2008 &mdash; by&ndash;nc</li>
+    </ul>
+  </p>
+</div>
+<br clear="both" />
 
-<!-- content block here -->
+  <!-- content block here -->
 
 {% endblock %}
