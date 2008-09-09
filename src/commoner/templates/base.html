@@ -1,21 +1,34 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
+  	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    
+    <!-- can you have multiple blocks of the same name, w/ same content? page_header here also -->
+  	<title>PAGE_HEADER - CC Commoner</title>
+  	<link href="/m/css/style.css" rel="stylesheet" type="text/css">
+	
     {% block header %}
 
     {% endblock %}
-  </head>
   
-  <body>
-    <h2>{% block page_header %}commoner.cc{% endblock %}</h2>
+  </head>
 
-    <div id="navigation">
+
+  <body>
+    <div id="header">
+      <h1><a href="/" title="CC Commoner"><span>CC Commoner</span></a></h1>
+    </div>
+    
+    <div id="nav" class="box nbox">
       {% block nav_override %}
-      <ul>
+      <ul class="box">
         {% if user.is_anonymous %}
-        <li><a href="{% url django.contrib.auth.views.login %}">login</a></li>
+        <li><a href="{% url django.contrib.auth.views.login %}">Login</a></li>
 	{% else %}
-        <li><a href="{% url commoner.profiles.views.profile_view user.username %}">my profile</a></li>
-        <li><a href="{% url django.contrib.auth.views.logout %}">logout</a></li>
+        <li><a href="{% url commoner.profiles.views.profile_view user.username %}">My Profile</a></li>
+        <li><a href="{% url django.contrib.auth.views.logout %}">Logout</a></li>
 	{% endif %}
 
         {% block extra_nav %}
@@ -25,8 +38,31 @@
       {% endblock %}
     </div>
     
-    {% block body %}
-    {% endblock %}
-
+    
+    <div id="main-body" class="box">
+      <div class="block" id="title">
+        <div class="title-labels">
+          <h1>{% block page_header %}commoner.cc{% endblock %}</h1>
+          <h3>{% block page_sub_header %}{% endblock %}</h3>
+        </div>
+      </div>
+      <div class="block page clear">
+        {% block body %}
+        {% endblock %}
+      </div>
+    </div>
+<div id="footer">
+  <div class="box">
+    <div id="license">
+      <p>
+        <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">
+          <img src="http://i.creativecommons.org/l/by/3.0/80x15.png" alt="Creative Commons Attribution 3.0 License" style="border: medium none ;" height="15" width="80">
+        </a>
+        Except where otherwise <a class="subfoot" href="/policies#license">noted</a>, content on this site is<br/>
+        licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/" class="subfoot">Creative Commons Attribution 3.0 License</a>
+      <p>
+    </div>
+  	</div>
+    </div>
   </body>
 </html>
