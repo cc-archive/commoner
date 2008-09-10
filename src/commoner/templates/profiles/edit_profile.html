@@ -13,18 +13,67 @@ Create Profile
 <div class="form">
   <form method="post" enctype="multipart/form-data" action=".">
 
-    {% for field in form %}
+    <h3>About You</h3>
 
-    <div class="field" id="{{field.id}}">
-      <span class="field_label">{{field.label}}:</span> {{field}}
-      {% if field.errors %}
-        <div class="error">{{field.errors}}</div>
+    <div class="field" id="nickname">
+      <span class="field_label">{{form.nickname.label}}</span>
+      {{form.nickname}}
+      {% if form.nickname.errors %}
+      <div class="errors">
+	{{ form.nickname.errors }}
+      </div>
       {% endif %}
-
     </div>
-    {% endfor %}
 
-    <input type="submit" value="save" />
+    <div class="field" id="homepage">
+      <span class="field_label">{{form.homepage.label}}</span>
+      {{form.homepage}}
+      {% if form.homepage.errors %}
+      <div class="errors">
+	{{ form.homepage.errors }}
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="field" id="location">
+      <span class="field_label">{{form.location.label}}</span>
+      {{form.location}}
+      {% if form.location.errors %}
+      <div class="errors">
+	{{ form.location.errors }}
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="field" id="photo">
+      <span class="field_label">{{form.photo.label}}</span>
+      {{form.photo}}
+      {% if form.photo.errors %}
+      <div class="errors">
+	{{ form.photo.errors }}
+      </div>
+      {% endif %}
+    </div>
+
+    <h3>Your CC Story</h3>
+    <div class="field" id="story">
+      <p>
+	Tell us how you've used CC to share your work, find work to
+	re-use and expand the Commons. By sharing your story here you
+	agree to licensed it under the Creative
+	Commons <a href="http://creativecommons.org/licenses/by/3.0/">
+	  Attribution 3.0 Unported</a> license.  Re-use will be
+	attributed to you.</p>
+
+      {{form.story}}
+      {% if form.story.errors %}
+      <div class="errors">
+	{{ form.story.errors }}
+      </div>
+      {% endif %}
+    </div>
+
+    <input type="submit" value="save profile" />
 
   </form>
 </div>
