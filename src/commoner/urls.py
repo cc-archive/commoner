@@ -27,13 +27,13 @@ urlpatterns = patterns(
         name='profile_edit'),
 
     # Content management
-    url(r'^(?P<username>\w+)/content/add/', 
+    url(r'^c/add/', 
         'commoner.content.views.add_or_edit',
         name='add_content'),
-    url(r'^(?P<username>\w+)/content/edit/(?P<id>\d+)/', 
+    url(r'^c/edit/(?P<id>\d+)/', 
         'commoner.content.views.add_or_edit',
         name='edit_content'),
-    url(r'^(?P<username>\w+)/content/delete/(?P<id>\d+)/', 
+    url(r'^c/delete/(?P<id>\d+)/', 
         'commoner.content.views.delete',
         name='delete_content'),
     
