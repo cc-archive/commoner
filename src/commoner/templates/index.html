@@ -1,15 +1,20 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block page_header %}Welcome{% endblock %}
+{% block body %}
 
-{% if user.is_authenticated %}
-Hello, {{user}}.  (<a href="{% url django.contrib.auth.views.logout %}">logout</a>)
-{% else %}
-<a href="{% url django.contrib.auth.views.login %}">login</a>
-{% endif %}
+<p>
+<strong>commoner.cc</strong> is a site where you can share the
+content you've licensed.
+</p>
 
-<ul>
- <li><a href="http://support.creativecommons.org">Support CC</a></li>
-</ul>
+<table width="100%">
+<tr>
+<td width="33%">Support The Commons<br/>
+<em>and get a profile</em></td>
+<td width="33%">Create a Profile</td>
+<td width="33%">Lorem Ipsum</td>
+</tr>
+</table>
 
 {% endblock %}
