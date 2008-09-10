@@ -35,11 +35,13 @@
       <li>{{ profile.location }}</li>
     </ul>
   </p>
-  <p class="clear">
+  <div class="clear">
+    {% if profile.story %}
     <h2>My Story</h2>
     {{ profile.story }}
-    
-  </p>
+    {% endif %}
+
+  </div>
 
   {% else %}
   
