@@ -10,9 +10,10 @@ from django.contrib.auth.models import User
 
 class RegistrationManager(models.Manager):
 
-    def create_registration(self, email, last, first,
+    def create_registration(self, transaction_id, email, last, first,
                             send_email = True):
         registration = PartialRegistration(
+            transaction_id = transaction_id,
             email = email,
             last_name = last,
             first_name = first)
@@ -42,6 +43,7 @@ class PartialRegistration(models.Model):
     first_name = models.CharField(max_length=30)
     email = models.EmailField()
     complete = models.BooleanField(default=False)
+    transaction_id = models.CharField(max_length=255, blank=False, null=False)
 
     user = models.ForeignKey(User, unique=True, blank=True, null=True)
 
