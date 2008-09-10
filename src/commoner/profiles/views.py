@@ -91,8 +91,10 @@ def view(request, username, public_profile_field=None,
 	if request.user.username == username:
 	    # redirect to creation
             return HttpResponseRedirect(reverse('profile_edit'))
-
-        raise Http404
+        
+        else:
+            # the user exists but hasn't created a profile
+            profile_obj = None
 
     if public_profile_field is not None and \
        not getattr(profile_obj, public_profile_field):

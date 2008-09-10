@@ -18,6 +18,8 @@
 
 {% block body %}
 <div class="column-wide column profile-info">
+
+  {% if profile %}
   <img src="{{ profile.photo.url }}" 
        width="150" height="150" 
        alt="[ {{ profile.user.first_name }}]" 
@@ -39,14 +41,33 @@
 <div class="column-narrow column">
   <p>
     <h4>Works I Have Licensed</h4>
+    {% if profile.content %}
     <ul class="licensed-works">
-      <li><a href="">Photo Object</a> &mdash; 28-Aug-2008 &mdash; by&ndash;nc</li>
-      <li><a href="">Photo Object</a> &mdash; 28-Aug-2008 &mdash; by&ndash;nc</li>
-      <li><a href="">Photo Object</a> &mdash; 28-Aug-2008 &mdash; by&ndash;nc</li>
-      <li class="last"><a href="">Photo Object</a> &mdash; 28-Aug-2008 &mdash; by&ndash;nc</li>
+      {% for work in profile.content %}
+      <li><a href="">Photo Object</a> &mdash; 28-Aug-2008 &mdash;
+      by&ndash;nc</li>
+      {% endfor %}
     </ul>
+    {% else %}
+      {% ifequal user profile.user %}
+        <span class="no-works">You haven't registered any licensed
+	  works at this time; would you like to 
+	  <a href="{% url add_content %}">add one</a>?</span>
+      {% else %}
+        <span class="no-works">This user has not registered any
+	  licensed works.</span>
+      {% endifequal %}
+    {% endif %}
   </p>
 </div>
+
+{% else %}
+
+<div class="column-wide column profile-info">
+This user hasn't created a profile yet.
+</div>
+
+{% endif %}
 <br clear="both" />
 
   <!-- content block here -->
