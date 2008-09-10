@@ -87,20 +87,14 @@ def view(request, username, public_profile_field=None,
     try:
         profile_obj = user.get_profile()
     except ObjectDoesNotExist:
-        # see if the username requested is also logged in...
-	if request.user.username == username:
-	    # redirect to creation
-            return HttpResponseRedirect(reverse('profile_edit'))
-        
-        else:
-            # the user exists but hasn't created a profile
-            profile_obj = None
+        profile_obj = None
 
     if public_profile_field is not None and \
-       not getattr(profile_obj, public_profile_field):
+       not getattr(profile_obj, public_profile_field, False):
         profile_obj = None
 
     return render_to_response(template_name,
-                              { 'profile': profile_obj },
+                              { 'profile'  : profile_obj,
+                                'username' : username},
                               context_instance=RequestContext(request))
 
