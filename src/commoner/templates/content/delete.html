@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block page_header %}
+Delete Content Registration
+{% endblock %}
+
+{% block body %}
+
+<p>
+  You are going to remove the content registration for
+  <a href="{{content.url}}">{{content.title}}</a>.
+</p>
+
+<div class="form">
+  <form method="post" enctype="multipart/form-data" action=".">
+
+    {% for field in form %}
+
+    <div class="field" id="{{field.id}}">
+      <span class="field_label">{{field.label}}:</span> {{field}}
+      {% if field.errors %}
+        <div class="error">{{field.errors}}</div>
+      {% endif %}
+
+    </div>
+    {% endfor %}
+
+    <input type="submit" value="continue" />
+
+  </form>
+</div>
+
+{% endblock %}

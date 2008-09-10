@@ -9,11 +9,13 @@ from commoner.util import getBaseURL
 
 class Content(models.Model):
 
-    commoner = models.ForeignKey(User, related_name='content')
+    user = models.ForeignKey(User, 
+                                     related_name='content')
 
-    title = models.CharField(max_length=255, blank=True)
     url = models.URLField(max_length=255, blank=False)
 
+    title = models.CharField(max_length=255, blank=True)
+    registered = models.DateField(auto_now_add=True)
     license = models.URLField(max_length=255, blank=True)
 
     def __unicode__(self):

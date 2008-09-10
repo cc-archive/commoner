@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load license %}
 
 {% block header %}
 <link rel="openid.server" href="{{base_url}}{% url commoner.server.views.endpoint %}">
@@ -36,20 +37,41 @@
     {{ profile.story }}
     
   </p>
+
+  {% else %}
+  
+  <p>
+    <ul>
+      <li>{{ user.first_name }} {{ user.last_name}}</li>
+    </ul>
+  </p>
+
+  {% endif %}
+
 </div>
 
 <div class="column-narrow column">
   <p>
     <h4>Works I Have Licensed</h4>
-    {% if profile.content %}
+    {% if user.content.all %}
     <ul class="licensed-works">
-      {% for work in profile.content %}
-      <li><a href="">Photo Object</a> &mdash; 28-Aug-2008 &mdash;
-      by&ndash;nc</li>
+      {% for work in user.content.all %}
+      <li><a href="{{work.url}}">{{work.title}}</a> &mdash;
+      {{work.registered}} &mdash;
+
+	<a href="{{work.license}}">
+	  <img src="{{work.license|license_button}}" 
+	       alt="{{work.license|license_code}}" 
+	       style="border:0;" /></a> 
+	{% ifequal user work.user %}
+	  <a href="{% url edit_content work.id %}">[edit]</a>
+	  <a href="{% url delete_content work.id %}">[delete]</a>
+	{% endifequal %}
+      </li>
       {% endfor %}
     </ul>
     {% else %}
-      {% ifequal user profile.user %}
+      {% ifequal user.username username %}
         <span class="no-works">You haven't registered any licensed
 	  works at this time; would you like to 
 	  <a href="{% url add_content %}">add one</a>?</span>

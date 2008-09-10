@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block page_header %}
+{% if content %}
+Edit Content Registration
+{% else %}
+Register Content
+{% endif %}
+{% endblock %}
+
+{% block body %}
+
+
+<div class="form">
+  <form method="post" enctype="multipart/form-data" action=".">
+
+    {% for field in form %}
+
+    <div class="field" id="{{field.id}}">
+      <span class="field_label">{{field.label}}:</span> {{field}}
+      {% if field.errors %}
+        <div class="error">{{field.errors}}</div>
+      {% endif %}
+
+    </div>
+    {% endfor %}
+
+    <input type="submit" value="save" />
+
+  </form>
+</div>
+
+{% endblock %}
