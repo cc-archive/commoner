@@ -29,6 +29,7 @@ setup(
                         'flup',
                         'MySQL-python',
                         'PILwoTK',
+                        'cc.license',
                         ],
 
     dependency_links=['http://download.zope.org/distribution/',],
