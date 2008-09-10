@@ -12,8 +12,8 @@
 
 {% block extra_nav %}
 {% if user.is_authenticated %}
-  {% ifequal user.username username %}
-<li><a href="{% url profile_edit %}">edit</a></li>
+  {% ifequal user.username profile_user.username %}
+<li><a href="{% url profile_edit %}">Edit</a></li>
   {% endifequal %}{% endif %}
 {% endblock %}
 
@@ -23,11 +23,11 @@
   {% if profile %}
   <img src="{{ profile.photo.url }}" 
        width="150" height="150" 
-       alt="[ {{ profile.user.first_name }}]" 
+       alt="[ {{ profile_user.first_name }}]" 
        />
   <p>
     <ul>
-      <li>{{ user.first_name }} {{ user.last_name}}</li>
+      <li>{{ profile_user.first_name }} {{ profile_user.last_name}}</li>
       <li>{{ profile.homepage }}</li>
       <li>{{ profile.location }}</li>
     </ul>
@@ -42,7 +42,7 @@
   
   <p>
     <ul>
-      <li>{{ user.first_name }} {{ user.last_name}}</li>
+      <li>{{ profile_user.first_name }} {{ profile_user.last_name}}</li>
     </ul>
   </p>
 
@@ -53,9 +53,9 @@
 <div class="column-narrow column">
   <p>
     <h4>Works I Have Licensed</h4>
-    {% if user.content.all %}
+    {% if profile_user.content.all %}
     <ul class="licensed-works">
-      {% for work in user.content.all %}
+      {% for work in profile_user.content.all %}
       <li><a href="{{work.url}}">{{work.title}}</a> &mdash;
       {{work.registered}} &mdash;
 

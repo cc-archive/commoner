@@ -95,6 +95,7 @@ def view(request, username, public_profile_field=None,
 
     return render_to_response(template_name,
                               { 'profile'  : profile_obj,
+                                'profile_user' : user,
                                 'username' : username},
                               context_instance=RequestContext(request))
 
