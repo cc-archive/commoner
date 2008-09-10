@@ -48,8 +48,10 @@ This registration code has already been used.
     </div>
 
     <div class="field" id="agree_to_tos">
+    <h3>Terms of Service</h3>
+      <textarea cols=50 rows=10>lorem, ipsum</textarea>
+      <br/>
       <span class="field_label">{{form.agree_to_tos.label}}</span>
-      <textarea>lorem, ipsum</textarea>
       {{form.agree_to_tos}}
       {% if form.agree_to_tos.errors %}
       <div class="errors">
@@ -58,7 +60,7 @@ This registration code has already been used.
       {% endif %}
     </div>
 
-    <input type="submit" value="save" />
+    <input type="submit" value="complete registration" />
 
 </form>
 

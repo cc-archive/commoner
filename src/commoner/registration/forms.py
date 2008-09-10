@@ -11,9 +11,11 @@ class CompleteRegistrationForm(forms.Form):
                                 widget=forms.PasswordInput)
     password2 = forms.CharField(label="Password (again):",
                                 widget=forms.PasswordInput)
-    agree_to_tos = forms.BooeleanField(label="Have you read and agreed "
+    agree_to_tos = forms.BooleanField(label="Have you read and agreed "
                                        "to the Terms of Service?",
-                                       widget=forms.CheckboxInput)
+                                       widget=forms.CheckboxInput,
+				       error_messages = dict(
+				       required='You must read and agree to the TOS.'))
 
     RE_ALNUM = re.compile(r'^\w+$')
 
@@ -39,16 +41,6 @@ class CompleteRegistrationForm(forms.Form):
             return self.cleaned_data['username']
         raise forms.ValidationError(_(u'This username is already taken. Please choose another.'))
 
-    def clean_agree_to_tos(self):
-        """Make sure the user checks that they've read the Terms of
-        Service."""
-
-        if not self.cleaned_data.get('agree_to_tos', False):
-            raise forms.ValidationError(_(u'You must read and agree to '
-                                          'the Terms of Service.'))
-
-        return True
-        
     def clean(self):
         """
         Verifiy that the values entered into the two password fields
