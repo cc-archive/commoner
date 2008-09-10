@@ -9,10 +9,10 @@ from commoner.util import getBaseURL
 
 class Content(models.Model):
 
-    user = models.ForeignKey(User, 
-                                     related_name='content')
+    user = models.ForeignKey(User, related_name='content')
 
-    url = models.URLField(max_length=255, blank=False)
+    url = models.URLField(max_length=255, blank=False,
+                          verbose_name="Content URL")
 
     title = models.CharField(max_length=255, blank=True)
     registered = models.DateField(auto_now_add=True)
