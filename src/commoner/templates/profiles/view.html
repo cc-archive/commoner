@@ -12,7 +12,7 @@
 
 {% block extra_nav %}
 {% if user.is_authenticated %}
-  {% ifequal user profile.user %}
+  {% ifequal user.username username %}
 <li><a href="{% url profile_edit %}">edit</a></li>
   {% endifequal %}{% endif %}
 {% endblock %}
@@ -27,9 +27,9 @@
        />
   <p>
     <ul>
-    <li>{{ profile.user.first_name }} {{ profile.user.last_name}}</li>
-    <li>{{ profile.homepage }}</li>
-    <li>{{ profile.location }}</li>
+      <li>{{ user.first_name }} {{ user.last_name}}</li>
+      <li>{{ profile.homepage }}</li>
+      <li>{{ profile.location }}</li>
     </ul>
   </p>
   <p class="clear">
@@ -83,15 +83,6 @@
   </p>
 </div>
 
-{% else %}
-
-<div class="column-wide column profile-info">
-This user hasn't created a profile yet.
-</div>
-
-{% endif %}
 <br clear="both" />
-
-  <!-- content block here -->
 
 {% endblock %}
