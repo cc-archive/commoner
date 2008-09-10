@@ -21,10 +21,13 @@
 <div class="column-wide column profile-info">
 
   {% if profile %}
-  <img src="{{ profile.photo.url }}" 
-       width="150" height="150" 
-       alt="[ {{ profile_user.first_name }}]" 
-       />
+   {% if profile.photo %}
+    <img src="{{ profile.photo.url }}" 
+         width="150" height="150" 
+         alt="[ {{ profile_user.first_name }}]" 
+         />
+   {% endif %}
+
   <p>
     <ul>
       <li>{{ profile_user.first_name }} {{ profile_user.last_name}}</li>
