@@ -87,3 +87,6 @@ LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/a/login/'
 
 
+# THUMBNAIL_PATH is a path relative to MEDIA_ROOT where
+# thumbnails of user photos are stored
+THUMBNAIL_PATH = 't'

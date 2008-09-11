@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load license %}
+{% load thumbnail %}
 
 {% block header %}
 <link rel="openid.server" href="{{base_url}}{% url commoner.server.views.endpoint %}">
@@ -22,8 +23,7 @@
 
   {% if profile %}
    {% if profile.photo %}
-    <img src="{{ profile.photo.url }}" 
-         width="150" height="150" 
+    <img src="{{ profile.photo|scale }}" 
          alt="[ {{ profile_user.first_name }}]" 
          />
    {% endif %}
