@@ -16,7 +16,20 @@ urlpatterns = patterns(
 
     # Account management
     (r'^a/login/$', 'django.contrib.auth.views.login'),
-    (r'^a/logout/$', 'django.contrib.auth.views.logout'),
+    (r'^a/logout/$', 'django.contrib.auth.views.logout',
+     {'template_name':'registration/logout.html'}),
+
+    url(r'^a/password/change/$',
+        'django.contrib.auth.views.password_change',
+        name='password_change'),
+    url(r'^a/password/change/done/$',
+        'django.contrib.auth.views.password_change_done',),
+    url(r'^a/password/reset/$',
+        'django.contrib.auth.views.password_reset',
+        name='password_reset'),
+    url(r'^a/password/reset/done/$',
+        'django.contrib.auth.views.password_reset_done',),
+
     (r'^a/register/complete/$', 
      'django.views.generic.simple.direct_to_template',
      {'template':'registration/success.html'}),
