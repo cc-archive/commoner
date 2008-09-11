@@ -1,3 +1,4 @@
+import os.path
 import urlparse
 
 from django.db import models
@@ -13,6 +14,7 @@ class CommonerProfile(models.Model):
 
     nickname = models.CharField(max_length=255, blank=True)
     photo = models.ImageField(upload_to='p', blank=True, null=True)
+
     homepage = models.URLField(max_length=255, blank=True)
     location = models.CharField(max_length=255, blank=True)
 
@@ -34,5 +36,7 @@ class CommonerProfile(models.Model):
                 getBaseURL(request), 
                 reverse('profile_view', args=(self.user.username, ) )
                 )
-                
 
+    @property
+    def content(self):
+        return self.user.content
