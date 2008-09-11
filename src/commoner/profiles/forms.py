@@ -1,7 +1,12 @@
-from django.forms import ModelForm
+from django import forms
+from django.core.files.storage import default_storage
+
 from commoner.profiles.models import CommonerProfile
 
-class CommonerProfileForm(ModelForm):
+class CommonerProfileForm(forms.ModelForm):
+
+    remove_photo = forms.BooleanField(label="Remove photo?",
+                                      required=False)
 
     def __init__(self, user, *args, **kwargs):
         self.user = user
@@ -15,7 +20,19 @@ class CommonerProfileForm(ModelForm):
             photo.name = u'%s.%s' % (self.user.username,
                                      photo.name.split('.')[-1])
 
+            if self.instance.photo:
+                # remove the old photo
+                default_storage.delete(self.instance.photo.path)
+
         return self.cleaned_data['photo']
+
+    def save(self, *args, **kwargs):
+
+        # see if we should remove the photo
+        if self.instance and self.cleaned_data.get('remove_photo', False):
+            self.instance.photo.delete()
+
+        return super(CommonerProfileForm, self).save(*args, **kwargs)
 
     class Meta:
         model = CommonerProfile
