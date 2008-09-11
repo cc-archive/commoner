@@ -24,7 +24,7 @@ def edit_or_create(request):
 
     if request.method == 'POST':
         # process the form
-        form = forms.CommonerProfileForm(
+        form = forms.CommonerProfileForm(request.user,
             data=request.POST, files=request.FILES, instance=profile)
 
         if form.is_valid():
@@ -37,7 +37,7 @@ def edit_or_create(request):
 
     else:
         # just display the form
-        form = forms.CommonerProfileForm(instance=profile)
+        form = forms.CommonerProfileForm(request.user, instance=profile)
 
     return render_to_response('profiles/edit_profile.html',
                               { 'form': form,
