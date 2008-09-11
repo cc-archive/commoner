@@ -16,7 +16,8 @@ urlpatterns = patterns(
 
     # Account management
     (r'^a/login/$', 'django.contrib.auth.views.login'),
-    (r'^a/logout/$', 'django.contrib.auth.views.logout'),
+    (r'^a/logout/$', 'django.contrib.auth.views.logout',
+     {'template_name':'registration/logout.html'}),
     (r'^a/register/complete/$', 
      'django.views.generic.simple.direct_to_template',
      {'template':'registration/success.html'}),
