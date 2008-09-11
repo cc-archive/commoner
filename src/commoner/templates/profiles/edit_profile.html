@@ -9,6 +9,9 @@ Create Profile
 {% endif %}
 {% endblock %}
 
+{% block extra_nav %}
+<li><a href="{% url password_change %}">Change Password</a></li>
+{% endblock %}
 {% block body %}
 
 <div class="form">
