@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load license %}
+{% load thumbnail %}
+
+{% block header %}
+<link rel="openid.server" href="{{base_url}}{% url commoner.server.views.endpoint %}">
+<link rel="openid2.provider" href="{{base_url}}{% url commoner.server.views.endpoint %}">
+{% endblock %}
+
+
+{% block page_header %}{{ profile.display_name }}{% endblock %}
+{% block page_sub_header %}Active Commoner{% endblock %}
+
+{% block extra_nav %}
+{% if user.is_authenticated %}
+  {% ifequal user.username profile_user.username %}
+<li><a href="{% url profile_edit %}">Edit</a></li>
+  {% endifequal %}{% endif %}
+{% endblock %}
+
+{% block body %}
+<div class="column-wide column profile-info">
+
+  {% if profile %}
+   {% if profile.photo %}
+    <img src="{{ profile.photo|scale }}" 
+         alt="[ {{ profile_user.first_name }}]" 
+         />
+   {% endif %}
+
+  <p>
+    <ul>
+      <li>{{ profile_user.first_name }} {{ profile_user.last_name}}</li>
+      <li><a href="{{profile.homepage}}">{{ profile.homepage }}</a></li>
+      <li>{{ profile.location }}</li>
+    </ul>
+  </p>
+  <div class="clear">
+    {% if profile.story %}
+    <h2>My CC Story</h2>
+    <a href="" rel="cc:attributionURL" />
+    {{ profile.story }}
+    {% endif %}
+
+  </div>
+
+  {% else %}
+  
+  <p>
+    <ul>
+      <li property="cc:attributionName">
+	{{ profile_user.first_name }} {{ profile_user.last_name}}
+      </li>
+    </ul>
+  </p>
+
+  {% endif %}
+
+</div>
+
+<div class="column-narrow column">
+  <p>
+    <h4>Works I Have Licensed</h4>
+    {% if profile_user.content.all %}
+    <ul class="licensed-works">
+      {% for work in profile_user.content.all %}
+      <li>
+	<a rel="cc:claimedContent" href="{{work.url}}"
+	   property="dct:title">{{work.title}}</a> &mdash;
+	{{work.registered}} &mdash;
+
+	<a about="{{work.url}}" rel="license" href="{{work.license}}" >
+	  <img src="{{work.license|license_button}}" 
+	       alt="{{work.license|license_code}}" 
+	       style="border:0;" /></a> 
+	{% ifequal user work.user %}
+	  <a href="{% url edit_content work.id %}">[edit]</a>
+	  <a href="{% url delete_content work.id %}">[delete]</a>
+	{% endifequal %}
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+      {% ifequal user.username username %}
+        <span class="no-works">You haven't registered any licensed
+	  works at this time; would you like to 
+	  <a href="{% url add_content %}">add one</a>?</span>
+      {% else %}
+        <span class="no-works">This user has not registered any
+	  licensed works.</span>
+      {% endifequal %}
+    {% endif %}
+  </p>
+</div>
+
+<br clear="both" />
+
+{% endblock %}

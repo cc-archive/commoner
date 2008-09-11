@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block page_header %}Complete Registration{% endblock %}
+
+{% block nav_override %}{% endblock %}
+{% block body %}
+
+<h2>{{form.partial.first_name}} {{form.partial.last_name}}</h2>
+<h3>{{form.partial.email}}</h3>
+
+{% if form.partial.complete %}
+<p class="error">
+This registration code has already been used.
+</p>
+
+{% else %}
+<div class="form">
+  <form action="." method="POST">
+
+    <div class="field" id="username">
+      <span class="field_label">{{form.username.label}}</span>
+      {{form.username}}
+      {% if form.username.errors %}
+      <div class="errors">
+	{{ form.username.errors }}
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="field" id="password1">
+      <span class="field_label">{{form.password1.label}}</span>
+      {{form.password1}}
+      {% if form.password1.errors %}
+      <div class="errors">
+	{{ form.password1.errors }}
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="field" id="password2">
+      <span class="field_label">{{form.password2.label}}</span>
+      {{form.password2}}
+      {% if form.password2.errors %}
+      <div class="errors">
+	{{ form.password2.errors }}
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="field" id="agree_to_tos">
+    <h3>Terms of Service</h3>
+      <iframe src="/l/termsofservice.html" style="width:500px; border:1px solid;">
+      </iframe>
+      <br/>
+      <span class="field_label">{{form.agree_to_tos.label}}</span>
+      {{form.agree_to_tos}}
+      {% if form.agree_to_tos.errors %}
+      <div class="errors">
+	{{ form.agree_to_tos.errors }}
+      </div>
+      {% endif %}
+    </div>
+
+    <input type="submit" value="complete registration" />
+
+</form>
+
+{% endif %}
+
+{% endblock %}

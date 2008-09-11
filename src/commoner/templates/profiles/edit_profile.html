@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+
+{% block page_header %}
+{% if profile %}
+Edit Profile
+{% else %}
+Create Profile
+{% endif %}
+{% endblock %}
+
+{% block body %}
+
+<div class="form">
+  <form method="post" enctype="multipart/form-data" action=".">
+
+    {{form.errors}}
+
+    <h3>About You</h3>
+
+    <div class="field" id="nickname">
+      <span class="field_label">{{form.nickname.label}}</span>
+      {{form.nickname}}
+      {% if form.nickname.errors %}
+      <div class="errors">
+	{{ form.nickname.errors }}
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="field" id="homepage">
+      <span class="field_label">{{form.homepage.label}}</span>
+      {{form.homepage}}
+      {% if form.homepage.errors %}
+      <div class="errors">
+	{{ form.homepage.errors }}
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="field" id="location">
+      <span class="field_label">{{form.location.label}}</span>
+      {{form.location}}
+      {% if form.location.errors %}
+      <div class="errors">
+	{{ form.location.errors }}
+      </div>
+      {% endif %}
+    </div>
+
+    <h4>Profile Photo</h4>
+    <div class="field" id="photo">
+      {% if form.instance.photo %}
+        <img src="{{ profile.photo|scale }}" align=TOP
+             alt="[ {{ profile_user.first_name }}]" 
+             /><br/> Replace photo: 
+      {% else %}
+	Choose photo:
+      {% endif %}
+      {{form.photo}}
+      {% if form.instance.photo %}
+	<br/><span class="field_label">{{ form.remove_photo_label}}</span>
+               {{ form.remove_photo }}
+      {% endif %}
+      {% if form.photo.errors %}
+      <div class="errors">
+	{{ form.photo.errors }}
+      </div>
+      {% endif %}
+    </div>
+
+    <h3>Your CC Story</h3>
+    <div class="field" id="story">
+      <p>
+	Tell us how you've used CC to share your work, find work to
+	re-use and expand the Commons. By sharing your story here you
+	agree to licensed it under the Creative
+	Commons <a href="http://creativecommons.org/licenses/by/3.0/">
+	  Attribution 3.0 Unported</a> license.  Re-use will be
+	attributed to you.</p>
+
+      {{form.story}}
+      {% if form.story.errors %}
+      <div class="errors">
+	{{ form.story.errors }}
+      </div>
+      {% endif %}
+    </div>
+
+    <input type="submit" value="save profile" />
+
+  </form>
+</div>
+
+{% endblock %}

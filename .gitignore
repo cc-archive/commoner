@@ -1,5 +1,8 @@
 *~
-bin
+bin/python
+bin/django
+bin/buildout
+bin/register
 parts
 develop-eggs
 eggs
@@ -7,3 +10,5 @@ eggs
 downloads
 *.pyc
 *.pyo
+commoner.pid
+src/commoner.egg-info

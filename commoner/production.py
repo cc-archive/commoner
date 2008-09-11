@@ -1,2 +1,0 @@
-
-from commoner.settings import *
