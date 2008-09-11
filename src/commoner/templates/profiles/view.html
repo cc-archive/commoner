@@ -31,13 +31,14 @@
   <p>
     <ul>
       <li>{{ profile_user.first_name }} {{ profile_user.last_name}}</li>
-      <li>{{ profile.homepage }}</li>
+      <li><a href="{{profile.homepage}}">{{ profile.homepage }}</a></li>
       <li>{{ profile.location }}</li>
     </ul>
   </p>
   <div class="clear">
     {% if profile.story %}
     <h2>My CC Story</h2>
+    <a href="" rel="cc:attributionURL" />
     {{ profile.story }}
     {% endif %}
 
@@ -47,7 +48,9 @@
   
   <p>
     <ul>
-      <li>{{ profile_user.first_name }} {{ profile_user.last_name}}</li>
+      <li property="cc:attributionName">
+	{{ profile_user.first_name }} {{ profile_user.last_name}}
+      </li>
     </ul>
   </p>
 
@@ -61,10 +64,12 @@
     {% if profile_user.content.all %}
     <ul class="licensed-works">
       {% for work in profile_user.content.all %}
-      <li><a href="{{work.url}}">{{work.title}}</a> &mdash;
-      {{work.registered}} &mdash;
+      <li>
+	<a rel="cc:claimedContent" href="{{work.url}}"
+	   property="dct:title">{{work.title}}</a> &mdash;
+	{{work.registered}} &mdash;
 
-	<a href="{{work.license}}">
+	<a about="{{work.url}}" rel="license" href="{{work.license}}" >
 	  <img src="{{work.license|license_button}}" 
 	       alt="{{work.license|license_code}}" 
 	       style="border:0;" /></a> 
