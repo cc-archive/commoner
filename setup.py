@@ -17,7 +17,8 @@ setup(
     entry_points = {
         
         'console_scripts' : [
-            'register = commoner.registration.scripts:cli',
+            'register = commoner.registration.scripts:register',
+            'welcome = commoner.registration.scripts:welcome',
             'django = commoner.scripts:manage',
             ]
         },

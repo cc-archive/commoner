@@ -1,5 +1,7 @@
+import sys
 import optparse
 
+import commoner.registration.models
 from commoner.registration.models import PartialRegistration
 
 def _opt_parser():
@@ -22,7 +24,7 @@ def _opt_parser():
 
     return parser
 
-def cli():
+def register():
     """Command line interface for creating a partial registration
     and sending the welcome email."""
 
@@ -38,3 +40,20 @@ def cli():
         options.transaction, options.email, 
         options.lastname, options.firstname, 
         options.send_welcome)
+
+def welcome():
+    """Re-send the welcome email for a partial registration."""
+
+    email = sys.argv[-1]
+
+    try:
+        registration = PartialRegistration.objects.get(email=email)
+    except commoner.registration.models.PartialRegistration.DoesNotExist:
+        print "Could not find registration."
+        sys.exit(1)
+
+    if registration.complete:
+        print "Registration already complete; cannot re-send welcome."
+        sys.exit(1)
+
+    PartialRegistration.objects.send_welcome(registration)

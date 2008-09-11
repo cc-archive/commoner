@@ -10,6 +10,21 @@ from django.contrib.auth.models import User
 
 class RegistrationManager(models.Manager):
 
+    def send_welcome(self, registration):
+        """Send the welcome email for a registration."""
+
+        from django.core.mail import send_mail
+
+        current_site = Site.objects.get_current()
+        subject = render_to_string('registration/email/subject.txt',
+                                   {'site':current_site}).strip()
+        message = render_to_string('registration/email/welcome.txt',
+                                   {'site':current_site,
+                                    'registration':registration})
+
+        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, 
+                  [registration.email])
+
     def create_registration(self, transaction_id, email, last, first,
                             send_email = True):
         registration = PartialRegistration(
@@ -21,16 +36,7 @@ class RegistrationManager(models.Manager):
         registration.save()
 
         if send_email:
-            from django.core.mail import send_mail
-
-            current_site = Site.objects.get_current()
-            subject = render_to_string('registration/email/subject.txt',
-                                       {'site':current_site}).strip()
-            message = render_to_string('registration/email/welcome.txt',
-                                       {'site':current_site,
-                                        'registration':registration})
-
-            send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email])
+            self.send_welcome(registration)
 
         return registration
 
