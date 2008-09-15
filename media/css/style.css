@@ -16,7 +16,7 @@ h2 {
 	margin-top: 1.5em;
 }
 
-
+/*** Template ***/
 #header { 
 /*	border-bottom: 1px solid #97c71c;*/
 	width: 850px;
@@ -123,8 +123,6 @@ h2 {
 	padding-bottom: 3em;
 }
 
-/*** ****/
-
 .block {
 	margin-bottom: 3em;
 }
@@ -156,7 +154,16 @@ h2 {
 }
 
 
-/********/
+/*** FORMS ***/
+
+div.form {}
+
+div.form form .field {
+	margin: 1em 0;
+}
+
+
+/*** Profile ***/
 
 .profile-info img {
 	float: left;
@@ -187,6 +194,16 @@ ul.licensed-works li {
 	padding: 0.25em 0;
 	border-bottom: 1px solid #ccc;
 }
+
 ul.licensed-works li.last {
 	border: none;
+}
+
+
+/*** Registration ***/
+
+textarea.tos {
+	width:500px; 
+	border:1px solid #ccc;
+	padding: 10px;
 }

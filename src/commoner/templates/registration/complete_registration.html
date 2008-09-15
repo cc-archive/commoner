@@ -49,16 +49,15 @@ This registration code has already been used.
     </div>
 
     <div class="field" id="agree_to_tos">
-    <h3>Terms of Service</h3>
-      <iframe src="/l/termsofservice.html" style="width:500px; border:1px solid;">
-      </iframe>
+      <h3>Terms of Service</h3>
+      <iframe src="/l/termsofservice.html" class="tos"> </iframe>
       <br/>
-      <span class="field_label">{{form.agree_to_tos.label}}</span>
       {{form.agree_to_tos}}
+      <span class="field_label">{{form.agree_to_tos.label}}</span>
       {% if form.agree_to_tos.errors %}
-      <div class="errors">
-	{{ form.agree_to_tos.errors }}
-      </div>
+        <div class="errors">
+          {{ form.agree_to_tos.errors }}
+        </div>
       {% endif %}
     </div>
 
