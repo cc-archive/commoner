@@ -202,7 +202,7 @@ ul.licensed-works li.last {
 
 /*** Registration ***/
 
-textarea.tos {
+iframe.tos {
 	width:500px; 
 	border:1px solid #ccc;
 	padding: 10px;
