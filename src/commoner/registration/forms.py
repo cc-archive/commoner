@@ -57,7 +57,9 @@ class CompleteRegistrationForm(forms.Form):
                 'password2' in self.cleaned_data:
             if self.cleaned_data['password1'] != self.cleaned_data['password2']:
                 raise forms.ValidationError(_(u'You must type the same password each time'))
-    
+
+        return self.cleaned_data
+
     def save(self):
         # create the new user
         new_user = User.objects.create_user(self.cleaned_data['username'],
