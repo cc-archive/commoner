@@ -98,7 +98,7 @@ p {
 
 #main-body {
 	padding-top: 2em;
-	background: url('../../commoner-id.png') no-repeat 100% -15px;
+	background: url('/m/images/commoner-id.png') no-repeat 100% -15px;
 }
 
 #main-body.register {

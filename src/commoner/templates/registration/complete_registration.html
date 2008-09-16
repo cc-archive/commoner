@@ -17,6 +17,11 @@ This registration code has already been used.
 {% else %}
 
 <div class="form">
+  {% if form.non_field_errors %}
+   <div class="errors">
+     {{ form.non_field_errors }}
+   </div>
+  {% endif %}
   <form action="." method="POST">
 
     <div class="field" id="username">

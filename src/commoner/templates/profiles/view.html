@@ -26,6 +26,8 @@
     <img src="{{ profile.photo|scale }}" 
          alt="[ {{ profile_user.first_name }}]" 
          />
+   {% else %}
+    <img src="/m/images/blank-avatar.jpg" alt="[ {{ profile_user.first_name }} ]" />
    {% endif %}
 
   <p>
@@ -35,11 +37,11 @@
       <li>{{ profile.location }}</li>
     </ul>
   </p>
-  <div class="clear">
+  <div class="clear story">
     {% if profile.story %}
     <h2>My CC Story</h2>
-    <a href="" rel="cc:attributionURL" />
-    {{ profile.story }}
+    <a href="" rel="cc:attributionURL"></a>
+    {{ profile.story|escape|linebreaks }}
     {% endif %}
 
   </div>
