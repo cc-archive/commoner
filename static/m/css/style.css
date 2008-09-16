@@ -11,9 +11,14 @@ body {
 }
 
 .clear { clear: both;}
+.noborder { border: none !important; }
 
 h2 {
 	margin-top: 1.5em;
+}
+
+p {
+	margin-top: 1em;
 }
 
 /*** Template ***/
@@ -156,10 +161,17 @@ h2 {
 
 /*** FORMS ***/
 
-div.form {}
+div.form {
+	background: url(../images/paper.png);
+	background-color: #f9f6e2;
+	padding: 1em 2em 2em 2em;
+	-moz-border-radius: 6px;
+}
 
 div.form form .field {
 	margin: 1em 0;
+	padding-bottom: 1em;
+	border-bottom: 1px solid #EEDFCC;
 }
 
 
@@ -203,6 +215,7 @@ ul.licensed-works li.last {
 /*** Registration ***/
 
 iframe.tos {
+	background-color: #fff;
 	width:500px; 
 	border:1px solid #ccc;
 	padding: 10px;
