@@ -23,7 +23,7 @@ Create Profile
     <h3>About You</h3>
 
     <div class="field" id="nickname">
-      <span class="field_label">{{form.nickname.label}}</span>
+      <span class="field_label">{{form.nickname.label}}: </span>
       {{form.nickname}}
       {% if form.nickname.errors %}
       <div class="errors">
@@ -33,7 +33,7 @@ Create Profile
     </div>
 
     <div class="field" id="homepage">
-      <span class="field_label">{{form.homepage.label}}</span>
+      <span class="field_label">{{form.homepage.label}}: </span>
       {{form.homepage}}
       {% if form.homepage.errors %}
       <div class="errors">
@@ -43,7 +43,7 @@ Create Profile
     </div>
 
     <div class="field" id="location">
-      <span class="field_label">{{form.location.label}}</span>
+      <span class="field_label">{{form.location.label}}: </span>
       {{form.location}}
       {% if form.location.errors %}
       <div class="errors">
@@ -92,7 +92,9 @@ Create Profile
     </div>
 
     <input type="submit" value="save profile" />
-
+    {% if profile %}
+	&nbsp;<a href="{% url profile_view user.username %}">cancel</a>
+	{% endif %}
   </form>
 </div>
 
