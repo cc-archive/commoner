@@ -101,6 +101,11 @@ p {
 	background: url('../../commoner-id.png') no-repeat 100% -15px;
 }
 
+#main-body.register {
+	background-image: url(/m/images/register.png);
+}
+
+
 .box {
 	text-align: left;
 	width: 800px;
@@ -164,6 +169,8 @@ p {
 div.form {
 	background: url(../images/paper.png);
 	background-color: #f9f6e2;
+	margin-top: 0.5em;
+	margin-left: -1em;
 	padding: 1em 2em 2em 2em;
 	-moz-border-radius: 6px;
 }
