@@ -1,7 +1,10 @@
 from django import template
 from django.template.defaultfilters import stringfilter
 
-import cc.license
+try:
+   import cc.license
+except ImportError, e:
+   pass
 
 register = template.Library()
 
