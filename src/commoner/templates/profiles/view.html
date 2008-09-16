@@ -9,7 +9,7 @@
 
 
 {% block page_header %}{{ profile.display_name }}{% endblock %}
-{% block page_sub_header %}Active Commoner{% endblock %}
+{% block page_sub_header %}Active {% endblock %}
 
 {% block extra_nav %}
 {% if user.is_authenticated %}
@@ -30,13 +30,11 @@
     <img src="/m/images/blank-avatar.jpg" alt="[ {{ profile_user.first_name }} ]" />
    {% endif %}
 
-  <p>
-    <ul>
-      <li>{{ profile_user.first_name }} {{ profile_user.last_name}}</li>
-      <li><a href="{{profile.homepage}}">{{ profile.homepage }}</a></li>
-      <li>{{ profile.location }}</li>
-    </ul>
-  </p>
+   <ul>
+     <li>{{ profile_user.first_name }} {{ profile_user.last_name}}</li>
+     <li><a href="{{profile.homepage}}">{{ profile.homepage }}</a></li>
+     <li>{{ profile.location }}</li>
+   </ul>
   <div class="clear story">
     {% if profile.story %}
     <h2>My CC Story</h2>
@@ -61,7 +59,6 @@
 </div>
 
 <div class="column-narrow column">
-  <p>
     <h4>Works I Have Licensed</h4>
     {% if profile_user.content.all %}
     <ul class="licensed-works">
@@ -92,7 +89,6 @@
 	  licensed works.</span>
       {% endifequal %}
     {% endif %}
-  </p>
 </div>
 
 <br clear="both" />
