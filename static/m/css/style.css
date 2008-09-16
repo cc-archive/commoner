@@ -188,6 +188,7 @@ div.form {
 	margin-left: -1.5em;
 	padding: 1.5em;
 	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
 }
 
 div.form h2 {
@@ -208,11 +209,12 @@ div.form form textarea {
 
 /*** Index ***/
 div.benefits {
-    background: url(../images/paper.png);
+    background: url(../images/paper-green.png);
     background-color: #f9f6e2;
     margin: 1.5em -1.5em;
     padding: 1.5em;
     -moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
 }
 
 div.benefits h2 {

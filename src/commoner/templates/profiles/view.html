@@ -14,7 +14,7 @@
 {% block extra_nav %}
 {% if user.is_authenticated %}
   {% ifequal user.username profile_user.username %}
-<li><a href="{% url profile_edit %}">Edit</a></li>
+<li><a href="{% url profile_edit %}">Edit Profile</a></li>
   {% endifequal %}{% endif %}
 {% endblock %}
 
@@ -65,7 +65,8 @@
       {% for work in profile_user.content.all %}
       <li>
 	<a rel="cc:claimedContent" href="{{work.url}}"
-	   property="dct:title">{{work.title}}</a> &mdash;
+	   property="dct:title"><strong>{{work.title}}</strong></a>
+	   <br/>
 	{{work.registered}} &mdash;
 
 	<a about="{{work.url}}" rel="license" href="{{work.license}}" >
