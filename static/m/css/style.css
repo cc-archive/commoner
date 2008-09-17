@@ -256,8 +256,10 @@ ul.licensed-works {
 }
 
 ul.licensed-works li {
+	margin-bottom: 0.75em;
 	padding: 0.25em 0;
-	border-bottom: 1px solid #ccc;
+	padding-bottom: 1em;
+	border-bottom: 1px solid #d4d4d4;
 }
 
 ul.licensed-works li.last {
