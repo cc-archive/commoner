@@ -112,7 +112,8 @@ ul li {
 }
 
 #main-body.register, #main-body.edit {
-	background-image: url(/m/images/register.png);
+	background-image: url(/m/images/edit.png);
+	background-position: 97% -1px;
 }
 
 
