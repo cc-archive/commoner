@@ -7,16 +7,26 @@
 <p>Your username and password didn't match. Please try again.</p>
 {% endif %}
 
+<div class="form">
 <form method="post" action=".">
-<table>
-<tr><td>{{ form.username.label_tag }}</td><td>{{ form.username }}</td></tr>
-<tr><td>{{ form.password.label_tag }}</td><td>{{ form.password }}</td></tr>
-</table>
 
-<input type="submit" value="login" />
-<input type="hidden" name="next" value="{{ next }}" />
-<p><a href="{% url password_reset %}">Forgot your password?</a></p>
+	<div class="field" id="username">
+		<span class="field_label">{{ form.username.label_tag }}: </span>
+		{{ form.username }}
+	</div>
+
+	<div class="field" id="password">
+		<span class="field_label">{{ form.password.label_tag }}: </span>
+		{{ form.password }}
+	</div>
+
+ 	<input type="hidden" name="next" value="{{ next }}" />
+	<p>
+		<input type="submit" value="login" />
+		&nbsp;&nbsp;&nbsp;<a href="{% url password_reset %}">Forgot your password?</a>
+	</p>
 
 </form>
+</div>
 
 {% endblock %}
