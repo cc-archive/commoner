@@ -250,7 +250,10 @@ div.benefits h2 {
 }
 ul.licensed-works {
 	list-style: none;
-	border: 1px solid #ccc;
+	/*border: 1px solid #ccc;
+	*/
+	background: url(/m/images/paper-green.png);
+	-moz-border-radius: 8px;
 	padding: 0.5em;
 	margin: 0;
 }
@@ -259,7 +262,7 @@ ul.licensed-works li {
 	margin-bottom: 0.75em;
 	padding: 0.25em 0;
 	padding-bottom: 1em;
-	border-bottom: 1px solid #d4d4d4;
+	border-bottom: 1px solid #cFdEbC; /*#d4d4d4;*/
 }
 
 ul.licensed-works li.last {
