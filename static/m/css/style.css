@@ -209,10 +209,10 @@ div.form form textarea {
 }
 
 /*** Index ***/
-div.benefits {
+div#aboutcc {
     background: url(../images/paper-green.png);
     background-color: #f9f6e2;
-    margin: 1.5em -1.5em;
+    margin: 3em -1.5em;
     padding: 1.5em;
     -moz-border-radius: 6px;
 	-webkit-border-radius: 6px;
