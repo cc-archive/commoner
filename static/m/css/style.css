@@ -222,6 +222,22 @@ div.benefits h2 {
 	margin-top: 0;
 }
 
+ul#benefit_list {
+	width: 100%;
+	list-style: none;
+	margin: 0 0 0em 0;
+	overflow:hidden;
+}
+
+ul#benefit_list li {
+	width: 260px;
+	text-align: center;
+	float: left;
+}
+ul#benefit_list li h2 {
+	margin-top: 0.25em;
+}
+
 /*** Profile ***/
 
 .profile-info img {
