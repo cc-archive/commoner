@@ -238,6 +238,21 @@ ul#benefit_list li h2 {
 	margin-top: 0.25em;
 }
 
+/*** About Page ***/
+#about ul#benefits {
+	list-style: none;
+	margin: 1.5em 0;
+}
+
+#about ul#benefits li {
+	overflow: auto;
+}
+
+#about ul#benefits li img {
+	float: left;
+	margin-right: 1.5em;
+}
+
 /*** Profile ***/
 
 .profile-info img {

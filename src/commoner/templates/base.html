@@ -36,6 +36,7 @@
         <li><a href="{% url profile_view user.username %}">My Profile</a></li>
         <li><a href="{% url django.contrib.auth.views.logout %}">Logout</a></li>
 	{% endif %}
+		<li><a href="/h/about">Help</a></li>
 
       </ul>
       {% endblock %}
