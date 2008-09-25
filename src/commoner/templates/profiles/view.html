@@ -60,6 +60,17 @@
 </div>
 
 <div class="column-narrow column">
+    {% if user.is_authenticated %}
+      {% ifequal user.username profile_user.username %}
+        <div id="badge">
+          <img src="/m/images/ccnetwork.png" alt="CC Network - Badge" title="CC Network" border="0" />
+          <p>
+            <strong>Place this badge on your website</strong><br/>
+            <input id="network-badge" value="a href=creativecommons.net/USERNAME" readonly="readonly" onclick="this.select()" onfocus="document.getElementById('network-badge').select();" type="text" />
+          </p>
+        </div>
+      {% endifequal %}{% endif %}
+    {% endblock %}
     <h4>Works I Have Licensed</h4>
     {% if profile_user.content.all %}
     <ul class="licensed-works">
