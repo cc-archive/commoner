@@ -300,7 +300,26 @@ ul.licensed-works li.last {
 	border: none;
 }
 
+#badge {
+	border: 1px solid #ddd;
+	padding: 1em;
+	margin-bottom: 1.5em;
+}
 
+#badge img {
+	float: left;
+	padding-right: 10px;
+}
+
+#badge p {
+		margin-top: 0 !important;
+	line-height: 1.25em;
+}
+
+#badge input {
+		margin-top: 5px;
+		width: 97%;
+}
 /*** Registration ***/
 
 iframe.tos {
