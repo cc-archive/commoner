@@ -1,20 +1,25 @@
 {% extends "base.html" %}
 
-{% block page_header %}Welcome{% endblock %}
+{% block page_header %}Welcome to<br/>The Creative Commons Network{% endblock %}
 {% block body %}
 
+<ul id="benefit_list">
+	<li><a href="/h/about/#openid"><img src="/m/images/benefits/openid.png" border="0"/></a><h2>OpenID Profile</h2></li>
+	<li><a href="/h/about/#identify"><img src="/m/images/benefits/identify.png" border="0"/></a><h2>Identify Your Content</h2></li>
+	<li><a href="/h/about/#share"><img src="/m/images/benefits/share.png" border="0"/></a><h2>Share Your CC Story</h2></li>
+</ul>
 <p>
-<strong>commoner.cc</strong> is a site where you can share the
-content you've licensed.
+Creative Commons, at its core, is about supporting global participatory culture. By joining the Creative Commons Network, you will be joining a worldwide community dedicated to building the Commons &mdash; the pool of content, of knowledge, that is freely and legally accessible to everyone &mdash; a vital public resource in this digital age. <a href="http://support.creativecommons.org/join">Join today!</a>
 </p>
 
-<table width="100%">
-<tr>
-<td width="33%">Support The Commons<br/>
-<em>and get a profile</em></td>
-<td width="33%">Create a Profile</td>
-<td width="33%">Lorem Ipsum</td>
-</tr>
-</table>
+<p style="text-align: center">[ JOIN BUTTON HERE ] [ BUTTON/LINK TO ABOUT PAGE HERE ]</p>
+
+<div id="aboutcc">
+<h1>About CC</h1>
+<p>
+<a href="http://creativecommons.org/">Creative Commons</a> is a non-profit organization that works to increase the amount of content (cultural, educational, and scientific content) in "the commons" &mdash; the body of work that is available to the public for free and legal sharing, use, re-purposing, and remixing. Creative Commons does this by providing free, easy-to-use legal and technical tools that give everyone a simple, standardized way to pre-clear copyrights to their creative work. CC licenses let people easily change their copyright terms from the default, restrictive "all rights reserved" to a more flexible "some rights reserved." To learn more about Creative Commons, please visit our <a href="http://creativecommons.org/">website</a>.
+
+</p>
+</div>
 
 {% endblock %}

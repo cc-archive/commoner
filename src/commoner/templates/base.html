@@ -8,7 +8,7 @@
   	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     
     <!-- can you have multiple blocks of the same name, w/ same content? page_header here also -->
-  	<title>PAGE_HEADER - CC Commoner</title>
+  	<title>{% block head_title %}{% endblock %} CC Network</title>
   	<link href="/m/css/style.css" rel="stylesheet" type="text/css">
 	
     {% block header %}
@@ -31,17 +31,19 @@
 
         {% if user.is_anonymous %}
         <li><a href="{% url django.contrib.auth.views.login %}">Login</a></li>
+		<li><a href="http://support.creativecommons.org/join">Join</a></li>
 	{% else %}
         <li><a href="{% url profile_view user.username %}">My Profile</a></li>
         <li><a href="{% url django.contrib.auth.views.logout %}">Logout</a></li>
 	{% endif %}
+		<li><a href="/h/about">Help</a></li>
 
       </ul>
       {% endblock %}
     </div>
     
     
-    <div id="main-body" class="box">
+    <div id="main-body" class="box {% block page_icon_class %}{% endblock %}">
       <div class="block" id="title">
         <div class="title-labels">
           <h1>{% block page_header %}commoner.cc{% endblock %}</h1>

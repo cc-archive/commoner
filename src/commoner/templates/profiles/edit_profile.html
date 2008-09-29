@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load thumbnail %}
+{% block head_title %}Profile -{% endblock %}
 
 {% block page_header %}
 {% if profile %}
@@ -12,6 +13,7 @@ Create Profile
 {% block extra_nav %}
 <li><a href="{% url password_change %}">Change Password</a></li>
 {% endblock %}
+{% block page_icon_class %}edit{% endblock %}
 {% block body %}
 
 <div class="form">
@@ -22,7 +24,7 @@ Create Profile
     <h3>About You</h3>
 
     <div class="field" id="nickname">
-      <span class="field_label">{{form.nickname.label}}</span>
+      <span class="field_label">{{form.nickname.label}}: </span>
       {{form.nickname}}
       {% if form.nickname.errors %}
       <div class="errors">
@@ -32,7 +34,7 @@ Create Profile
     </div>
 
     <div class="field" id="homepage">
-      <span class="field_label">{{form.homepage.label}}</span>
+      <span class="field_label">{{form.homepage.label}}: </span>
       {{form.homepage}}
       {% if form.homepage.errors %}
       <div class="errors">
@@ -42,7 +44,7 @@ Create Profile
     </div>
 
     <div class="field" id="location">
-      <span class="field_label">{{form.location.label}}</span>
+      <span class="field_label">{{form.location.label}}: </span>
       {{form.location}}
       {% if form.location.errors %}
       <div class="errors">
@@ -51,10 +53,10 @@ Create Profile
       {% endif %}
     </div>
 
-    <h4>Profile Photo</h4>
+    <h3>Profile Photo</h3>
     <div class="field" id="photo">
       {% if form.instance.photo %}
-        <img src="{{ profile.photo|scale }}" align=TOP
+        <img src="{{ profile.photo|scale }}" 
              alt="[ {{ profile_user.first_name }}]" 
              /><br/> Replace photo: 
       {% else %}
@@ -76,8 +78,8 @@ Create Profile
     <div class="field" id="story">
       <p>
 	Tell us how you've used CC to share your work, find work to
-	re-use and expand the Commons. By sharing your story here you
-	agree to licensed it under the Creative
+	re-use, and expand the Commons. By sharing your story here you
+	agree to license it under the Creative
 	Commons <a href="http://creativecommons.org/licenses/by/3.0/">
 	  Attribution 3.0 Unported</a> license.  Re-use will be
 	attributed to you.</p>
@@ -91,7 +93,9 @@ Create Profile
     </div>
 
     <input type="submit" value="save profile" />
-
+    {% if profile %}
+	&nbsp;<a href="{% url profile_view user.username %}">cancel</a>
+	{% endif %}
   </form>
 </div>
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Replace these three settings.
-PROJDIR="/var/www/commoner.cc/commoner"
+PROJDIR="/var/www/creativecommons.net/commoner"
 FCGIHOST="localhost"
 FCGIPORT="7999"
 PIDFILE="$PROJDIR/commoner.pid"

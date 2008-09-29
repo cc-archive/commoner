@@ -1,8 +1,9 @@
 {% extends "base.html" %}
-
+{% block head_title %}Complete Registration -{% endblock %}
 {% block page_header %}Complete Registration{% endblock %}
 
 {% block nav_override %}{% endblock %}
+{% block page_icon_class %}register{% endblock %}
 {% block body %}
 
 <h2>{{form.partial.first_name}} {{form.partial.last_name}}</h2>
@@ -16,6 +17,11 @@ This registration code has already been used.
 {% else %}
 
 <div class="form">
+  {% if form.non_field_errors %}
+   <div class="errors">
+     {{ form.non_field_errors }}
+   </div>
+  {% endif %}
   <form action="." method="POST">
 
     <div class="field" id="username">
@@ -28,7 +34,7 @@ This registration code has already been used.
       {% endif %}
     </div>
 
-    <div class="field" id="password1">
+    <div class="field noborder" id="password1">
       <span class="field_label">{{form.password1.label}}</span>
       {{form.password1}}
       {% if form.password1.errors %}
@@ -51,14 +57,15 @@ This registration code has already been used.
     <div class="field" id="agree_to_tos">
       <h3>Terms of Service</h3>
       <iframe src="/l/termsofservice.html" class="tos"> </iframe>
-      <br/>
-      {{form.agree_to_tos}}
-      <span class="field_label">{{form.agree_to_tos.label}}</span>
-      {% if form.agree_to_tos.errors %}
+      <p>
+        {{form.agree_to_tos}}
+        <span class="field_label">{{form.agree_to_tos.label}}</span>
+        {% if form.agree_to_tos.errors %}
         <div class="errors">
           {{ form.agree_to_tos.errors }}
         </div>
-      {% endif %}
+        {% endif %}
+      </p>
     </div>
 
     <input type="submit" value="complete registration" />

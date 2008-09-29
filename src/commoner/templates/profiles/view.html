@@ -7,6 +7,7 @@
 <link rel="openid2.provider" href="{{base_url}}{% url commoner.server.views.endpoint %}">
 {% endblock %}
 
+{% block head_title %}{{ profile.display_name }} -{% endblock %}
 
 {% block page_header %}{{ profile.display_name }}{% endblock %}
 {% block page_sub_header %}
@@ -20,7 +21,7 @@
 {% block extra_nav %}
 {% if user.is_authenticated %}
   {% ifequal user.username profile_user.username %}
-<li><a href="{% url profile_edit %}">Edit</a></li>
+<li><a href="{% url profile_edit %}">Edit Profile</a></li>
   {% endifequal %}{% endif %}
 {% endblock %}
 
@@ -32,20 +33,20 @@
     <img src="{{ profile.photo|scale }}" 
          alt="[ {{ profile_user.first_name }}]" 
          />
+   {% else %}
+    <img src="/m/images/blank-avatar.jpg" alt="[ {{ profile_user.first_name }} ]" />
    {% endif %}
 
-  <p>
-    <ul>
-      <li>{{ profile_user.first_name }} {{ profile_user.last_name}}</li>
-      <li><a href="{{profile.homepage}}">{{ profile.homepage }}</a></li>
-      <li>{{ profile.location }}</li>
-    </ul>
-  </p>
-  <div class="clear">
+   <ul>
+     <li>{{ profile_user.first_name }} {{ profile_user.last_name}}</li>
+     <li><a href="{{profile.homepage}}">{{ profile.homepage }}</a></li>
+     <li>{{ profile.location }}</li>
+   </ul>
+  <div class="clear story">
     {% if profile.story %}
     <h2>My CC Story</h2>
-    <a href="" rel="cc:attributionURL" />
-    {{ profile.story }}
+    <a href="" rel="cc:attributionURL"></a>
+    {{ profile.story|escape|linebreaks }}
     {% endif %}
 
   </div>
@@ -65,14 +66,25 @@
 </div>
 
 <div class="column-narrow column">
-  <p>
+    {% if user.is_authenticated %}
+      {% ifequal user.username profile_user.username %}
+        <div id="badge">
+          <img src="/m/images/ccnetwork.png" alt="CC Network - Badge" title="CC Network" border="0" />
+          <p>
+            <strong>Place this badge on your website</strong><br/>
+            <input id="network-badge" value="a href=creativecommons.net/USERNAME" readonly="readonly" onclick="this.select()" onfocus="document.getElementById('network-badge').select();" type="text" />
+          </p>
+        </div>
+      {% endifequal %}{% endif %}
+    {% endblock %}
     <h4>Works I Have Licensed</h4>
     {% if profile_user.content.all %}
     <ul class="licensed-works">
       {% for work in profile_user.content.all %}
       <li>
 	<a rel="cc:claimedContent" href="{{work.url}}"
-	   property="dct:title">{{work.title}}</a> &mdash;
+	   property="dct:title"><strong>{{work.title}}</strong></a>
+	   <br/>
 	{{work.registered}} &mdash;
 
 	<a about="{{work.url}}" rel="license" href="{{work.license}}" >
@@ -85,7 +97,8 @@
 	{% endifequal %}
       </li>
       {% endfor %}
-    </ul>
+<li style="text-align:right"><a href="MORE_CONTENT_ITEMS"><em>More...</em></a></li>
+	</ul>
     {% else %}
       {% ifequal user.username username %}
         <span class="no-works">You haven't registered any licensed
@@ -96,7 +109,6 @@
 	  licensed works.</span>
       {% endifequal %}
     {% endif %}
-  </p>
 </div>
 
 <br clear="both" />

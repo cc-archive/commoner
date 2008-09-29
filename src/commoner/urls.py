@@ -13,6 +13,10 @@ urlpatterns = patterns(
     (r'^$', 'django.views.generic.simple.direct_to_template',
      {'template':'index.html'}),
     (r'^admin/(.*)', admin.site.root),
+    
+	# Help pages
+    (r'^h/about/$', 'django.views.generic.simple.direct_to_template',
+	 {'template':'help/about.html'}),
 
     # Account management
     (r'^a/login/$', 'django.contrib.auth.views.login'),

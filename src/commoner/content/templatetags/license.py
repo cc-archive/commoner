@@ -6,7 +6,6 @@ try:
 except ImportError, e:
     pass
 
-
 register = template.Library()
 
 @register.filter
