@@ -1,5 +1,8 @@
-
-import djangorecipe.manage
+import os
+from django.core import management
 
 def manage():
-    djangorecipe.manage.main('commoner.settings')
+
+    import commoner.settings as mod
+
+    management.execute_manager(mod)
