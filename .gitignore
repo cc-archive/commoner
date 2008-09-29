@@ -3,6 +3,7 @@ bin/python
 bin/django
 bin/buildout
 bin/register
+bin/welcome
 parts
 develop-eggs
 eggs
