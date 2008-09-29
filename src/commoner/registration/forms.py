@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 
 from django import forms
 
+from commoner.profiles.models import CommonerProfile
+
 class CompleteRegistrationForm(forms.Form):
 
     username = forms.CharField(label="Username:", max_length=30)
@@ -61,7 +63,7 @@ class CompleteRegistrationForm(forms.Form):
         return self.cleaned_data
 
     def save(self):
-        # create the new user
+        # create the new user and profile
         new_user = User.objects.create_user(self.cleaned_data['username'],
                                            self.partial.email,
                                            self.cleaned_data['password1'])
@@ -69,6 +71,9 @@ class CompleteRegistrationForm(forms.Form):
         new_user.first_name = self.partial.first_name
         new_user.last_name = self.partial.last_name
         new_user.save()
+
+        new_profile = CommonerProfile(user=new_user)
+        new_profile.save()
 
         # update the partial registration
         self.partial.user = new_user
