@@ -7,6 +7,7 @@ from django.db import models
 from django.db.models import permalink
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
+from django.conf import settings
 
 from commoner.util import getBaseURL
 
@@ -62,3 +63,9 @@ class CommonerProfile(models.Model):
     @property
     def content(self):
         return self.user.content
+
+    @property
+    def badge_img_url(self):
+
+        return "%s%s" % (settings.BADGE_BASE_URL, self.user.username)
+    
