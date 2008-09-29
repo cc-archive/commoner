@@ -1,6 +1,8 @@
 import os.path
 import urlparse
 
+from datetime import datetime
+
 from django.db import models
 from django.db.models import permalink
 from django.core.urlresolvers import reverse
@@ -20,6 +22,10 @@ class CommonerProfile(models.Model):
 
     story = models.TextField(blank=True)
 
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    expires = models.DateTimeField(blank=True, null=False)
+
     def __unicode__(self):
         if self.nickname:
             return u"%s (%s)" % (self.user.username, self.nickname)
@@ -36,6 +42,22 @@ class CommonerProfile(models.Model):
                 getBaseURL(request), 
                 reverse('profile_view', args=(self.user.username, ) )
                 )
+
+    def save(self):
+        # if we're creating and the expiration date hasn't been set...
+        if not(self.created) and not(self.expires):
+
+            # set the expiration to be now + 1 year
+            today = datetime.now()
+            self.expires = today.replace(today.year + 1)
+            
+        super(CommonerProfile, self).save()
+
+    @property
+    def active(self):
+        """Return True if the profile is not expired."""
+
+        return (datetime.now() < self.expires)
 
     @property
     def content(self):

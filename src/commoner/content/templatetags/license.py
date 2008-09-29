@@ -2,9 +2,9 @@ from django import template
 from django.template.defaultfilters import stringfilter
 
 try:
-   import cc.license
+    import cc.license
 except ImportError, e:
-   pass
+    pass
 
 register = template.Library()
 

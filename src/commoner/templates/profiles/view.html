@@ -10,7 +10,13 @@
 {% block head_title %}{{ profile.display_name }} -{% endblock %}
 
 {% block page_header %}{{ profile.display_name }}{% endblock %}
-{% block page_sub_header %}Active {% endblock %}
+{% block page_sub_header %}
+  {% if profile.active %}
+    Active 
+  {% else %}
+    Inactive
+  {% endif %}
+{% endblock %}
 
 {% block extra_nav %}
 {% if user.is_authenticated %}
