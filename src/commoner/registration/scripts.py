@@ -31,10 +31,9 @@ def register():
 
     (options, args) = _opt_parser().parse_args()
 
-    if None in (options.lastname, options.firstname, options.email,
-                options.transaction):
+    if None in (options.lastname, options.firstname, options.email):
         # a required value is missing
-        raise Exception("lastname, firstname, email and transaction id must be supplied.")
+        raise Exception("lastname, firstname, and email must be supplied.")
 
     PartialRegistration.objects.create_registration(
         options.transaction, options.email, 
