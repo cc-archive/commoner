@@ -72,7 +72,8 @@
           <img src="/m/images/ccnetwork.png" alt="CC Network - Badge" title="CC Network" border="0" />
           <p>
             <strong>Place this badge on your website</strong><br/>
-            <input id="network-badge" value="a href=creativecommons.net/USERNAME" readonly="readonly" onclick="this.select()" onfocus="document.getElementById('network-badge').select();" type="text" />
+            <input id="network-badge" value='{% include "profiles/badge.html" %}' 
+		   readonly="readonly" onclick="this.select()" onfocus="document.getElementById('network-badge').select();" type="text" />
           </p>
         </div>
       {% endifequal %}{% endif %}

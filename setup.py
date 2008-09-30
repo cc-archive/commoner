@@ -11,7 +11,7 @@ def read(*rnames):
 setup(
     name = "commoner",
     version = "0.1",
-    packages = ['commoner'],
+    packages = ['commoner', 'commoner_i',],
     package_dir = {'':'src'},
 
     entry_points = {
@@ -20,12 +20,12 @@ setup(
             'register = commoner.registration.scripts:register',
             'welcome = commoner.registration.scripts:welcome',
             'django = commoner.scripts:manage',
+            'idjango = commoner_i.scripts:manage',
             ]
         },
     
     install_requires = ['setuptools',
                         'Django',
-			'djangorecipe',
                         'python-openid',
                         'flup',
                         'MySQL-python',

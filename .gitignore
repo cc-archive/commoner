@@ -4,6 +4,7 @@ bin/django
 bin/buildout
 bin/register
 bin/welcome
+bin/i/django
 parts
 develop-eggs
 eggs

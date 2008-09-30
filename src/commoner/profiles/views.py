@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
 import forms
+import models
 
 @login_required
 def edit_or_create(request):
@@ -82,11 +83,12 @@ def view(request, username, public_profile_field=None,
         :template:`profiles/profile_detail.html`.
     
     """
+    # get the user and profile objects
     user = get_object_or_404(User, username=username)
     try:
         profile_obj = user.get_profile()
     except ObjectDoesNotExist:
-        profile_obj = None
+        profile_obj = models.CommonerProfile(user=user)
 
     if public_profile_field is not None and \
        not getattr(profile_obj, public_profile_field, False):

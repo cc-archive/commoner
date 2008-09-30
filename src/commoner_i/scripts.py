@@ -3,6 +3,6 @@ from django.core import management
 
 def manage():
 
-    import commoner.settings as mod
+    import commoner_i.settings as mod
 
     management.execute_manager(mod)
