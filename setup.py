@@ -20,6 +20,7 @@ setup(
             'register = commoner.registration.scripts:register',
             'welcome = commoner.registration.scripts:welcome',
             'django = commoner.scripts:manage',
+            'noop = commoner.scripts:noop',
             'idjango = commoner_i.scripts:manage',
             ]
         },
@@ -30,7 +31,7 @@ setup(
                         'flup',
                         'MySQL-python',
                         'PILwoTK',
-                        'cc.license',
+                        # 'cc.license',
                         ],
 
     dependency_links=['http://download.zope.org/distribution/',],
