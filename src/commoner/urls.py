@@ -17,6 +17,8 @@ urlpatterns = patterns(
 	# Help pages
     (r'^h/about/$', 'django.views.generic.simple.direct_to_template',
 	 {'template':'help/about.html'}),
+	(r'^h/openid/$', 'django.views.generic.simple.direct_to_template',
+	 {'template':'help/openid.html'}),
 
     # Account management
     (r'^a/login/$', 'django.contrib.auth.views.login'),
