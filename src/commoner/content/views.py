@@ -76,16 +76,18 @@ def view(request, id):
                               dict(work=work),
                               context_instance=RequestContext(request))
 
-def by_uri(request, uri):
+def by_uri(request):
 
-    works = model.Content.objects.filter(url = uri)
+    uri = request.GET.get('uri', None)
+
+    works = models.Content.objects.filter(url = uri)
 
     if len(works) == 1:
         return HttpResponseRedirect(
             reverse('view_work', args=(works[0].id,)))
     elif len(works) == 0:
         # not found
-        return Http404()
+        raise Http404("No works matched the given URL, %s" % uri)
     
 
     # display the disambiguation list

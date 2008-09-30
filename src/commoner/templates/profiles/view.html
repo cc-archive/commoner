@@ -82,10 +82,10 @@
     <ul class="licensed-works">
       {% for work in profile_user.content.all %}
       <li>
-	<a rel="cc:claimedContent" href="{{work.url}}"
-	   property="dct:title"><strong>{{work.title}}</strong></a>
+	<a rel="cc:claimedContent" href="{{work.url}}">
+	   <strong property="dct:title">{{work.title}}</strong></a>
 	   <br/>
-	{{work.registered}} &mdash;
+	<a href="{{work.get_absolute_url}}">{{work.registered}}</a> &mdash;
 
 	<a about="{{work.url}}" rel="license" href="{{work.license}}" >
 	  <img src="{{work.license|license_button}}" 
@@ -97,7 +97,7 @@
 	{% endifequal %}
       </li>
       {% endfor %}
-<li style="text-align:right"><a href="MORE_CONTENT_ITEMS"><em>More...</em></a></li>
+<li style="text-align:right"><a rel="rdf:seeAlso" href="{% url commoner.profiles.views.works user.username %}"><em>More...</em></a></li>
 	</ul>
     {% else %}
       {% ifequal user.username username %}

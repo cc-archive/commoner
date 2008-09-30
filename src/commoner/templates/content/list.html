@@ -2,7 +2,7 @@
 {% load license %}
 
 {% block page_header %}
-Work Registrations
+Registered Works
 {% endblock %}
 
 {% block body %}
@@ -14,8 +14,9 @@ Work Registrations
     <ul class="licensed-works">
       {% for work in works %}
       <li>
-	<a rel="cc:claimedContent" href="{{work.url}}"
-	   property="dct:title"><strong>{{work.title}}</strong></a>
+	<a about="{{work.user.get_absolute_url}}" 
+	   rel="cc:claimedContent" href="{{work.url}}">
+	   <strong property="dct:title">{{work.title}}</strong></a>
 	   <br/>
 	{{work.registered}} &mdash;
 
