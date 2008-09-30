@@ -36,4 +36,4 @@ class CommonerProfileForm(forms.ModelForm):
 
     class Meta:
         model = CommonerProfile
-        exclude = ('user',)
+        exclude = ('user','created','expires','updated')
