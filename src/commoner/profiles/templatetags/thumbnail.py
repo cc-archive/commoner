@@ -44,7 +44,7 @@ def thumbnail(file, size='104x104'):
     return _thumbnail(file, x, y)
 
 @register.filter
-def scale(file, max_side=200):
+def scale(file, max_side=150):
 
     try:
         max_side = float(max_side)
