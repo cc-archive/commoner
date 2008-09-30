@@ -67,3 +67,31 @@ def delete(request, id):
                                 },
                               context_instance=RequestContext(request)
                               )
+
+def view(request, id):
+
+    work = get_object_or_404(models.Content, id=id)
+
+    return render_to_response('content/view.html',
+                              dict(work=work),
+                              context_instance=RequestContext(request))
+
+def by_uri(request, uri):
+
+    works = model.Content.objects.filter(url = uri)
+
+    if len(works) == 1:
+        return HttpResponseRedirect(
+            reverse('view_work', args=(works[0].id,)))
+    elif len(works) == 0:
+        # not found
+        return Http404()
+    
+
+    # display the disambiguation list
+    return render_to_response('content/list.html',
+                              dict(works=works,
+                                   message="More than one work matches the URL provided.",
+                                   ),
+                              context_instance=RequestContext(request))
+

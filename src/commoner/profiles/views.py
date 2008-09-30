@@ -100,3 +100,16 @@ def view(request, username, public_profile_field=None,
                                 'username' : username},
                               context_instance=RequestContext(request))
 
+def works(request, username):
+
+    user = get_object_or_404(User, username=username)
+    works = user.content.all()
+
+    # display the complete list of works
+    return render_to_response('content/list.html',
+                              dict(works=works,
+                                   user=user,
+                                   profile=user.get_profile(),
+                                   ),
+                              context_instance=RequestContext(request))
+

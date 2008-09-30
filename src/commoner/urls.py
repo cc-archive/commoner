@@ -43,23 +43,29 @@ urlpatterns = patterns(
     url(r'^p/edit/$', 'commoner.profiles.views.edit_or_create', 
         name='profile_edit'),
 
-    # Content management
-    url(r'^c/add/', 
+    # Work management
+    url(r'^w/add/', 
         'commoner.content.views.add_or_edit',
         name='add_content'),
-    url(r'^c/edit/(?P<id>\d+)/', 
+    url(r'^w/edit/(?P<id>\d+)/', 
         'commoner.content.views.add_or_edit',
         name='edit_content'),
-    url(r'^c/delete/(?P<id>\d+)/', 
+    url(r'^w/delete/(?P<id>\d+)/', 
         'commoner.content.views.delete',
         name='delete_content'),
+    url(r'^w/uri/(?P<uri>.+)/', 'commoner.content.views.by_uri',
+        name='lookup_work'),
+    url(r'^w/(?P<id>\d+)/', 'commoner.content.views.view',
+        name='view_work'),
     
     # OpenID Support
     (r'^o/xrds/$', 'commoner.server.views.idpXrds'),
     (r'^o/processTrustResult/$', 'commoner.server.views.processTrustResult'),
     (r'^o/endpoint/$', 'commoner.server.views.endpoint'),
 
-    # Profile view
+    # Profile views
+    url(r'^(?P<username>\w+)/works/$', 'commoner.profiles.views.works',
+        name='profile_works'),
     url(r'^(?P<username>\w+)/$', 'commoner.profiles.views.view',
         name='profile_view'),
     (r'^(?P<username>\w+)$', 'django.views.generic.simple.redirect_to',

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block page_header %}
+Work Registrations
+{% endblock %}
+
+{% block body %}
+
+{% if message %}
+<h3>{{ message }}</h3>
+{% endif %}
+
+    <ul class="licensed-works">
+      {% for work in works %}
+      <li>
+	<a rel="cc:claimedContent" href="{{work.url}}"
+	   property="dct:title"><strong>{{work.title}}</strong></a>
+	   <br/>
+	{{work.registered}} &mdash;
+
+	<a about="{{work.url}}" rel="license" href="{{work.license}}" >
+	  <img src="{{work.license|license_button}}" 
+	       alt="{{work.license|license_code}}" 
+	       style="border:0;" /></a> 
+	{% ifequal user work.user %}
+	  <a href="{% url edit_content work.id %}">[edit]</a>
+	  <a href="{% url delete_content work.id %}">[delete]</a>
+	{% endifequal %}
+      </li>
+
+      {% endfor %}
+    </ul>
+    
+{% endblock %}
