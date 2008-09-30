@@ -1,4 +1,0 @@
-#!/bin/bash
-
-./bin/django runfcgi host=localhost port=7999 daemonize=false
-
