@@ -90,4 +90,4 @@ LOGIN_URL = '/a/login/'
 # THUMBNAIL_PATH is a path relative to MEDIA_ROOT where
 # thumbnails of user photos are stored
 THUMBNAIL_PATH = 't'
-BADGE_BASE_URL = 'http://i.creativecommons.org/p/'
+BADGE_BASE_URL = 'http://i.creativecommons.net/p/'
