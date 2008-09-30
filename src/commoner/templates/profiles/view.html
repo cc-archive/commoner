@@ -69,7 +69,7 @@
     {% if user.is_authenticated %}
       {% ifequal user.username profile_user.username %}
         <div id="badge">
-          <img src="/m/images/ccnetwork.png" alt="CC Network - Badge" title="CC Network" border="0" />
+          <img src="{{ profile.badge_img_url }}" alt="CC Network - Badge" title="CC Network" border="0" />
           <p>
             <strong>Place this badge on your website</strong><br/>
             <input id="network-badge" value='{% include "profiles/badge.html" %}' 
