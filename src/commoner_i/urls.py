@@ -9,7 +9,7 @@ urlpatterns = patterns(
     '',
 
     # Profile view
-    url(r'^p/(?P<username>\w+)/$', 'commoner.profiles.views.badge',
+    url(r'^p/(?P<username>\w+)/$', 'commoner_i.views.badge',
         name='profile_badge'),
 
 )
