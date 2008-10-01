@@ -15,7 +15,7 @@ class CommonerProfile(models.Model):
     
     user = models.ForeignKey(User, unique=True)
 
-    nickname = models.CharField(max_length=255, blank=True)
+    nickname = models.CharField("Screen name", max_length=255, blank=True)
     photo = models.ImageField(upload_to='p', blank=True, null=True)
 
     homepage = models.URLField(max_length=255, blank=True)
