@@ -82,7 +82,7 @@
     <ul class="licensed-works">
       {% for work in profile_user.content.all %}
       <li>
-	<a rel="cc:claimedContent" href="{{work.url}}">
+	<a rel="sioc:owner_of" href="{{work.url}}">
 	   <strong property="dct:title">{{work.title}}</strong></a>
 	   <br/>
 	<a href="{{work.get_absolute_url}}">{{work.registered}}</a> &mdash;
