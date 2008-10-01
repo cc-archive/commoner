@@ -88,7 +88,7 @@
     <h4>Works I Have Licensed</h4>
     {% if profile_user.content.all %}
     <ul class="licensed-works">
-      {% for work in profile_user.content.all %}
+      {% for work in profile_user.content.all|slice:":5" %}
       <li>
 	<a rel="sioc:owner_of" href="{{work.url}}">
 	   <strong property="dct:title">{{work.title}}</strong></a>
@@ -105,7 +105,7 @@
 	{% endifequal %}
       </li>
       {% endfor %}
-<li style="text-align:right"><a rel="rdf:seeAlso" href="{% url commoner.profiles.views.works profile_user.username %}"><em>More...</em></a></li>
+<li style="text-align:right"><a rel="rdf:seeAlso" href="{% url commoner.profiles.views.works profile_user.username %}"><em>All...</em></a></li>
 	</ul>
     {% else %}
       {% ifequal user.username username %}
