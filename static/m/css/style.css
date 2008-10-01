@@ -33,7 +33,13 @@ li p {
 	margin-top: 0.25em;
 }
 
+a, a:link {
+	text-decoration: none;
+}
 
+a:hover {
+	text-decoration: underline;
+}
 
 /*** Template ***/
 #header { 
@@ -303,6 +309,7 @@ div#join_network h2 a:hover {
 
 .profile-info img {
 	float: left;
+	margin-right: 10px;
 }
 
 .profile-info ul img {
@@ -315,7 +322,6 @@ div#join_network h2 a:hover {
 	list-style: none;
 	font-style: italic;
 	margin: 0;
-	margin-left: 165px;
 }
 
 .profile-info ul li {
