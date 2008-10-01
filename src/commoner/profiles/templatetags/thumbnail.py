@@ -24,7 +24,8 @@ def _thumbnail(file, x, y):
     if not default_storage.exists(miniature): 
 
         # make sure the directories exist
-        os.makedirs(os.path.dirname(miniature_filename))
+	if not(os.path.exists(os.path.dirname(miniature_filename))):
+            os.makedirs(os.path.dirname(miniature_filename))
 
         image = Image.open(filename)
         image.thumbnail([x, y], Image.ANTIALIAS)
@@ -63,6 +64,7 @@ def scale(file, max_side=150):
 
         return _thumbnail(file, x, y)
     except Exception, e:
+        return e
         return file.url
 
 
