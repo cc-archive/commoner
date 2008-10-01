@@ -8,7 +8,8 @@ from commoner.profiles.models import CommonerProfile
 
 class CompleteRegistrationForm(forms.Form):
 
-    username = forms.CharField(label="Username:", max_length=30)
+    username = forms.CharField(label="Username:", max_length=30,
+                               help_text="https://creativecommons.net/USERNAME")
     password1 = forms.CharField(label="Password:",
                                 widget=forms.PasswordInput)
     password2 = forms.CharField(label="Password (again):",
