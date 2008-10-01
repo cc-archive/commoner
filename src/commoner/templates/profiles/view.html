@@ -95,10 +95,12 @@
 	   <br/>
 	<a href="{{work.get_absolute_url}}">{{work.registered}}</a> &mdash;
 
+        {% if work.license %}
 	<a about="{{work.url}}" rel="license" href="{{work.license}}" >
 	  <img src="{{work.license|license_button}}" 
 	       alt="{{work.license|license_code}}" 
 	       style="border:0;" /></a> 
+        {% endif %}
 	{% ifequal user work.user %}
 	  <a href="{% url edit_content work.id %}">[edit]</a>
 	  <a href="{% url delete_content work.id %}">[delete]</a>
