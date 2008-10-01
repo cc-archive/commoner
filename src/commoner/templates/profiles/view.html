@@ -42,7 +42,9 @@
    {% endif %}
 
    <ul>
-     <li>{{ profile_user.first_name }} {{ profile_user.last_name}}</li>
+     <li span property="sioc:name">
+       {{ profile_user.first_name }} {{ profile_user.last_name}}
+     </li>
      <li><a href="{{profile.homepage}}">{{ profile.homepage }}</a></li>
      <li>{{ profile.location }}</li>
    </ul>
