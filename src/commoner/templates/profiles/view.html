@@ -83,6 +83,8 @@
           </p>
         </div>
       {% endifequal %}{% endif %}
+	<a style="float:right;" 
+	   title="add a work" href="{% url add_content %}">+</a>
     <h4>Works I Have Licensed</h4>
     {% if profile_user.content.all %}
     <ul class="licensed-works">
