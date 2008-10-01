@@ -15,7 +15,7 @@ Registered Works
       {% for work in works %}
       <li>
 	<a about="{{work.user.get_profile.get_absolute_url}}" 
-	   rel="cc:claimedContent" href="{{work.url}}">
+	   rel="sioc:owner_of" href="{{work.url}}">
 	   <strong property="dct:title">{{work.title}}</strong></a>
 	   <br/>
 	{{work.registered}} &mdash;
