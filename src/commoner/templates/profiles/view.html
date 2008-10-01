@@ -3,8 +3,10 @@
 {% load thumbnail %}
 
 {% block header %}
-<link rel="openid.server" href="{{base_url}}{% url commoner.server.views.endpoint %}">
-<link rel="openid2.provider" href="{{base_url}}{% url commoner.server.views.endpoint %}">
+<link rel="openid.server" href="{{base_url}}{% url commoner.server.views.endpoint %}" />
+<link rel="openid2.provider" href="{{base_url}}{% url commoner.server.views.endpoint %}" />
+
+<link about="" typeof="sioc:User" />
 {% endblock %}
 
 {% block head_title %}{{ profile.display_name }} -{% endblock %}
@@ -42,9 +44,7 @@
    {% endif %}
 
    <ul>
-     <li span property="sioc:name">
-       {{ profile_user.first_name }} {{ profile_user.last_name}}
-     </li>
+     <li property="sioc:name">{{ profile_user.first_name }} {{ profile_user.last_name}}</li>
      <li><a href="{{profile.homepage}}">{{ profile.homepage }}</a></li>
      <li>{{ profile.location }}</li>
    </ul>
@@ -117,6 +117,6 @@
     {% endif %}
 </div>
 
-<br clear="both" />
+<br style="clear: both" />
 
 {% endblock %}

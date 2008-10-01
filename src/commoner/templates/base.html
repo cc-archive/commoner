@@ -1,18 +1,23 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" 
+	"http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" 
       xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
       xmlns:cc="http://creativecommons.org/ns#"
       xmlns:dct="http://purl.org/dc/terms/"
       xmlns:sioc="http://rdfs.org/sioc/ns#"
+      xmlns:sioc_service="http://rdfs.org/sioc/services#"
       xmlns:foaf="http://xmlns.com/foaf/0.1/">
   <head>
   	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     
   	<title>{% block head_title %}{% endblock %} CC Network</title>
-  	<link href="/m/css/style.css" rel="stylesheet" type="text/css">
-	
+  	<link href="/m/css/style.css" rel="stylesheet" type="text/css"/>
+
+        <link about="/" rel="sioc_service:has_service"
+	      href="{% url lookup_work %}" />
+        <link about="{% url lookup_work %}" rel="sioc_service:service_protocol"
+	      href="http://wiki.creativecommons.org/work-lookup" />
     {% block header %}
 
     {% endblock %}
@@ -64,7 +69,7 @@
         <div id="license">
           <p>
             <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">
-              <img src="http://i.creativecommons.org/l/by/3.0/80x15.png" alt="Creative Commons Attribution 3.0 License" style="border:none;" height="15" width="80">
+              <img src="http://i.creativecommons.org/l/by/3.0/80x15.png" alt="Creative Commons Attribution 3.0 License" style="border:none;" height="15" width="80" />
             </a>
             Except where otherwise <a class="subfoot" href="/h/privacy/">noted</a>, content on this site is 
             licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/" class="subfoot">Creative Commons Attribution 3.0 License</a>.<br/>
