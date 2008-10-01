@@ -123,7 +123,6 @@ def endpoint(request):
     # We got a request; if the mode is checkid_*, we will handle it by
     # getting feedback from the user or by checking the session.
     if openid_request.mode in ["checkid_immediate", "checkid_setup"]:
-        print openid_request
         return handleCheckIDRequest(request, openid_request)
     else:
         # We got some other kind of OpenID request, so we let the
