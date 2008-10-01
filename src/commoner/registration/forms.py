@@ -13,11 +13,11 @@ class CompleteRegistrationForm(forms.Form):
                                 widget=forms.PasswordInput)
     password2 = forms.CharField(label="Password (again):",
                                 widget=forms.PasswordInput)
-    agree_to_tos = forms.BooleanField(label="Have you read and agreed "
-                                       "to the Terms of Service?",
+    agree_to_tos = forms.BooleanField(label="I have read and agreed "
+                                       "to the Terms of Use.",
                                        widget=forms.CheckboxInput,
 				       error_messages = dict(
-				       required='You must read and agree to the TOS.'))
+				       required='You must read and agree to the TOU.'))
 
     RE_ALNUM = re.compile(r'^\w+$')
 
