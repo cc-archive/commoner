@@ -217,6 +217,12 @@ div.form form .field {
 	border-bottom: 1px solid #EEDFCC;
 }
 
+div.form form .field .help {
+	font-style: oblique;
+	font-size: 95%;
+	margin-top: 0.5em;
+}
+
 div.form form textarea {
 	width: 500px;
 	margin: 1em 0;
