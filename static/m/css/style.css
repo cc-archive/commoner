@@ -21,12 +21,16 @@ p {
 	margin-top: 1em;
 }
 
-ul {
+ul, ol {
 	margin: 1.5em 3em;
 }
 
-ul li {
+ul li, ol li {
 	margin-bottom: 1.5em;
+}
+
+li p {
+	margin-top: 0.25em;
 }
 
 
@@ -116,6 +120,10 @@ ul li {
 	background-position: 97% -1px;
 }
 
+#main-body.openid {
+	background-image: url(/m/images/openid.png);
+	background-position: 102% 1px;
+}
 
 .box {
 	text-align: left;
@@ -164,6 +172,7 @@ ul li {
 	color: #888;
 	margin-top: 0.25em;
 	margin-bottom: 0.25em;
+	line-height: 1.25em;
 }
 
 

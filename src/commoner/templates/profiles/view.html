@@ -101,7 +101,7 @@
 	{% endifequal %}
       </li>
       {% endfor %}
-<li style="text-align:right"><a rel="rdf:seeAlso" href="{% url commoner.profiles.views.works user.username %}"><em>More...</em></a></li>
+<li style="text-align:right"><a rel="rdf:seeAlso" href="{% url commoner.profiles.views.works profile_user.username %}"><em>More...</em></a></li>
 	</ul>
     {% else %}
       {% ifequal user.username username %}
