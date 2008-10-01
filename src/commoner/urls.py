@@ -1,10 +1,8 @@
 
-from django.conf.urls.defaults import patterns, include, handler500, url
+from django.conf.urls.defaults import patterns, include, handler500, handler404, url
 from django.conf import settings
 
 from django.contrib import admin
-
-handler500 # Pyflakes
 
 admin.autodiscover()
 
@@ -77,7 +75,8 @@ urlpatterns = patterns(
 
 )
 
-if settings.DEBUG:
+if False :
+    #settings.DEBUG:
     urlpatterns += patterns('',
         (r'^media/(?P<path>.*)$', 'django.views.static.serve', 
          {'document_root': settings.MEDIA_ROOT}),
