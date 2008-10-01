@@ -111,7 +111,7 @@ def getBaseURL(req):
 
     proto = req.META['SERVER_PROTOCOL']
 
-    if 'HTTPS' in proto:
+    if 'HTTPS' in proto or req.is_secure():
         proto = 'https'
     else:
         proto = 'http'
