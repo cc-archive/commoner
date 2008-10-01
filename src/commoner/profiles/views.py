@@ -108,7 +108,7 @@ def works(request, username):
     # display the complete list of works
     return render_to_response('content/list.html',
                               dict(works=works,
-                                   user=user,
+                                   profile_user=user,
                                    profile=user.get_profile(),
                                    ),
                               context_instance=RequestContext(request))
