@@ -9,7 +9,11 @@
 
 {% block head_title %}{{ profile.display_name }} -{% endblock %}
 
-{% block page_header %}{{ profile.display_name }}{% endblock %}
+{% block page_header %}
+  <span rel="sioc:member_of" resource="/">
+    {{ profile.display_name }}
+  </span>
+{% endblock %}
 {% block page_sub_header %}
   {% if profile.active %}
     Active 
