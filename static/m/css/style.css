@@ -119,8 +119,8 @@ a:hover {
 	#subnav {
 		color: #fff;
 		text-align: left;
-		padding-top: 1em;
 		margin-bottom: 0em;
+		padding-left: 50px;
 	}
 
 	#subnav ul {
@@ -142,7 +142,7 @@ a:hover {
 		float: left;
 		background-color: #DEEBB8;
 		border: 1px solid #bBc4aB;
-		border-bottom: none;
+		border-top: none;
 		
 		-moz-border-radius-bottomleft: 4px;
 		-moz-border-radius-bottomright: 4px;
