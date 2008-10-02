@@ -11,12 +11,14 @@ import models
 def add_or_edit(request, id=None):
 
     if id is not None:
-        instance = models.Content.objects.get(id=id)
+        instance = get_object_or_404(models.Content, id=id)
+
+        # make sure the instance user is actually the owner
+        if instance.user != request.user:
+            return HttpResponseForbidden("Forbidden.")
+
     else:
         instance = None
-
-    if instance.user != request.user:
-        return HttpResponseForbidden("Forbidden.")
 
     if request.method == 'POST':
         # process the form
