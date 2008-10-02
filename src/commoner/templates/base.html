@@ -36,19 +36,23 @@
     <div id="nav" class="box nbox">
       {% block nav_override %}
       <ul class="box">
-        {% block extra_nav %}
-	{% endblock %}
-
         {% if user.is_anonymous %}
+	<li><a href="http://support.creativecommons.org/join">Join</a></li>
         <li><a href="{% url django.contrib.auth.views.login %}">Login</a></li>
-		<li><a href="http://support.creativecommons.org/join">Join</a></li>
 	{% else %}
         <li><a href="{% url profile_view user.username %}">My Profile</a></li>
         <li><a href="{% url django.contrib.auth.views.logout %}">Logout</a></li>
 	{% endif %}
-		<li><a href="/h/about">Help</a></li>
+
+	<li><a href="/h/about">Help</a></li>
 
       </ul>
+    </div>
+    <div id="subnav" class="box nbox">
+      <ul class="box">
+        {% block extra_nav %}
+	{% endblock %}
+      </ul>	
       {% endblock %}
     </div>
     
