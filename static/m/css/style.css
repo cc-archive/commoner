@@ -181,6 +181,11 @@ a:hover {
 	background-position: 102% 1px;
 }
 
+#main-body.works {
+	background-image: url(/m/images/works.png);
+	background-position: 100% 1px;
+}
+
 .box {
 	text-align: left;
 	width: 800px;
