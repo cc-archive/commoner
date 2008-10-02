@@ -17,7 +17,8 @@ class Content(models.Model):
 
     title = models.CharField(max_length=255, blank=True)
     registered = models.DateField(auto_now_add=True)
-    license = models.URLField(max_length=255, blank=True)
+    license = models.URLField(max_length=255, blank=True,
+                              help_text="The URL of the license your work is available under.")
 
     def __unicode__(self):
         return self.title or self.url
