@@ -10,8 +10,6 @@ def badge(request, username):
     profile = get_object_or_404(User, username=username)
     profile = profile.get_profile()
 
-    # set the content type appropriately
-
     # serve the inactive badge by default
     filename = 'm/images/badge/inactive.png'
 
@@ -20,5 +18,6 @@ def badge(request, username):
         filename = 'm/images/badge/active.png'
 
 
+    # set the content type appropriately
     return HttpResponse(default_storage.open(filename).read(),
                         content_type='image/png')
