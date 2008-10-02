@@ -19,21 +19,22 @@ Work Registration
 <h2 property="dct:title">{{work.title}}</h2>
 <h3><a href="{{work.url}}">{{work.url}}</a></h3>
 
-<div class="field">
-  <span class="field_label">Registered By:</span> 
-  <a href="{{work.user.get_profile.get_absolute_url}}">{{ work.user.get_profile.display_name }}</a>
-</div>
+<ul class="work_fields">
+  <li>
+    <span class="field_label">Registered By:</span> 
+    <a href="{{work.user.get_profile.get_absolute_url}}">{{ work.user.get_profile.display_name }}</a>
+  </li>
 
-<div class="field">
-  <span class="field_label">Registered:</span> 
-  <span property="dct:created" datatype="xsd:date">{{ work.registered }}</span>
-</div>
+  <li>
+    <span class="field_label">Registered:</span> 
+    <span property="dct:created" datatype="xsd:date">{{ work.registered }}</span>
+  </li>
 
-<div class="field">
-  <span class="field_label">License:</span> 
-  <a about="{{work.url}}" rel="license" 
-     href="{{work.license}}">{{ work.license }}</a>
-</div>
+  <li>
+    <span class="field_label">License:</span> 
+    <a about="{{work.url}}" rel="license" href="{{work.license}}">{{ work.license }}</a>
+  </li>
+</ul>
 
 {% endblock %}
 

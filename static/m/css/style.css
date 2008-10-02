@@ -17,6 +17,10 @@ h2 {
 	margin-top: 1.5em;
 }
 
+h3 {
+	margin-top: 0.5em;
+}
+
 p {
 	margin-top: 1em;
 }
@@ -26,8 +30,8 @@ ul, ol {
 }
 
 ul li, ol li {
-	margin-bottom: 1.5em;
-}
+/*	margin-bottom: 1.5em;
+*/}
 
 li p {
 	margin-top: 0.25em;
