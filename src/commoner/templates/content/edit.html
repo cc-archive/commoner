@@ -68,7 +68,7 @@ YAHOO.cc.success = function (response) {
     var subject = null;
 
     // hide the working indicator
-    YAHOO.util.Dom.setStyle("loading_metadata", "display:none");
+    YAHOO.util.Dom.setStyle("loading_metadata", "display", "none");
     
     // see if the work URL has metadata
     if ( (metadata.subjects.indexOf(work_url) > -1) ) {
@@ -83,7 +83,7 @@ YAHOO.cc.success = function (response) {
 YAHOO.cc.failure = function () {
 
     // hide the working indicator
-    YAHOO.util.Dom.setStyle("loading_metadata", "display:none");
+    YAHOO.util.Dom.setStyle("loading_metadata", "display", "none");
     
 } // failure
 
@@ -91,7 +91,7 @@ YAHOO.cc.check = function () {
 
     var work_url = YAHOO.util.Dom.get('id_url').value;
 
-    if (work_url.match('^http://')) {
+    if (work_url.match('^https?://')) {
 
 	// construct the request callback
 	var callback = {
@@ -101,12 +101,12 @@ YAHOO.cc.check = function () {
 	};
 
         // show the working indicator
-        YAHOO.util.Dom.setStyle("loading_metadata", "display:inline");
+        YAHOO.util.Dom.setStyle("loading_metadata", "display", "inline");
 
 	var url = '/t/triples?url=' + encodeURIComponent(work_url);
 	YAHOO.util.Connect.asyncRequest('GET', url, callback, null);
 
-    } // if refered from http:// request
+    } // if refered from http[s]:// request
 
 } // check
 
