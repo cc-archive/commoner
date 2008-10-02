@@ -5,6 +5,13 @@ Work Registration
 {% endblock %}
 {% block page_icon_class %}works{% endblock %}
 
+{% block extra_nav %}
+   {% ifequal user work.user %}
+   <li><a href="{% url edit_content work.id %}">edit</a></li>
+   <li><a href="{% url delete_content work.id %}">delete</a></li>
+   {% endifequal %}
+{% endblock %}
+
 {% block body %}
 
 <h2 property="dct:title">{{work.title}}</h2>
