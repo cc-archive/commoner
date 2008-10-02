@@ -27,6 +27,7 @@ This registration code has already been used.
     <div class="field" id="username">
       <span class="field_label">{{form.username.label}}</span>
       {{form.username}}
+      <div class="help">{{form.username.help_text}}</div>
       {% if form.username.errors %}
       <div class="errors">
 	{{ form.username.errors }}
