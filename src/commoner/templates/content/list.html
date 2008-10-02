@@ -5,6 +5,10 @@
 Registered Works
 {% endblock %}
 
+{% block page_sub_header %} 
+<a href="{{ profile.get_absolute_url }}">{{ profile.display_name }}</a>
+{% endblock %}
+
 {% block body %}
 
 {% if message %}
