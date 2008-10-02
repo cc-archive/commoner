@@ -1,7 +1,6 @@
 import os
-import os
 
-DEBUG = TEMPLATE_DEBUG = False
+DEBUG = TEMPLATE_DEBUG = True
 
 ADMINS = (
     ('Creative Commons Webmaster', 'webmaster@creativecommons.org'),
@@ -11,6 +10,10 @@ MANAGERS = ADMINS
 
 if not DEBUG:
     SEND_BROKEN_LINK_EMAILS = True
+
+from commoner.settings import DATABASE_ENGINE, DATABASE_NAME
+from commoner.settings import DATABASE_USER, DATABASE_PASSWORD
+from commoner.settings import DATABASE_HOST, DATABASE_PORT
 
 TIME_ZONE = 'America/Chicago'
 
