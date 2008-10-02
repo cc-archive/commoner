@@ -84,15 +84,6 @@ def idpXrds(request):
     return util.renderXRDS(
         request, [OPENID_IDP_2_0_TYPE], [getViewURL(request, endpoint)])
 
-def idPage(request):
-    """
-    Serve the identity page for OpenID URLs.
-    """
-    return direct_to_template(
-        request,
-        'server/idPage.html',
-        {'server_url': getViewURL(request, endpoint)})
-
 def endpoint(request):
     """
     Respond to low-level OpenID protocol messages.
