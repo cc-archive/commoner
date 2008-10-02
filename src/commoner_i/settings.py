@@ -1,6 +1,6 @@
 import os
 
-DEBUG = TEMPLATE_DEBUG = True
+DEBUG = TEMPLATE_DEBUG = False
 
 ADMINS = (
     ('Creative Commons Webmaster', 'webmaster@creativecommons.org'),
@@ -48,7 +48,7 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'commoner_i.urls'
 
-INSTALLED_APPS = ()
+INSTALLED_APPS = ('commoner.profiles',)
 
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.load_template_source',
@@ -67,3 +67,4 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "commoner.util.base_url_context",
     )
 
+AUTH_PROFILE_MODULE = "profiles.CommonerProfile"
