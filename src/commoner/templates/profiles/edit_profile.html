@@ -56,10 +56,14 @@ Create Profile
       {% if form.instance.photo %}
         <img src="{{ profile.photo|scale }}" 
              alt="[ {{ profile_user.first_name }}]" 
-             /><br/> Replace photo: 
+             /><br/> 
+	<span class="field_label">		 
+	Replace photo: 
       {% else %}
+	<span class="field_label">
 	Choose photo:
       {% endif %}
+	</span>
       {{form.photo}}
       {% if form.instance.photo %}
 	<br/><span class="field_label">{{ form.remove_photo.label}}</span>
