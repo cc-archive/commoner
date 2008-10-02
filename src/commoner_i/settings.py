@@ -6,3 +6,4 @@ MEDIA_ROOT = os.path.abspath(
     )
 
 ROOT_URLCONF = 'commoner_i.urls'
+# DEBUG = False

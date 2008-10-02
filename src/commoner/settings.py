@@ -1,13 +1,15 @@
 import os
 
-DEBUG = TEMPLATE_DEBUG = True
+DEBUG = TEMPLATE_DEBUG = False # True
 
 ADMINS = (
     ('Nathan R. Yergler', 'nathan@creativecommons.org'),
-    # ('Your Name', 'your_email@domain.com'),
+    ('Creative Commons Webmaster', 'webmaster@creativecommons.org'),
 )
 
 MANAGERS = ADMINS
+
+SEND_BROKEN_LINK_EMAILS = True
 
 DATABASE_ENGINE = 'mysql'    # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
 DATABASE_NAME = 'commoner'
@@ -22,12 +24,12 @@ LANGUAGE_CODE = 'en-us'
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'media')
+MEDIA_ROOT = os.path.join(os.path.dirname(__file__), '..','..','static','m','user')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = '/media/'
+MEDIA_URL = '/m/user/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
@@ -82,7 +84,7 @@ SITE_ID=1
 ACCOUNT_ACTIVATION_DAYS = 14
 
 AUTH_PROFILE_MODULE = "profiles.CommonerProfile"
-DEFAULT_FROM_EMAIL = "webmaster@commoner.cc"
+DEFAULT_FROM_EMAIL = "noreply@creativecommons.net"
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/a/login/'
 
