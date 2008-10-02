@@ -428,9 +428,9 @@ ul.licensed-works li.last {
 }
 
 #badge {
-	border: 1px solid #ddd;
-	padding: 1em;
-	margin-bottom: 1.5em;
+	border-bottom: 1px solid #ddd;
+	padding-bottom: 1.5em;
+	margin-bottom: 2em;
 }
 
 #badge img {
@@ -439,14 +439,25 @@ ul.licensed-works li.last {
 }
 
 #badge p {
-		margin-top: 0 !important;
+	margin-top: 0 !important;
 	line-height: 1.25em;
 }
 
 #badge input {
-		margin-top: 5px;
-		width: 97%;
+	margin-top: 5px;
+	width: 97%;
 }
+
+a.add_work {
+	float: right;
+	color: #000;
+	padding: 2px 4px;
+	border: 1px solid #ddd;
+	background-color: #fff;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+}
+
 /*** Registration ***/
 
 iframe.tos {

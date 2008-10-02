@@ -81,8 +81,7 @@
         </div>
       {% endifequal %}{% endif %}
 	{% ifequal user.username profile_user.username %}
-	<a style="float:right;" 
-	   title="add a work" href="{% url add_content %}">+</a>
+	<a class="add_work" title="add a work" href="{% url add_content %}">Add</a>
 	{% endifequal %}
     <h4>Works I Have Licensed</h4>
     {% if profile_user.content.all %}
