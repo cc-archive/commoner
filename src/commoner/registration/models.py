@@ -51,7 +51,7 @@ class PartialRegistration(models.Model):
     complete = models.BooleanField(default=False)
     transaction_id = models.CharField(max_length=255, blank=True, null=True)
 
-    user = models.ForeignKey(User, unique=True, blank=True, null=True)
+    user = models.ForeignKey(User, blank=True, null=True)
 
     def __unicode__(self):
         return u"%s (%s, %s)" % (
@@ -73,3 +73,6 @@ class PartialRegistration(models.Model):
         super(PartialRegistration, self).save()
 
     objects = RegistrationManager()
+
+    class Meta:
+        verbose_name="User registration"
