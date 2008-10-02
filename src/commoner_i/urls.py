@@ -1,9 +1,7 @@
-from django.conf.urls.defaults import patterns, include, handler500, url
+from django.conf.urls.defaults import patterns, include, handler500, handler404, url
 from django.conf import settings
 
 from django.contrib import admin
-
-handler500 # Pyflakes
 
 urlpatterns = patterns(
     '',
