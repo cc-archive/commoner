@@ -52,26 +52,19 @@ def delete(request, id):
         return HttpResponseForbidden("Forbidden.")
 
     if request.method == 'POST':
-        # process the form
-        form = forms.ContentDeleteForm(data=request.POST)
 
-        if form.is_valid():
-
-            if form.cleaned_data['confirm_delete']:
-                # remove the content object
-                instance.delete()
+        # make sure it was submitted with the confirm button
+        if request.POST.get('confirm', False):
+            # remove the object
+            instance.delete()
 
             # redirect to the profile
             return HttpResponseRedirect(
                 reverse('profile_view', args=(request.user.username,)))
 
-    else:
-        # just display the form
-        form = forms.ContentDeleteForm()
-        
+    # just display the form
     return render_to_response('content/delete.html',
-                              { 'form': form,
-                                'content': instance
+                              { 'content': instance
                                 },
                               context_instance=RequestContext(request)
                               )

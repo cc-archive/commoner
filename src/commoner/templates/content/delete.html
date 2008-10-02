@@ -8,25 +8,18 @@ Delete Content Registration
 
 <p>
   You are going to remove the content registration for
-  <a href="{{content.url}}">{{content.title}}</a>.
+  <a href="{{content.get_absolute_url}}">{{content.title}}</a>.
 </p>
 
 <div class="form">
   <form method="post" enctype="multipart/form-data" action=".">
 
-    {% for field in form %}
+    <p>
+      Are you sure you wish to continue? This can not be undone.
+    </p>
 
-    <div class="field" id="{{field.id}}">
-      <span class="field_label">{{field.label}}:</span> {{field}}
-      {% if field.errors %}
-        <div class="error">{{field.errors}}</div>
-      {% endif %}
-
-    </div>
-    {% endfor %}
-
-    <input type="submit" value="continue" />
-
+    <input type="submit" name="confirm" value="Yes, delete" />
+    <a href="{{content.user.get_profile.get_absolute_url}}">No, cancel</a>
   </form>
 </div>
 
