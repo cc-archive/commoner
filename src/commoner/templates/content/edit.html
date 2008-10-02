@@ -1,5 +1,127 @@
 {% extends "base.html" %}
 
+{% block header %}
+<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/yahoo-dom-event/yahoo-dom-event.js"></script> 
+<script src="http://yui.yahooapis.com/2.6.0/build/connection/connection-min.js"></script> 
+<script src="http://yui.yahooapis.com/2.6.0/build/json/json-min.js"></script> 
+
+<script>
+YAHOO.namespace("cc");
+
+
+YAHOO.cc.license_uri = function(license_uri) {
+
+    // ensure that the license_uri is canonical
+    // note that this is a CC-ism, although this only runs in deeds @ CC,
+    // so we're fine with that
+
+    if (license_uri.charAt(license_uri.length - 1) == '/') return license_uri;
+
+    return license_uri.substring(0, license_uri.lastIndexOf('/') + 1);
+
+} // license_uri
+
+YAHOO.cc.get_license = function (metadata, subject) {
+
+    // Return the license URI for the given subject; if no license is
+    // asserted, return null.  This looks for xhtml:license, dc:license,
+    // and cc:license in that order.
+
+    if (!metadata[subject]) return null;
+
+    var license = 
+        metadata[subject]['http://www.w3.org/1999/xhtml/vocab#license'] ||
+        metadata[subject]['http://purl.org/dc/terms/license'] ||
+        metadata[subject]['http://creativecommons.org/ns#license'] || 
+        null;
+
+    if (license) return license[0];
+
+    return null;
+
+} // get_license
+
+YAHOO.cc.get_title = function (metadata, subject) {
+
+    // Return the title for the given subject; if no title is
+    // asserted, return an empty string.
+
+    if (!metadata[subject]) return null;
+
+    var license = 
+        metadata[subject]['http://purl.org/dc/terms/title'] ||
+        metadata[subject]['http://purl.org/dc/elements/1.1/title'] ||
+        null;
+
+    if (license) return license[0];
+
+    return '';
+
+} // get_title
+
+YAHOO.cc.success = function (response) {
+
+    if (response.status != 200) return;
+
+    var work_url = response.argument;
+    var metadata = YAHOO.lang.JSON.parse(response.responseText);
+    var subject = null;
+
+    // hide the working indicator
+    YAHOO.util.Dom.setStyle("loading_metadata", "display:none");
+    
+    // see if the work URL has metadata
+    if ( (metadata.subjects.indexOf(work_url) > -1) ) {
+
+        YAHOO.util.Dom.get('id_license').value = YAHOO.cc.get_license(metadata.triples, work_url);
+        YAHOO.util.Dom.get('id_title').value = YAHOO.cc.get_title(metadata.triples, work_url);
+
+    }
+
+} // success
+
+YAHOO.cc.failure = function () {
+
+    // hide the working indicator
+    YAHOO.util.Dom.setStyle("loading_metadata", "display:none");
+    
+} // failure
+
+YAHOO.cc.check = function () {
+
+    var work_url = YAHOO.util.Dom.get('id_url').value;
+
+    if (work_url.match('^http://')) {
+
+	// construct the request callback
+	var callback = {
+	    success: YAHOO.cc.success,
+	    failure: YAHOO.cc.failure,
+	    argument: work_url
+	};
+
+        // show the working indicator
+        YAHOO.util.Dom.setStyle("loading_metadata", "display:inline");
+
+	var url = '/t/triples?url=' + encodeURIComponent(work_url);
+	YAHOO.util.Connect.asyncRequest('GET', url, callback, null);
+
+    } // if refered from http:// request
+
+} // check
+
+YAHOO.cc.load = function() {
+
+  YAHOO.util.Event.addListener("id_url", "blur", YAHOO.cc.check);
+
+} //load
+
+YAHOO.util.Event.onDOMReady(YAHOO.cc.load);
+</script>
+
+{% endblock %}
+
+
 {% block page_header %}
 {% if content %}
 Edit Work Registration
@@ -12,19 +134,49 @@ Register Your Work
 
 
 <div class="form">
+  {% if form.non_field_errors %}
+   <div class="errors">
+     {{ form.non_field_errors }}
+   </div>
+  {% endif %}
+
+
   <form method="post" enctype="multipart/form-data" action=".">
 
-    {% for field in form %}
-
-    <div class="field" id="{{field.id}}">
-      <span class="field_label">{{field.label}}:</span> {{field}}
-      <div class="help">{{ field.help_text }}</div>
-      {% if field.errors %}
-        <div class="error">{{field.errors}}</div>
+    <div class="field">
+      <span class="field_label">{{form.url.label}}</span>
+      {{form.url}} 
+      <img id="loading_metadata" src="/m/images/loading.gif"
+	   style="display:none;" />
+      <div class="help">{{form.url.help_text}}</div>
+      {% if form.url.errors %}
+      <div class="errors">
+	{{ form.url.errors }}
+      </div>
       {% endif %}
-
     </div>
-    {% endfor %}
+
+    <div class="field">
+      <span class="field_label">{{form.title.label}}</span>
+      {{form.title}}
+      <div class="help">{{form.title.help_text}}</div>
+      {% if form.title.errors %}
+      <div class="errors">
+	{{ form.title.errors }}
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="field">
+      <span class="field_label">{{form.license.label}}</span>
+      {{form.license}}
+      <div class="help">{{form.license.help_text}}</div>
+      {% if form.license.errors %}
+      <div class="errors">
+	{{ form.license.errors }}
+      </div>
+      {% endif %}
+    </div>
 
     <input type="submit" value="save" />
 
