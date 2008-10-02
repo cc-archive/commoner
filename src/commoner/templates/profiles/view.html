@@ -44,14 +44,14 @@
    {% endif %}
 
    <ul>
-     <li property="sioc:name">{{ profile_user.first_name }} {{ profile_user.last_name}}</li>
+     <li property="sioc:name cc:attributionName">{{ profile_user.first_name }} {{ profile_user.last_name}}</li>
      <li><a href="{{profile.homepage}}">{{ profile.homepage }}</a></li>
      <li>{{ profile.location }}</li>
    </ul>
   <div class="clear story">
     {% if profile.story %}
     <h2>My CC Story</h2>
-    <a href="" rel="cc:attributionURL"></a>
+    <a href="{{profile.get_absolute_url}}" rel="cc:attributionURL"></a>
     {{ profile.story|escape|linebreaks }}
     {% endif %}
 
@@ -61,7 +61,7 @@
   
   <p>
     <ul>
-      <li property="cc:attributionName">{{ profile_user.first_name }} {{ profile_user.last_name}}</li>
+      <li property="sioc:name cc:attributionName">{{ profile_user.first_name }} {{ profile_user.last_name}}</li>
     </ul>
   </p>
 
