@@ -19,8 +19,6 @@ Create Profile
 <div class="form">
   <form method="post" enctype="multipart/form-data" action=".">
 
-    {{form.errors}}
-
     <h3>About You</h3>
 
     <div class="field" id="nickname">
@@ -64,7 +62,7 @@ Create Profile
       {% endif %}
       {{form.photo}}
       {% if form.instance.photo %}
-	<br/><span class="field_label">{{ form.remove_photo_label}}</span>
+	<br/><span class="field_label">{{ form.remove_photo.label}}</span>
                {{ form.remove_photo }}
       {% endif %}
       {% if form.photo.errors %}
