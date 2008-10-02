@@ -7,19 +7,22 @@ Work Registration
 
 {% block body %}
 
-<h2>{{work.title}}</h2>
-<h3>{{work.url}}</h3>
+<h2 property="dct:title">{{work.title}}</h2>
+<h3><a href="{{work.url}}">{{work.url}}</a></h3>
 
 <div class="field">
-<span class="field_label">Registered By:</span> <a href="{{work.user.get_profile.get_absolute_url}}">{{ work.user.get_profile.display_name }}</a>
+  <span class="field_label">Registered By:</span> 
+  <a href="{{work.user.get_profile.get_absolute_url}}">{{ work.user.get_profile.display_name }}</a>
 </div>
 
 <div class="field">
-<span class="field_label">Registered:</span> {{ work.registered }}
+  <span class="field_label">Registered:</span> 
+  <span property="dct:created">{{ work.registered }}</span>
 </div>
 
 <div class="field">
-<span class="field_label">License:</span> {{ work.license}}
+  <span class="field_label">License:</span> 
+  <a rel="license" href="{{work.license}}">{{ work.license }}</a>
 </div>
 
 {% endblock %}
