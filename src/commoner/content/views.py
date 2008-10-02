@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
@@ -14,6 +14,9 @@ def add_or_edit(request, id=None):
         instance = models.Content.objects.get(id=id)
     else:
         instance = None
+
+    if instance.user != request.user:
+        return HttpResponseForbidden("Forbidden.")
 
     if request.method == 'POST':
         # process the form
@@ -42,6 +45,9 @@ def add_or_edit(request, id=None):
 def delete(request, id):
 
     instance = get_object_or_404(models.Content, id=id)
+
+    if instance.user != request.user:
+        return HttpResponseForbidden("Forbidden.")
 
     if request.method == 'POST':
         # process the form
