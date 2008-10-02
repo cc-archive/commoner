@@ -18,23 +18,7 @@ Registered Works
 
     <ul class="licensed-works">
       {% for work in works %}
-      <li>
-	<a about="{{work.user.get_profile.get_absolute_url}}" 
-	   rel="sioc:owner_of" href="{{work.url}}">
-	   <strong property="dct:title">{{work.title}}</strong></a>
-	   <br/>
-	{{work.registered}} &mdash;
-
-	<a about="{{work.url}}" rel="license" href="{{work.license}}" >
-	  <img src="{{work.license|license_button}}" 
-	       alt="{{work.license|license_code}}" 
-	       style="border:0;" /></a> 
-	{% ifequal user work.user %}
-	  <a href="{% url edit_content work.id %}">[edit]</a>
-	  <a href="{% url delete_content work.id %}">[delete]</a>
-	{% endifequal %}
-      </li>
-
+         {% include "content/work_item.html" %}
       {% endfor %}
     </ul>
     
