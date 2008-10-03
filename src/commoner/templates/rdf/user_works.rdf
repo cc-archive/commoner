@@ -1,0 +1,35 @@
+  <sioc:User rdf:about="{{base_url}}{{ profile.get_absolute_url }}">
+    <sioc:member_of rdf:resource="{{base_url}}" />
+    <sioc:name>{{ profile.full_name }}</sioc:name>
+    <cc:attributionName>{{ profile.full_name }}</cc:attributionName>
+    <cc:attributionURL 
+       rdf:resource="{{base_url}}{{ profile.get_absolute_url }}" />
+    <dct:license
+        rdf:resource="http://creativecommons.org/licenses/by/3.0/" />
+
+{% for work in profile.content.all %}
+    <sioc:owner_of rdf:resource="{{base_url}}{{work.get_absolute_url}}" />
+    <sioc:owner_of rdf:resource="{{work.url}}" />
+{% endfor %}
+  </sioc:User>
+
+{% for work in profile.content.all %}
+  <ccnet:Registration rdf:about="{{base_url}}{{work.get_absolute_url}}">
+    <dct:creator
+      rdf:resource="{{base_url}}{{work.user.get_profile.get_absolute_url}}" />
+    <dct:created rdf:datatype="xsd:date">{{ work.registered }}</dct:created>
+    <sioc:has_owner 
+      rdf:resource="{{base_url}}{{ work.user.get_profile.get_absolute_url }}" />
+    <sioc:parent_of rdf:resource="{{work.url}}" />
+  </ccnet:Registration>
+
+  <ccnet:Work rdf:about="{{work.url}}">
+    <dct:license
+        rdf:resource="http://creativecommons.org/licenses/by/3.0/" />
+
+    <sioc:has_owner 
+      rdf:resource="{{base_url}}{{ work.user.get_profile.get_absolute_url }}" />
+    <sioc:has_parent rdf:resource="{{base_url}}{{work.get_absolute_url}}" />
+
+  </ccnet:Work>
+{% endfor %}
