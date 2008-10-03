@@ -13,7 +13,7 @@ class Content(models.Model):
 
     url = models.URLField(max_length=255, blank=False,
                           verify_exists=False,
-                          verbose_name="Content URL")
+                          verbose_name="Work URL")
 
     title = models.CharField(max_length=255, blank=True)
     registered = models.DateField(auto_now_add=True)

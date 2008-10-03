@@ -113,3 +113,31 @@ def works(request, username):
                                    ),
                               context_instance=RequestContext(request))
 
+
+def all_rdf(request):
+
+    # get a list of all profiles
+    profiles = models.CommonerProfile.objects.all()
+
+    # display the complete list of works
+    return render_to_response('rdf/all.rdf',
+                              dict(profiles=profiles,
+                                   ),
+                              context_instance=RequestContext(request),
+                              mimetype='application/rdf+xml')
+
+
+def user_rdf(request, username):
+
+    user = get_object_or_404(User, username=username)
+    works = user.content.all()
+
+    # display the complete list of works
+    return render_to_response('rdf/user.rdf',
+                              dict(works=works,
+                                   profile_user=user,
+                                   profile=user.get_profile(),
+                                   ),
+                              context_instance=RequestContext(request),
+                              mimetype='application/rdf+xml')
+

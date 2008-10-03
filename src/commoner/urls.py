@@ -65,8 +65,14 @@ urlpatterns = patterns(
     (r'^o/processTrustResult/$', 'commoner.server.views.processTrustResult'),
     (r'^o/endpoint/$', 'commoner.server.views.endpoint'),
 
+    # RDF 
+    url(r'^r/all.rdf$', 'commoner.profiles.views.all_rdf',
+        name='all_rdf'),
+
     # Profile views
     url(r'^(?P<username>\w+)/works/$', 'commoner.profiles.views.works',
+        name='profile_works'),
+    url(r'^(?P<username>\w+)/works/rdf$', 'commoner.profiles.views.user_rdf',
         name='profile_works'),
     url(r'^(?P<username>\w+)/$', 'commoner.profiles.views.view',
         name='profile_view'),

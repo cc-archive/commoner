@@ -35,6 +35,9 @@ class CommonerProfile(models.Model):
     def display_name(self):
         return self.nickname or self.user.username
 
+    def full_name(self):
+        return u"%s %s" % (self.user.first_name, self.user.last_name)
+
     def get_absolute_url(self, request=None):
         if request is None:
             return reverse('profile_view', args=(self.user.username, ) )
