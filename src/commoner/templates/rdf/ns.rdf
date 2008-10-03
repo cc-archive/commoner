@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<rdf:RDF
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xmlns:dcterms="http://purl.org/dc/terms/"
+  xmlns:owl="http://www.w3.org/2002/07/owl#"
+  xmlns:sioc="http://rdfs.org/sioc/ns#"
+  xmlns:foaf="http://xmlns.com/foaf/0.1/"
+  xmlns:cc="http://creativecommons.org/ns#"
+>
+
+<!-- creativecommons.net -->
+
+<!-- For more detail see http://creativecommons.net/n/ -->
+
+<rdfs:Class rdf:about="http://creativecommons.net/n/Registration">
+  <rdfs:label xml:lang="en">Work Registration</rdfs:label>
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+
+  <rdfs:comment xml:lang="en">Describes the registration of a cc:Work.</rdfs:comment>
+  
+  <rdfs:domain rdf:resource="http://creativecommons.org/ns#Work" />
+  <rdfs:subClassOf rdf:resource="http://rdfs.org/sioc/ns#Container"/>
+  <rdfs:isDefinedBy rdf:resource="http://creativecommons.net/n#"/>
+  <rdfs:seeAlso rdf:resource="http://xmlns.com/foaf/0.1/Agent"/>
+</rdfs:Class>
+
+</rdf:RDF>

@@ -65,7 +65,12 @@ urlpatterns = patterns(
     (r'^o/processTrustResult/$', 'commoner.server.views.processTrustResult'),
     (r'^o/endpoint/$', 'commoner.server.views.endpoint'),
 
-    # RDF 
+    # Namespace and RDF support
+    (r'^n$', 'django.views.generic.simple.direct_to_template',
+     {'template':'rdf/ns.html'}),
+    (r'^n/rdf$', 'django.views.generic.simple.direct_to_template',
+     {'template':'rdf/ns.rdf',
+      'mimetype':'application/rdf+xml'}),
     url(r'^r/all.rdf$', 'commoner.profiles.views.all_rdf',
         name='all_rdf'),
 

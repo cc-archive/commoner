@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block namespaces %}
+  xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xmlns:owl="http://www.w3.org/2002/07/owl#"
+{% endblock %}
+
+{% block page_header %}Creative Commons Network{% endblock %}
+
+{% block body %}
+
+<p>The Creative Commons schema lets you describe copyright licenses in
+  RDF.  For more information on describing licenses in RDF and
+  attaching those descriptions to digital works,
+  see <a href="http://wiki.creativecommons.org/ccREL">ccREL</a>.
+</p>
+
+<h2>Classes</h2>
+
+<div id="Registration" about="#Registration" typeof="owl:Class">
+  <h4 property="rdfs:label">Work Registration</h4>
+
+  <p><span property="rdfs:comment" 
+	   datatype="">Describes the registration of a <a rel="rdf:domain" href="http://creativecommons.org/ns#Work">Work</a>. Subclasses <a rel="rdfs:subClassOf" 
+    href="http://rdfs.sioc/ns#Container">sioc:Container</a>.</p>
+
+  <a href="#" rel="rdfs:isDefinedBy" />
+
+</div>
+
+{% endblock %}
