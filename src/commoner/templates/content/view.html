@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 
+{% block header %}
+<link about="" typeof="ccnet:Registration" />
+<link about="{{work.url}}" typeof="cc:Work" />
+{% endblock %}
+
 {% block head_title %}{{ work.title }} -{% endblock %}
 
 {% block page_header %}
@@ -16,13 +21,17 @@ Work Registration
 
 {% block body %}
 
-<h2 property="dct:title">{{work.title}}</h2>
-<h3><a href="{{work.url}}">{{work.url}}</a></h3>
+<h2 about="{{work.url}}" property="dct:title"
+    rel="sioc:has_owner" rev="sioc:owner_of"
+    resource="{{ work.owner.get_absolute_url }}">{{work.title}}</h2>
+<h3><a rel="sioc:parent_of" rev="sioc:has_parent" 
+       href="{{work.url}}">{{work.url}}</a></h3>
 
 <ul class="work_fields">
   <li>
     <span class="field_label">Registered By:</span> 
-    <a href="{{work.user.get_profile.get_absolute_url}}">{{ work.user.get_profile.display_name }}</a>
+    <a rel="dct:creator sioc:has_owner" rev="sioc:owner_of"
+       href="{{work.owner.get_absolute_url}}">{{ work.user.get_profile.display_name }}</a>
   </li>
 
   <li>
@@ -35,7 +44,6 @@ Work Registration
     <a about="{{work.url}}" rel="license" href="{{work.license}}">{{ work.license }}</a>
   </li>
 </ul>
-
 {% endblock %}
 
 {% block license_override %}

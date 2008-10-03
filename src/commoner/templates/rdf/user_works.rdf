@@ -23,7 +23,7 @@
     <sioc:parent_of rdf:resource="{{work.url}}" />
   </ccnet:Registration>
 
-  <ccnet:Work rdf:about="{{work.url}}">
+  <cc:Work rdf:about="{{work.url}}">
     <dct:license
         rdf:resource="http://creativecommons.org/licenses/by/3.0/" />
 
@@ -31,5 +31,5 @@
       rdf:resource="{{base_url}}{{ work.user.get_profile.get_absolute_url }}" />
     <sioc:has_parent rdf:resource="{{base_url}}{{work.get_absolute_url}}" />
 
-  </ccnet:Work>
+  </cc:Work>
 {% endfor %}
