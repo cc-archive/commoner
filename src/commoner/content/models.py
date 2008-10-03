@@ -25,4 +25,14 @@ class Content(models.Model):
 
     def get_absolute_url(self):
         return reverse('view_work', args=(self.id,))
-	
+
+    @property
+    def owner(self):
+        """Convenience method to return the owner profile."""
+
+        return self.user.get_profile()
+
+    @property
+    def license_url(self):
+        return self.license
+
