@@ -423,6 +423,11 @@ ul.licensed-works li {
 	border-bottom: 1px solid #cFdEbC; /*#d4d4d4;*/
 }
 
+ul.licensed-works li img {
+	display: inline-block;
+	margin-bottom: -4px;
+}
+
 ul.licensed-works li.last {
 	border: none;
 }
@@ -466,4 +471,9 @@ iframe.tos {
 	height: 400px;
 	border:1px solid #ccc;
 	padding: 10px;
+}
+
+/*** About ***/
+ul#benefits li {
+	margin-bottom: 1.5em;
 }
