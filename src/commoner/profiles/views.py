@@ -103,10 +103,10 @@ def view(request, username, public_profile_field=None,
 def works(request, username):
 
     user = get_object_or_404(User, username=username)
-    works = user.content.all()
+    works = user.get_profile().works.all()
 
     # display the complete list of works
-    return render_to_response('content/list.html',
+    return render_to_response('works/list.html',
                               dict(works=works,
                                    profile_user=user,
                                    profile=user.get_profile(),
@@ -130,11 +130,11 @@ def all_rdf(request):
 def user_rdf(request, username):
 
     user = get_object_or_404(User, username=username)
-    works = user.content.all()
+    registrations = user.get_profile().registrations.all()
 
     # display the complete list of works
     return render_to_response('rdf/user.rdf',
-                              dict(works=works,
+                              dict(registration=registrations,
                                    profile_user=user,
                                    profile=user.get_profile(),
                                    ),

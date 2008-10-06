@@ -13,7 +13,7 @@ Work Registration
 {% block page_icon_class %}works{% endblock %}
 
 {% block extra_nav %}
-   {% ifequal user work.user %}
+   {% ifequal user work.owner %}
    <li><a href="{% url edit_content work.id %}">edit</a></li>
    <li><a href="{% url delete_content work.id %}">delete</a></li>
    {% endifequal %}
@@ -31,7 +31,7 @@ Work Registration
   <li>
     <span class="field_label">Registered By:</span> 
     <a rel="dct:creator sioc:has_owner" rev="sioc:owner_of"
-       href="{{work.owner.get_absolute_url}}">{{ work.user.get_profile.display_name }}</a>
+       href="{{work.owner.get_profile.get_absolute_url}}">{{ work.owner.get_profile.display_name }}</a>
   </li>
 
   <li>
@@ -41,7 +41,7 @@ Work Registration
 
   <li>
     <span class="field_label">License:</span> 
-    <a about="{{work.url}}" rel="license" href="{{work.license}}">{{ work.license }}</a>
+    <a about="{{work.url}}" rel="license" href="{{work.license_url}}">{{ work.license }}</a>
   </li>
 </ul>
 {% endblock %}

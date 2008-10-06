@@ -84,10 +84,10 @@
 	<a class="add_work" title="add a work" href="{% url add_content %}">Add</a>
 	{% endifequal %}
     <h4>Works I Have Licensed</h4>
-    {% if profile_user.content.all %}
+    {% if profile.works.all %}
     <ul class="licensed-works">
-      {% for work in profile_user.content.all|slice:":5" %}
-         {% include "content/work_item.html" %}
+      {% for work in profile.works.all|slice:":5" %}
+         {% include "works/list_item.html" %}
       {% endfor %}
 
       <li style="text-align:right">

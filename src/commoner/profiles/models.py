@@ -9,6 +9,8 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.conf import settings
 
+import commoner.works
+
 from commoner.util import getBaseURL
 
 class CommonerProfile(models.Model):
@@ -64,8 +66,14 @@ class CommonerProfile(models.Model):
         return (datetime.now() < self.expires)
 
     @property
-    def content(self):
-        return self.user.content
+    def works(self):
+
+        return commoner.works.models.Work.objects.filter(
+            registration__owner__exact = self.user.id)
+
+    @property
+    def registrations(self):
+        return self.user.registrations
 
     @property
     def badge_img_url(self):

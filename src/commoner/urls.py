@@ -47,17 +47,17 @@ urlpatterns = patterns(
 
     # Work management
     url(r'^w/add/', 
-        'commoner.content.views.add_or_edit',
+        'commoner.works.views.add_or_edit',
         name='add_content'),
     url(r'^w/(?P<id>\d+)/edit/', 
-        'commoner.content.views.add_or_edit',
+        'commoner.works.views.add_or_edit',
         name='edit_content'),
     url(r'^w/(?P<id>\d+)/delete/', 
-        'commoner.content.views.delete',
+        'commoner.works.views.delete',
         name='delete_content'),
-    url(r'^w/lookup/$', 'commoner.content.views.by_uri',
+    url(r'^w/lookup/$', 'commoner.works.views.by_uri',
         name='lookup_work'),
-    url(r'^w/(?P<id>\d+)/', 'commoner.content.views.view',
+    url(r'^w/(?P<id>\d+)/', 'commoner.works.views.view',
         name='view_work'),
     
     # OpenID Support

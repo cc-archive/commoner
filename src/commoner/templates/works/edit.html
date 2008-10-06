@@ -123,7 +123,7 @@ YAHOO.util.Event.onDOMReady(YAHOO.cc.load);
 
 
 {% block page_header %}
-{% if content %}
+{% if work %}
 Edit Work Registration
 {% else %}
 Register Your Work
@@ -169,12 +169,12 @@ Register Your Work
     </div>
 
     <div class="field">
-      <span class="field_label">{{form.license.label}}</span>
-      {{form.license}}
-      <div class="help">{{form.license.help_text}}</div>
-      {% if form.license.errors %}
+      <span class="field_label">{{form.license_url.label}}</span>
+      {{form.license_url}}
+      <div class="help">{{form.license_url.help_text}}</div>
+      {% if form.license_url.errors %}
       <div class="errors">
-	{{ form.license.errors }}
+	{{ form.license_url.errors }}
       </div>
       {% endif %}
     </div>
