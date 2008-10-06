@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import models
 
 from django.db import models
@@ -13,13 +15,23 @@ class Registration(models.Model):
 
     owner = models.ForeignKey(User, 
                               related_name='registrations')
-    created = models.DateField(auto_now_add=True)
-    updated = models.DateField(auto_now=True)
+    created = models.DateTimeField(default = datetime.now())
+    updated = models.DateTimeField()
+
+    def __unicode__(self):
+        return u"%s - %s" % (self.owner, self.created)
+
+    def save(self):
+        # set the updated timestamp
+        self.updated = datetime.now()
+
+        super(Registration, self).save()
 
 class Feed(Registration):
 
     url = models.URLField(max_length=255, blank=False, verify_exists=False)
     license = models.URLField(max_length=255, blank=True)    
+
 
 
 class Work(models.Model):
@@ -32,9 +44,12 @@ class Work(models.Model):
                           verbose_name="Work URL")
 
     title = models.CharField(max_length=255, blank=True)
-    registered = models.DateField(auto_now_add=True)
     license_url = models.URLField(max_length=255, blank=True,
                               help_text="The URL of the license your work is available under.")
+
+    registered = models.DateTimeField(default=datetime.now())
+    updated = models.DateTimeField()
+
     same_as = models.ForeignKey("self", blank=True, null=True)
 
     def get_absolute_url(self):
@@ -42,6 +57,12 @@ class Work(models.Model):
 
     def __unicode__(self):
         return self.title or self.url
+
+    def save(self):
+        # set the updated timestamp
+        self.updated = datetime.now()
+
+        super(Work, self).save()
 
     @property
     def owner(self):

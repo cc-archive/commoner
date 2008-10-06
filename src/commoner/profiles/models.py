@@ -25,8 +25,8 @@ class CommonerProfile(models.Model):
 
     story = models.TextField(blank=True)
 
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(default=datetime.now())
+    updated = models.DateTimeField()
     expires = models.DateTimeField(blank=True, null=False)
 
     def __unicode__(self):
@@ -56,6 +56,9 @@ class CommonerProfile(models.Model):
             # set the expiration to be now + 1 year
             today = datetime.now()
             self.expires = today.replace(today.year + 1)
+
+        # set the updated timestamp
+        self.updated = datetime.now()
             
         super(CommonerProfile, self).save()
 
