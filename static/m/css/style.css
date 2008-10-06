@@ -172,7 +172,7 @@ a:hover {
 
 #main-body {
 	padding-top: 2em;
-	background: url('/m/images/commoner-id.png') no-repeat 100% -15px;
+	background: url('/m/images/commoner-id.png') no-repeat 108% -15px;
 }
 
 #main-body.register, #main-body.edit {
@@ -227,6 +227,10 @@ a:hover {
 	margin-right: 160px;
 	color: #000;
 	font-size: 125%;
+}
+
+.index #title {
+	padding-top: 0;
 }
 
 #title h1 {
