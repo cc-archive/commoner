@@ -61,7 +61,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'commoner.registration',
     'commoner.profiles',
-    'commoner.content',
+    # 'commoner.content',
     'commoner.works',
     'commoner.server',
 )
