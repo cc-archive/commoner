@@ -48,7 +48,7 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'commoner_i.urls'
 
-INSTALLED_APPS = ('commoner.profiles',)
+INSTALLED_APPS = ('commoner.profiles','commoner.works')
 
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.load_template_source',
