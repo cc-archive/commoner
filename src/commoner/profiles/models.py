@@ -49,7 +49,7 @@ class CommonerProfile(models.Model):
 
     def save(self):
         # if we're creating and the expiration date hasn't been set...
-        if not(self.created) and not(self.expires):
+        if not(self.expires):
 
             # set the expiration to be now + 1 year
             today = datetime.now()
