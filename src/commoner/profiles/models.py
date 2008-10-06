@@ -9,8 +9,6 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.conf import settings
 
-import commoner.works
-
 from commoner.util import getBaseURL
 
 class CommonerProfile(models.Model):
@@ -70,6 +68,8 @@ class CommonerProfile(models.Model):
 
     @property
     def works(self):
+
+        import commoner.works
 
         return commoner.works.models.Work.objects.filter(
             registration__owner__exact = self.user.id)
