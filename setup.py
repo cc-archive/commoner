@@ -31,6 +31,7 @@ setup(
                         'flup',
                         'MySQL-python',
                         'PILwoTK',
+                        'pycrypto',
                         # 'cc.license',
                         ],
 
