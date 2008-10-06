@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block header %}
+        <meta http-equiv="x-xrds-location" content="{{base_url}}{% url server_xrds %}" />
+{% endblock %}
+
 {% block page_header %}Welcome to<br/>The Creative Commons Network{% endblock %}
 {% block page_sub_header %}Service currently in beta, data loss and profile corruption is possible. Official&nbsp;site&nbsp;launch expected October 15th. {% endblock %}
 {% block body %}
