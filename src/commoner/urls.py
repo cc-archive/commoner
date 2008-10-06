@@ -61,7 +61,7 @@ urlpatterns = patterns(
         name='view_work'),
     
     # OpenID Support
-    (r'^o/xrds/$', 'commoner.server.views.idpXrds'),
+    url(r'^o/xrds/$', 'commoner.server.views.idpXrds', name="server_xrds"),
     (r'^o/processTrustResult/$', 'commoner.server.views.processTrustResult'),
     (r'^o/endpoint/$', 'commoner.server.views.endpoint'),
 
