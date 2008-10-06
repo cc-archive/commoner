@@ -7,6 +7,7 @@ import commoner.works.models as works
 if __name__ == '__main__':
 
     for c in content.Content.objects.all():
+        print c.url
 
         # create a new registration
         reg = works.Registration(owner=c.user,
