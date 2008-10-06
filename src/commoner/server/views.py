@@ -31,6 +31,7 @@ from openid.server.server import Server, ProtocolError, CheckIDRequest, \
 from openid.server.trustroot import verifyReturnTo
 from openid.yadis.discover import DiscoveryFailure
 from openid.consumer.discover import OPENID_IDP_2_0_TYPE
+from openid.consumer.discover import OPENID_2_0_TYPE
 from openid.extensions import sreg
 from openid.fetchers import HTTPFetchingError
 
@@ -82,7 +83,7 @@ def idpXrds(request):
     IDP-driven identifier selection.
     """
     return util.renderXRDS(
-        request, [OPENID_IDP_2_0_TYPE], [getViewURL(request, endpoint)])
+        request, [OPENID_2_0_TYPE], [getViewURL(request, endpoint)])
 
 def endpoint(request):
     """
