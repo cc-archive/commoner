@@ -14,7 +14,7 @@ def add_or_edit(request, id=None):
         instance = get_object_or_404(models.Work, id=id)
 
         # make sure the instance user is actually the owner
-        if instance.owner != request.user:
+        if instance.owner_user != request.user:
             return HttpResponseForbidden("Forbidden.")
 
     else:
@@ -50,7 +50,7 @@ def delete(request, id):
 
     instance = get_object_or_404(models.Work, id=id)
 
-    if instance.owner != request.user:
+    if instance.owner_user != request.user:
         return HttpResponseForbidden("Forbidden.")
 
     if request.method == 'POST':

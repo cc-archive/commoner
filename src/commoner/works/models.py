@@ -66,8 +66,12 @@ class Work(models.Model):
         super(Work, self).save()
 
     @property
-    def owner(self):
+    def owner_user(self):
         return self.registration.owner
+
+    @property
+    def owner(self):
+        return self.registration.owner.get_profile()
 
     @property
     def license(self):
