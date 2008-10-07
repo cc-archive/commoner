@@ -276,6 +276,7 @@ div.form h2 {
 
 div.form input[type="text"], div.form .field #id_photo {
 	width: 300px;
+	font-size: 102%;
 }
 
 .field_label {
@@ -284,8 +285,8 @@ div.form input[type="text"], div.form .field #id_photo {
 }
 
 div.form form .field {
-	margin: 1em 0;
-	padding-bottom: 1em;
+	margin: 1em 0 1.5em 0;
+	padding-bottom: 1.5em;
 	border-bottom: 1px solid #EEDFCC;
 }
 
@@ -308,7 +309,8 @@ div.form form textarea {
 }
 .form #photo img {
 	float: left;
-	margin-right: 10px;
+	margin-right: 0.75em;
+	margin-bottom: 0.5em;
 	padding: 7px;
 	border: 1px solid #EEDFCC;
 	background-color: #fff;
