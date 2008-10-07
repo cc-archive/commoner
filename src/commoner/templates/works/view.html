@@ -32,11 +32,12 @@ Work Registration
        href="{{work.url}}">{{work.url}}</a></h3>
 {% if work.constrained %}
 <ul class="work_constraints" rel="powder:iriset">
-  <li>Includes all works beginning with this URL
   {% if work.has_leading_glob %}
+  <li>Includes all works beginning with this URL
   {% for c in work.constraints.all %}
   <span property="powder:{{c.mode}}regex" content="{{c.regex}}" />
   {% endfor %}
+  </li>
   {% endif %}
 </ul>
 {% endif %}
