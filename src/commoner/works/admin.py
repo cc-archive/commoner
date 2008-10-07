@@ -1,5 +1,6 @@
 from django.contrib import admin
-from commoner.works.models import Registration, Feed, Work, Glob
+from commoner.works.models import Registration, Feed
+from commoner.works.models import Work, Constraint
 
 
 class RegistrationAdmin(admin.ModelAdmin):
@@ -12,12 +13,10 @@ class FeedAdmin(admin.ModelAdmin):
 
 admin.site.register(Feed, FeedAdmin)
 
+class ConstraintAdmin(admin.TabularInline):
+    model=Constraint
+
 class WorkAdmin(admin.ModelAdmin):
-    pass
+    inlines = [ConstraintAdmin]
 
 admin.site.register(Work, WorkAdmin)
-
-class GlobAdmin(admin.ModelAdmin):
-    pass
-
-admin.site.register(Glob, GlobAdmin)

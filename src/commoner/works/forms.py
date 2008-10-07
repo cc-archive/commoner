@@ -10,6 +10,10 @@ class SimpleRegistrationForm(forms.Form):
     license_url = forms.URLField(label="License",
                              help_text="The URL of the license your work is available under.")
 
+    claim_all = forms.BooleanField(label="Claim all works beginning with this URL?",
+                                   help_text="Use this option to claim large groups of works that you own. Note this is only appropriate if you own <strong>everything</strong> starting with this URL.",
+                                   required=False)
+
     def __init__(self, user, instance={}, **kwargs):
         self._user = user
         self._instance = instance
@@ -19,7 +23,8 @@ class SimpleRegistrationForm(forms.Form):
             kwargs['data'] = dict(
                 url = self._instance.url,
                 title = self._instance.title,
-                license_url = self._instance.license_url)
+                license_url = self._instance.license_url,
+                claim_all = self._instance.is_simple_glob())
 
         super(SimpleRegistrationForm, self).__init__(**kwargs)
 
@@ -28,7 +33,19 @@ class SimpleRegistrationForm(forms.Form):
         otherwise add a new registration with a work."""
 
         if self._instance:
-            # update
+            # see if we need to update existing constraint
+            if self._instance.is_simple_glob():
+                
+                if not self.cleaned_data.get('claim_all', False):
+                    # not claiming all; remove the constraint
+                    self._instance.constraints.clear()
+                else:
+                    # update the constraint value
+                    constraint = self._instance.constraints.all()[0]
+                    constraint.value = self.cleaned_data['url']
+                    constraint.save()
+
+            # update the existing instance
             self._instance.url = self.cleaned_data['url']
             self._instance.title = self.cleaned_data['title']
             self._instance.license_url = self.cleaned_data['license_url']
@@ -42,9 +59,17 @@ class SimpleRegistrationForm(forms.Form):
             registration = models.Registration(owner=self._user)
             registration.save()
 
-            work = models.Work(**self.cleaned_data)
-            work.registration = registration
-        
+            work = models.Work(url=self.cleaned_data['url'],
+                               title=self.cleaned_data['title'],
+                               license_url=self.cleaned_data['license_url'])
+
+            work.registration = registration        
             work.save()
+
+            if self.cleaned_data.get('claim_all', False):
+                # add the constraint
+                c = models.Constraint.objects.create_simple_glob(
+                        self.cleaned_data['url'])
+                work.constraints.add(c)
 
             return work

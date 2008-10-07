@@ -158,6 +158,17 @@ Register Your Work
     </div>
 
     <div class="field">
+      <span class="field_label">{{form.claim_all.label}}</span>
+      {{form.claim_all}} 
+      <div class="help">{{form.claim_all.help_text}}</div>
+      {% if form.claim_all.errors %}
+      <div class="errors">
+	{{ form.claim_all.errors }}
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="field">
       <span class="field_label">{{form.title.label}}</span>
       {{form.title}}
       <div class="help">{{form.title.help_text}}</div>

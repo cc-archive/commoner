@@ -64,7 +64,8 @@ def delete(request, id):
 
             # if this is the last work in a non-feed registration,
             # remove the registration as well
-            if not registration.feed and registration.works.count() == 0:
+            if not hasattr(registration, 'feed') and \
+                    registration.works.count() == 0:
                 registration.delete()
             
             # redirect to the profile
