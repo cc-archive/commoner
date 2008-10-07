@@ -10,8 +10,8 @@ class SimpleRegistrationForm(forms.Form):
     license_url = forms.URLField(label="License",
                              help_text="The URL of the license your work is available under.")
 
-    claim_all = forms.BooleanField(label="Claim all works beginning with this URL?",
-                                   help_text="Use this option to claim large groups of works that you own. Note this is only appropriate if you own <strong>everything</strong> starting with this URL.",
+    claim_all = forms.BooleanField(label="Register all works beginning with this URL?",
+                                   help_text="Use this option to register large groups of works that you have created. Note this is only appropriate if you own <strong>everything</strong> starting with this URL.",
                                    required=False)
 
     def __init__(self, user, instance={}, **kwargs):
