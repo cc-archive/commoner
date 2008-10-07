@@ -149,21 +149,20 @@ Register Your Work
       {{form.url}} 
       <img id="loading_metadata" src="/m/images/loading.gif"
 	   style="display:none;" />
-      <div class="help">{{form.url.help_text}}</div>
-      {% if form.url.errors %}
-      <div class="errors">
-	{{ form.url.errors }}
-      </div>
-      {% endif %}
-    </div>
+      <div class="help">{{form.url.help_text}}
 
-    <div class="field">
-      <span class="field_label">{{form.claim_all.label}}</span>
       {{form.claim_all}} 
-      <div class="help">{{form.claim_all.help_text}}</div>
+      {{form.claim_all.label}}<br/>
+      <div>{{form.claim_all.help_text|safe}}</div>
       {% if form.claim_all.errors %}
       <div class="errors">
 	{{ form.claim_all.errors }}
+      </div>
+      {% endif %}
+
+      {% if form.url.errors %}
+      <div class="errors">
+	{{ form.url.errors }}
       </div>
       {% endif %}
     </div>
