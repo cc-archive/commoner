@@ -28,10 +28,10 @@ def add_or_edit(request, id=None):
             data=request.POST)
 
         if form.is_valid():
-            form.save()
+            work = form.save()
 
             return HttpResponseRedirect(
-                reverse('profile_view', args=(request.user.username,)))
+                reverse('view_work', args=(work.id,)))
 
     else:
         # just display the form
