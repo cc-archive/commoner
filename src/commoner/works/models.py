@@ -115,7 +115,7 @@ class Work(models.Model):
 
         Constraints are additive; adding a second one (even a no-op)
         causes this to return False:
-        >>> c2 = Constraint(constraint='scheme', mode='include', var='http')
+        >>> c2 = Constraint(constraint='schemes', mode='include', var='http')
         >>> w.constraints.add(c2)
         >>> w.has_leading_glob()
         False
@@ -163,7 +163,7 @@ class ConstraintManager(models.Manager):
         work.constraints.add(
             Constraint(mode='include',
                        constraint='schemes',
-                       var=url[3]))
+                       var=url[0]))
 
 
 class Constraint(models.Model):
