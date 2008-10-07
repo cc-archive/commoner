@@ -274,6 +274,10 @@ div.form h2 {
 	margin-top: 0;
 }
 
+div.form h3.notice {
+	color: #800;
+}
+
 div.form input[type="text"], div.form .field #id_photo {
 	width: 300px;
 	font-size: 102%;
