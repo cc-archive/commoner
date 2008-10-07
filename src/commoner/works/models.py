@@ -132,13 +132,13 @@ class Work(models.Model):
             # look for each constraint
             self.constraints.get(mode='include',
                                  constraint='hosts',
-                                 var=url.netloc)
+                                 var=url[1])
             self.constraints.get(mode='include',
                                  constraint='pathstartswith',
-                                 var=url.path)
+                                 var=url[2])
             self.constraints.get(mode='include',
                                  constraint='schemes',
-                                 var=url.scheme)
+                                 var=url[0])
 
             return True
         except:
@@ -155,15 +155,15 @@ class ConstraintManager(models.Manager):
         work.constraints.add(
             Constraint(mode='include',
                        constraint='hosts',
-                       var=url.netloc))
+                       var=url[1]))
         work.constraints.add(
             Constraint(mode='include',
                        constraint='pathstartswith',
-                       var=url.path))
+                       var=url[2]))
         work.constraints.add(
             Constraint(mode='include',
                        constraint='schemes',
-                       var=url.scheme))
+                       var=url[3]))
 
 
 class Constraint(models.Model):
