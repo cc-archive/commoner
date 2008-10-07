@@ -6,7 +6,7 @@
     <strong property="dct:title">{{work.title}}</strong></a>
 
   {% if work.constrained %}
-<span class="work_constraints" about="{{work.get_absolute_url}}" 
+<div class="work_constraints" about="{{work.get_absolute_url}}" 
       rel="powder:iriset">
   {% if work.has_leading_glob %}
   (Includes all works beginning with this URL)
@@ -14,7 +14,7 @@
   <span property="powder:{{c.mode}}regex" content="{{c.regex}}" />
   {% endfor %}
   {% endif %}
-</span>
+</div>
 {% endif %}
 
   <br/>
