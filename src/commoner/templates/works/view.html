@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block namespaces %}
+xmlns:powder="http://www.w3.org/2007/05/powder#"
+{% endblock %}
+
 {% block header %}
 <link about="" typeof="ccnet:Registration" />
 <link about="{{work.url}}" typeof="cc:Work" />
@@ -13,7 +17,7 @@ Work Registration
 {% block page_icon_class %}works{% endblock %}
 
 {% block extra_nav %}
-   {% ifequal user work.owner %}
+   {% ifequal user work.owner_user %}
    <li><a href="{% url edit_content work.id %}">edit</a></li>
    <li><a href="{% url delete_content work.id %}">delete</a></li>
    {% endifequal %}
@@ -26,12 +30,19 @@ Work Registration
     resource="{{ work.owner.get_absolute_url }}">{{work.title}}</h2>
 <h3><a rel="sioc:parent_of" rev="sioc:has_parent" 
        href="{{work.url}}">{{work.url}}</a></h3>
+{% if work.constrained %}
+<ul class="work_constraints" rel="powder:iriset">
+  {% for c in work.constraints.all %}
+  <li property="powder:{{c.mode}}regex">{{c.regex}}</li>
+  {% endfor %}
+</ul>
+{% endif %}
 
 <ul class="work_fields">
   <li>
     <span class="field_label">Registered By:</span> 
     <a rel="dct:creator sioc:has_owner" rev="sioc:owner_of"
-       href="{{work.owner.get_profile.get_absolute_url}}">{{ work.owner.get_profile.display_name }}</a>
+       href="{{work.owner.get_absolute_url}}">{{ work.owner.display_name }}</a>
   </li>
 
   <li>
