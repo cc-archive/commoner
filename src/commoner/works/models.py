@@ -1,3 +1,4 @@
+from urlparse import urlparse
 from datetime import datetime
 
 from django.db import models
@@ -88,7 +89,7 @@ class Work(models.Model):
     def constrained(self):
         return self.constraints.count() > 0
 
-    def is_simple_glob(self):
+    def has_leading_glob(self):
         """Return True if the given Work has a simple, "prefix" glob.
 
         First, create a work:
@@ -101,68 +102,96 @@ class Work(models.Model):
 
         With no constraints, we by definition are not a simple glob:
 
-        >>> w.is_simple_glob()
+        >>> w.has_leading_glob()
         False
 
-        Now add a constraint:
+        Now add a leading glob constraint:
 
-        >>> c = Constraint.objects.create_simple_glob(w.url)
-        >>> w.constraints.add(c)
+        >>> Constraint.objects.add_leading_glob(w)
 
         We can check for this:
-        >>> w.is_simple_glob()
+        >>> w.has_leading_glob()
         True
 
         Constraints are additive; adding a second one (even a no-op)
         causes this to return False:
-        >>> c2 = Constraint(component='scheme', matching_rule='exact', mode='include', value='http')
+        >>> c2 = Constraint(constraint='scheme', mode='include', var='http')
         >>> w.constraints.add(c2)
-        >>> w.is_simple_glob()
+        >>> w.has_leading_glob()
         False
 
         """
 
-        # we must have one and only one constraint to qualify
-        if self.constraints.count() != 1:
+        # we must have three constraints to qualify
+        if self.constraints.count() != 3:
             return False
 
-        # we have only one constraint; see if it matches
-        constraint = self.constraints.all()[0]
-        return (constraint.component == 'ipath') and \
-            (constraint.matching_rule == 'startsWith') and \
-            (constraint.mode == 'include') and \
-            (constraint.value == self.url)
+        try:
+            url = urlparse(self.url)
+
+            # look for each constraint
+            self.constraints.get(mode='include',
+                                 constraint='hosts',
+                                 var=url.netloc)
+            self.constraints.get(mode='include',
+                                 constraint='pathstartswith',
+                                 var=url.path)
+            self.constraints.get(mode='include',
+                                 constraint='schemes',
+                                 var=url.scheme)
+
+            return True
+        except:
+            return False
                 
 
 class ConstraintManager(models.Manager):
 
-    def create_simple_glob(self, prefix):
-        """Return a newly created, simple "glob" constraint."""
+    def add_leading_glob(self, work):
+        """Create the constraints necessary to claim all works that
+        begin with the given URL."""
 
-        constraint = Constraint(
-            component = 'ipath',
-            matching_rule = 'startsWith',
-            mode ='include',
-            value=prefix)
-        constraint.save()
+        url = urlparse(work.url)
+        work.constraints.add(
+            Constraint(mode='include',
+                       constraint='hosts',
+                       var=url.netloc))
+        work.constraints.add(
+            Constraint(mode='include',
+                       constraint='pathstartswith',
+                       var=url.path))
+        work.constraints.add(
+            Constraint(mode='include',
+                       constraint='schemes',
+                       var=url.scheme))
 
-        return constraint
 
 class Constraint(models.Model):
-    
-    COMPONENTS = (
-        ('scheme', 'scheme'),
-        ('ihost',  'ihost'),
-        ('ipath',  'ipath'),
-        ('port',   'port'),
+
+    REGEXES = dict(
+        schemes = r'^var\:\/\/',
+        hosts = r'\:\/\/(([^\/\?\#]*)\@)?([^\:\/\?\#\@]+\.)?var(\:([0-9]+))?\/',
+        ports = r'\:\/\/(([^\/\?\#]*)\@)?([^\:\/\?\#\@]+\.)*[^\:\/\?\#\@]+\:var\/',
+        exactpaths = r'\:\/\/(([^\/\?\#]*)\@)?([^\:\/\?\#\@]*)(\:([0-9]+))?var($|\?|\#)',
+        pathcontains = r'\:\/\/(([^\/\?\#]*)\@)?([^\:\/\?\#\@]*)(\:([0-9]+))?\/[^\?\#]*var[^\?\#]*[\?\#]?',
+        pathstartswith = r'\:\/\/(([^\/\?\#]*)\@)?([^\:\/\?\#\@]*)(\:([0-9]+))?var',
+        pathendswith = r'\:\/\/(([^\/\?\#]*)\@)?([^\:\/\?\#\@]*)(\:([0-9]+))?\/[^\?\#]*var($|\?|\#)',
+        resources = r'^var$',
         )
-    MATCHING_RULES = (
-        ('exact', 'exact'),
-        ('endswith', 'endswith'),
-        ('contains', 'contains'),
-        ('startsWith', 'startsWith'), 
-        ('endsWith', 'endsWith'),
+
+    ESCAPE_CHARS = """. \ ? * + { } ( ) [ ] ! " # % & ' , - / : ; = > @ [ ] _ ` ~""".strip()
+
+    CONSTRAINTS = (
+        ('schemes',        'schemes'),
+        ('hosts',          'hosts'),
+        ('ports',          'ports'),
+        ('exactpaths',     'exactpaths'),
+        ('pathcontains',   'pathcontains'),
+        ('pathstartswith', 'pathstartswith'),
+        ('pathendswith',   'pathendswith'),
+        ('resources',      'resources'),
         )
+
     MODES = (
         ('include', 'include'),
         ('exclude', 'exclude'),
@@ -171,16 +200,38 @@ class Constraint(models.Model):
     work = models.ForeignKey(Work, related_name='constraints',
                              null=True, blank=True)
     
-    component = models.CharField(max_length=20, choices=COMPONENTS)
-    matching_rule = models.CharField(max_length=20, choices=MATCHING_RULES)
+    constraint = models.CharField(max_length=20, choices=CONSTRAINTS)
     mode = models.CharField(max_length=20, choices=MODES)
 
-    value = models.CharField(max_length=255)
+    var = models.CharField(max_length=255)
 
     objects = ConstraintManager()
 
-    def match(self, input):
-        """Run this constraint against the given input.  Return True
-        if the input matches."""
+    @property
+    def regex_var(self):
+        """Return the processed version of self.var as described by 
+        http://www.w3.org/TR/2008/WD-powder-formal-20080815/#whitespace"""
+    
+        result = self.var.strip()
+        result = result.replace(' ', '|')
+        
+        var = u""
+        for c in result:
+            if c in self.ESCAPE_CHARS:
+                var += u"\%s" % c
+            else:
+                var += c
 
-        raise NotImplementedError()
+        return u"(%s)" % var
+
+    @property
+    def predicate(self):
+        return u"%s%s" % (self.mode, self.constraint)
+
+    @property
+    def regex(self):
+        """Return a regex for the given constraint as described by 
+        http://www.w3.org/TR/2008/WD-powder-formal-20080815/#iriSets"""
+
+        return self.REGEXES[self.constraint].replace('var', self.regex_var)
+

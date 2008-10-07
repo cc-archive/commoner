@@ -20,7 +20,7 @@ class WorkFormTestCase(django.test.TestCase):
                                     dict(title='Test Glob Adding',
                                          url='http://example.org/test/glob/adding',
                                          license_url='http://example.org/license',
-                                         claim_all=True))
+                                         claim_all='on'))
 
         # make sure we were redirected
         self.assertEqual(response.status_code, 302)
@@ -30,7 +30,7 @@ class WorkFormTestCase(django.test.TestCase):
                 registration__owner__username = 'normal').all())[-1]
 
         # verify the constraint was created correctly
-        self.assert_(work.is_simple_glob())
+        self.assert_(work.has_leading_glob())
 
     def test_edit_globbing_work(self):
 
@@ -57,7 +57,7 @@ class WorkFormTestCase(django.test.TestCase):
                 registration__owner__username = 'normal').all())[-1]
 
         # verify the constraint was created correctly
-        self.assert_(work.is_simple_glob())
+        self.assert_(work.has_leading_glob())
 
         # edit the work
         response = self.client.get('/w/%s/edit/' % work.id)
@@ -75,5 +75,4 @@ class WorkFormTestCase(django.test.TestCase):
         self.assertEqual(edited_work.title, 'Test Glob Editing')
 
         # make sure the constraint is correctly added
-        self.assertEqual(edited_work.constraints.all()[0].value, 
-                         edited_work.url)
+        self.assert_(edited_work.has_leading_glob())

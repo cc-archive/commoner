@@ -24,7 +24,7 @@ class SimpleRegistrationForm(forms.Form):
                 url = self._instance.url,
                 title = self._instance.title,
                 license_url = self._instance.license_url,
-                claim_all = self._instance.is_simple_glob())
+                claim_all = self._instance.has_leading_glob())
 
         super(SimpleRegistrationForm, self).__init__(**kwargs)
 
@@ -33,22 +33,21 @@ class SimpleRegistrationForm(forms.Form):
         otherwise add a new registration with a work."""
 
         if self._instance:
-            # see if we need to update existing constraint
-            if self._instance.is_simple_glob():
-                
-                if not self.cleaned_data.get('claim_all', False):
-                    # not claiming all; remove the constraint
-                    self._instance.constraints.clear()
-                else:
-                    # update the constraint value
-                    constraint = self._instance.constraints.all()[0]
-                    constraint.value = self.cleaned_data['url']
-                    constraint.save()
+
+            # clear the leading glob if it already exists
+            if self._instance.has_leading_glob():
+                self._instance.constraints.all().delete()
 
             # update the existing instance
             self._instance.url = self.cleaned_data['url']
             self._instance.title = self.cleaned_data['title']
             self._instance.license_url = self.cleaned_data['license_url']
+
+            self._instance.save()
+
+            # add the leading glob if needed
+            if self.cleaned_data.get('claim_all', False):
+                models.Constraint.objects.add_leading_glob(self._instance)
 
             self._instance.save()
 
@@ -68,8 +67,6 @@ class SimpleRegistrationForm(forms.Form):
 
             if self.cleaned_data.get('claim_all', False):
                 # add the constraint
-                c = models.Constraint.objects.create_simple_glob(
-                        self.cleaned_data['url'])
-                work.constraints.add(c)
+                models.Constraint.objects.add_leading_glob(work)
 
             return work
