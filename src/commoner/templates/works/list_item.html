@@ -4,9 +4,22 @@
   <a about="{{work.owner.get_absolute_url}}" 
      rel="sioc:owner_of" href="{{work.url}}">
     <strong property="dct:title">{{work.title}}</strong></a>
+
+  {% if work.constrained %}
+<span class="work_constraints" about="{{work.get_absolute_url}}" 
+      rel="powder:iriset">
+  {% if work.has_leading_glob %}
+  (Includes all works beginning with this URL)
+  {% for c in work.constraints.all %}
+  <span property="powder:{{c.mode}}regex" content="{{c.regex}}" />
+  {% endfor %}
+  {% endif %}
+</span>
+{% endif %}
+
   <br/>
   
-  {% ifequal user work.owner %}
+  {% ifequal user work.owner_user %}
   <span style="float: right;">
     <a href="{% url edit_content work.id %}">[edit]</a>
     <a href="{% url delete_content work.id %}">[delete]</a>
