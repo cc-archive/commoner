@@ -98,7 +98,7 @@ def getBaseURL(req):
     proper scheme and authority.  It will lack a port if the port is
     standard (80, 443).
     """
-    name = req.META['HTTP_HOST']
+    name = req.META.get('HTTP_HOST', '')
     try:
         name = name[:name.index(':')]
     except:
