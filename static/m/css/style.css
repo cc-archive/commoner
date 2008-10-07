@@ -172,7 +172,7 @@ a:hover {
 
 #main-body {
 	padding-top: 2em;
-	background: url('/m/images/commoner-id.png') no-repeat 100% -15px;
+	background: url('/m/images/commoner-id.png') no-repeat 108% -15px;
 }
 
 #main-body.register, #main-body.edit {
@@ -227,6 +227,10 @@ a:hover {
 	margin-right: 160px;
 	color: #000;
 	font-size: 125%;
+}
+
+.index #title {
+	padding-top: 0;
 }
 
 #title h1 {
@@ -296,6 +300,18 @@ div.form form textarea {
 	width: 500px;
 	margin: 1em 0;
 	padding: 0.25em;
+}
+
+.form #photo {
+	overflow: auto;
+	display: block;
+}
+.form #photo img {
+	float: left;
+	margin-right: 10px;
+	padding: 7px;
+	border: 1px solid #EEDFCC;
+	background-color: #fff;
 }
 
 /*** Index ***/
