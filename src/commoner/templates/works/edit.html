@@ -73,7 +73,7 @@ YAHOO.cc.success = function (response) {
     // see if the work URL has metadata
     if ( (metadata.subjects.indexOf(work_url) > -1) ) {
 
-        YAHOO.util.Dom.get('id_license').value = YAHOO.cc.get_license(metadata.triples, work_url);
+        YAHOO.util.Dom.get('id_license_url').value = YAHOO.cc.get_license(metadata.triples, work_url);
         YAHOO.util.Dom.get('id_title').value = YAHOO.cc.get_title(metadata.triples, work_url);
 
     }
