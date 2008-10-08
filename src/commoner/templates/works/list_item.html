@@ -7,17 +7,17 @@
 
   {% if work.constrained %}
 <div class="work_constraints" about="{{work.get_absolute_url}}" 
-      rel="powder:iriset">
+      rel="powder:iriset" style="font-size:95%">
   {% if work.has_leading_glob %}
-  (Includes all works beginning with this URL)
+  Includes all works beginning with this URL.
   {% for c in work.constraints.all %}
   <span property="powder:{{c.mode}}regex" content="{{c.regex}}" />
   {% endfor %}
   {% endif %}
 </div>
-{% endif %}
-
+{%else%}
   <br/>
+{% endif %}
   
   {% ifequal user work.owner_user %}
   <span style="float: right;">
