@@ -33,8 +33,12 @@ urlpatterns = patterns(
     url(r'^a/password/reset/$',
         'django.contrib.auth.views.password_reset',
         name='password_reset'),
+    url(r'^a/password/reset/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$', 
+        'django.contrib.auth.views.password_reset_confirm'),
     url(r'^a/password/reset/done/$',
         'django.contrib.auth.views.password_reset_done',),
+    url(r'^a/password/reset/complete/$',
+        'django.contrib.auth.views.password_reset_complete',),
 
     (r'^a/register/complete/$', 
      'django.views.generic.simple.direct_to_template',
