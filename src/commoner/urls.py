@@ -45,19 +45,19 @@ urlpatterns = patterns(
     url(r'^p/edit/$', 'commoner.profiles.views.edit_or_create', 
         name='profile_edit'),
 
-    # Work management
-    url(r'^w/add/', 
+    # Work Registration management
+    url(r'^r/add/', 
         'commoner.works.views.add_or_edit',
         name='add_content'),
-    url(r'^w/(?P<id>\d+)/edit/', 
+    url(r'^r/(?P<id>\d+)/edit/', 
         'commoner.works.views.add_or_edit',
         name='edit_content'),
-    url(r'^w/(?P<id>\d+)/delete/', 
+    url(r'^r/(?P<id>\d+)/delete/', 
         'commoner.works.views.delete',
         name='delete_content'),
-    url(r'^w/lookup/$', 'commoner.works.views.by_uri',
+    url(r'^r/lookup/$', 'commoner.works.views.by_uri',
         name='lookup_work'),
-    url(r'^w/(?P<id>\d+)/', 'commoner.works.views.view',
+    url(r'^r/(?P<id>\d+)/', 'commoner.works.views.view',
         name='view_work'),
     
     # OpenID Support

@@ -12,11 +12,11 @@ class WorkFormTestCase(django.test.TestCase):
         self.client.login(username='normal', password='testing')
 
         # retrieve the add page
-        response = self.client.get('/w/add/')
+        response = self.client.get('/r/add/')
         self.assertEqual(response.status_code, 200)
 
         # post a new work
-        response = self.client.post('/w/add/', 
+        response = self.client.post('/r/add/', 
                                     dict(title='Test Glob Adding',
                                          url='http://example.org/test/glob/adding',
                                          license_url='http://example.org/license',
@@ -39,11 +39,11 @@ class WorkFormTestCase(django.test.TestCase):
         self.client.login(username='normal', password='testing')
 
         # retrieve the add page
-        response = self.client.get('/w/add/')
+        response = self.client.get('/r/add/')
         self.assertEqual(response.status_code, 200)
 
         # post a new work
-        response = self.client.post('/w/add/', 
+        response = self.client.post('/r/add/', 
                                     dict(title='Test Glob Adding',
                                          url='http://example.org/test/glob/adding',
                                          license_url='http://example.org/license',
@@ -60,10 +60,10 @@ class WorkFormTestCase(django.test.TestCase):
         self.assert_(work.has_leading_glob())
 
         # edit the work
-        response = self.client.get('/w/%s/edit/' % work.id)
+        response = self.client.get('/r/%s/edit/' % work.id)
         self.assertEqual(response.status_code, 200)
 
-        response = self.client.post('/w/%s/edit/' % work.id,
+        response = self.client.post('/r/%s/edit/' % work.id,
                                     dict(title = 'Test Glob Editing',
                                          url='http://example.org/glob/editing',
                                          license_url='http://example.org/license',

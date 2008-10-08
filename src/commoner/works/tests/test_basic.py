@@ -15,5 +15,5 @@ class TestBasics(django.test.TestCase):
         self.assert_(response.status_code == 200)
 
         # add
-        response = self.client.get('/w/add/')
+        response = self.client.get('/r/add/')
         self.assertEqual(response.status_code,200)

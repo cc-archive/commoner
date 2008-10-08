@@ -10,11 +10,11 @@ class TestEditing(django.test.TestCase):
         self.client.login(username='normal', password='testing')
 
         # retrieve the add page
-        response = self.client.get('/w/add/')
+        response = self.client.get('/r/add/')
         self.assertEqual(response.status_code, 200)
 
         # post a new work
-        response = self.client.post('/w/add/', 
+        response = self.client.post('/r/add/', 
                                     dict(title='Test Work Adding',
                                          url='http://example.org/test/work/adding',
                                          license_url='http://creativecommons.org/licenses/by/3.0/'))
@@ -37,11 +37,11 @@ class TestEditing(django.test.TestCase):
         self.client.login(username='normal', password='testing')
 
         # retrieve the add page
-        response = self.client.get('/w/add/')
+        response = self.client.get('/r/add/')
         self.assertEqual(response.status_code, 200)
 
         # post a new work
-        response = self.client.post('/w/add/', 
+        response = self.client.post('/r/add/', 
                                     dict(title='Test Work Adding',
                                          url='http://example.org/test/work/adding',
                                          license_url='http://creativecommons.org/licenses/by/3.0/'))
@@ -54,10 +54,10 @@ class TestEditing(django.test.TestCase):
                 registration__owner__username = 'normal').all())[-1].id
 
         # edit the work
-        response = self.client.get('/w/%s/edit/' % work_id)
+        response = self.client.get('/r/%s/edit/' % work_id)
         self.assertEqual(response.status_code, 200)
 
-        response = self.client.post('/w/%s/edit/' % work_id,
+        response = self.client.post('/r/%s/edit/' % work_id,
                                     dict(title = 'Test Work Editing',
                                          url='http://example.org/test/work/adding',
                                          license_url='http://example.org/license'))
@@ -74,11 +74,11 @@ class TestEditing(django.test.TestCase):
         self.client.login(username='normal', password='testing')
 
         # retrieve the add page
-        response = self.client.get('/w/add/')
+        response = self.client.get('/r/add/')
         self.assertEqual(response.status_code, 200)
 
         # post a new work
-        response = self.client.post('/w/add/', 
+        response = self.client.post('/r/add/', 
                                     dict(title='Test Work Adding',
                                          url='http://example.org/test/work/deleting',
                                          license_url='http://creativecommons.org/licenses/by/3.0/'))
@@ -98,8 +98,8 @@ class TestEditing(django.test.TestCase):
         # now delete it
         work_id = work.id
         del work
-        response = self.client.get('/w/%s/delete/' % work_id)
-        response = self.client.post('/w/%s/delete/' % work_id,
+        response = self.client.get('/r/%s/delete/' % work_id)
+        response = self.client.post('/r/%s/delete/' % work_id,
                                     dict(confirm=True))
         self.assertEqual(response.status_code, 302)
 
