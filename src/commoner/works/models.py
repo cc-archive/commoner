@@ -54,6 +54,8 @@ class Work(models.Model):
 
     same_as = models.ForeignKey("self", blank=True, null=True)
 
+    class Meta:
+        ordering = ['-registered']
     def get_absolute_url(self):
         return reverse('view_work', args=(self.id,))
 
