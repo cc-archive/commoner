@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
-from django.http import Http404, HttpResponseRedirect, HttpResponseForbidden
+from django.http import Http404, HttpResponseRedirect, HttpResponseForbidden, HttpResponseNotFound
 from django.shortcuts import get_object_or_404, render_to_response
+from django.template.loader import render_to_string
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
 
@@ -104,8 +105,11 @@ def by_uri(request):
 
         if works.count() == 0:
             # still not found
-            raise Http404("No works matched the given URL, %s" % uri)
-    
+            return HttpResponseNotFound(render_to_string("works/list.html",
+                                                          dict(works=[],
+                                                               message="No works found that match the given URL, %s" % uri,
+                                           ),
+                                                         context_instance=RequestContext(request)))
 
     # display the disambiguation list
     return render_to_response('works/list.html',
