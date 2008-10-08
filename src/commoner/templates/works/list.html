@@ -17,10 +17,12 @@ Registered Works
 <h3>{{ message }}</h3>
 {% endif %}
 
+{% if works %}
     <ul class="licensed-works">
       {% for work in works %}
          {% include "works/list_item.html" %}
       {% endfor %}
     </ul>
-    
+{% endif %}
+
 {% endblock %}
