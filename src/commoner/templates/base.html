@@ -12,8 +12,9 @@
   	<link href="/m/css/style.css" rel="stylesheet" type="text/css"/>
 
         <link about="/" rel="sioc_service:has_service"
-	      href="{% url lookup_work %}" />
-        <link about="{% url lookup_work %}" rel="sioc_service:service_protocol"
+	      href="{{ services.lookup_work }}" />
+        <link about="{{ services.lookup_work }}" 
+	      rel="sioc_service:service_protocol"
 	      href="http://wiki.creativecommons.org/work-lookup" />
     {% block header %}
 

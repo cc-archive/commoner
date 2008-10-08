@@ -11,6 +11,7 @@ from django.template import loader
 from django import http
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse as reverseURL
+from django.core.urlresolvers import NoReverseMatch
 from django.views.generic.simple import direct_to_template
 
 from django.conf import settings
@@ -155,3 +156,16 @@ def base_url_context(request):
     context."""
 
     return dict(base_url=getBaseURL(request)[:-1])
+
+def services_url_context(request):
+    """Django Context Processor which adds a dict of service URLs to the 
+    context."""
+
+    try:
+        lookup_work=getViewURL(request, "lookup_work")
+    except NoReverseMatch, e:
+        lookup_work = ""
+
+    services = dict(lookup_work=lookup_work)
+
+    return dict(services=services)

@@ -81,6 +81,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
     "commoner.util.base_url_context",
+    "commoner.util.services_url_context",
     )
 
 
