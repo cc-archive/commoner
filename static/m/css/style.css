@@ -354,22 +354,22 @@ div#join_network {
 	width: 66%;
 	margin: 2em auto 0 auto;
 	padding: 0.5em;
-	background: url(../images/paper.png);
 	overflow: auto;
+	text-align: center;
 }
 
 div#join_network h2, div#join_network h3 {
-	float: left;
+	width: 66%;
 	line-height: 1em;
 	padding: 0;
-	margin: 0;
+	margin: 0 auto ;
 }
 
 div#join_network h2 a, div#join_network h3 a {
-	color: #000;
+	color: #5E3B20;
 	text-decoration: none;
 	display: block;
-	padding: 5px;
+	padding: 15px;
 	margin: 7px;
 }
 div#join_network h3 a:hover {
@@ -378,14 +378,14 @@ div#join_network h3 a:hover {
 
 div#join_network h2 a {
 	margin: 3px;
-	border: 1px solid #666;
-	background-color: #eee;
+	border: 1px solid #A07D65;
+	background-color: #f0f0f0;
 	font-size: 125%;
 }
 
 div#join_network h2 a:hover {
-	background-color: #000;
-	color: #eee;
+	background-color: #A07D65;
+	color: #fff;
 }
 /*** About Page ***/
 #about ul#benefits {
