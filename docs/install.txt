@@ -1,0 +1,73 @@
+Installation
+============
+
+Commoner uses `buildout <http://python.org/pypi/zc.buildout>`_ to
+manage dependencies.  Buildout will handle retrieving most
+dependencies for you.  To get started, run::
+
+  $ python bootstrap.py
+
+This will download `setuptools <>`_ and create the buildout script.
+To retrieve dependencies and create control scripts run::
+
+  $ ./bin/buildout
+
+Configuration
+-------------
+
+Before you need to set some configuration parameters, including
+database information. If you'd like to do the minimal amount of work
+needed, simply open ``src/commoner/settings.py`` and edit the line
+which reads::
+
+ DEBUG = TEMPLATE_DEBUG = True
+
+To read::
+
+ DEBUG = TEMPLATE_DEBUG = False
+
+This will use a SQLite database and allow you to play with the
+software.  If you'd like to use a different database, edit the
+appropriate settings in ``settings.py``.  See the Django database
+settings documentation
+(http://docs.djangoproject.com/en/dev/ref/settings/#database-engine)
+for more information.
+
+Database Specific Notes
+-----------------------
+
+MySQL Notes
+~~~~~~~~~~~
+
+The default character set for MySQL is latin1. When creating your
+database you will need to specify the character set as utf8::
+
+  mysql> create database commoner charset=utf8;
+
+
+Testing Your Installation
+-------------------------
+
+After running buildout and configuring your database you can get
+started by running::
+
+  $ ./bin/django syncdb
+
+This will initialize your database and prompt you to create an
+administrative user.  After that is complete you can use the internal
+webserver for testing::
+
+  $ ./bin/django runserver
+
+Opening your browser to http://localhost:8000/ will display the
+Commoner homepage with the default look and feel (which is the same as
+creativecommons.net).
+
+
+Production Deployments
+----------------------
+
+
+Serving Badges
+--------------
+

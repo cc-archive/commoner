@@ -1,0 +1,25 @@
+URL Prefixes
+------------
+
+Commoner attempts to use very short URLs where-ever possible.  This
+file documents prefixes in use.
+
+=======  ==================================================
+Prefix   Usage
+=======  ==================================================
+
+a/       User-accessible account management views
+admin/   Django admin site
+h/       Help pages
+i/       Reserved for serving badges on a single-domain 
+         deployment.
+l/       Legal documents, including Terms of Use
+m/       Media, including CSS, images and user-uploaded
+         avatars.
+n/       Namespace document views
+o/       OpenID related views
+p/       Profile views
+r/       Registration views
+s/       Reserved for mounting analytics packages
+
+*        All other prefixes are considered usernames
