@@ -17,9 +17,10 @@ class CompleteRegistrationForm(forms.Form):
     agree_to_tos = forms.BooleanField(label="I have read and agreed "
                                        "to the Terms of Use.",
                                        widget=forms.CheckboxInput,
+                                       help_text="By agreeing to the Terms of Use you affirm you are at least 13 years of age.  If you are between 13 years old and the age of majority in your jurisdiction, CC requires that you obtain your parents permission before creating an account.",
 				       error_messages = dict(
-				       required='You must read and agree to the Terms of User.',
-                                       help_text="By agreeing to the Terms of Use you affirm you are at least 13 years of age to create an account.  If you are between 13 years old and the age of majority in your jurisdiction, CC requires that you obtain your parents permission before creating an account."))
+				       required='You must read and agree to the Terms of Use.',
+				       ))
 
     RE_ALNUM = re.compile(r'^\w+$')
 

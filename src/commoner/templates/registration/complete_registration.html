@@ -58,16 +58,16 @@ This registration code has already been used.
     <div class="field" id="agree_to_tos">
       <h3>Terms of Use</h3>
       <iframe src="/l/termsofuse.html" class="tos"> </iframe>
-      <p>
+      <div>
         {{form.agree_to_tos}}
-        <span class="field_label">{{form.agree_to_tos.label}}</span>
-	<div class="help">{{form.agree_to_tos.help_text}}</div>
+        <span >{{form.agree_to_tos.label}}</span>
         {% if form.agree_to_tos.errors %}
         <div class="errors">
           {{ form.agree_to_tos.errors }}
         </div>
         {% endif %}
-      </p>
+	<div class="help" style="margin-left:0;">{{form.agree_to_tos.help_text}}</div>
+      </div>
     </div>
 
     <input type="submit" value="complete registration" />
