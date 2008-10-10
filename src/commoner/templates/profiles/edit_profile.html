@@ -1,18 +1,20 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% load thumbnail %}
-{% block head_title %}Profile -{% endblock %}
+
+{% block head_title %}{% trans "Profile" %} -{% endblock %}
 
 {% block page_header %}
 {% if profile %}
-Edit Profile
+  {% trans "Edit Profile" %}
 {% else %}
-Create Profile
+  {% trans "Create Profile" %}
 {% endif %}
 {% endblock %}
 
 {% block extra_nav %}
-<li><a href="{% url password_change %}">Change Password</a></li>
-<li><a href="{% url delete_account %}">Delete My Account</a></li>
+<li><a href="{% url password_change %}">{% trans "Change Password" %}</a></li>
+<li><a href="{% url delete_account %}">{% trans "Delete My Account" %}</a></li>
 {% endblock %}
 {% block page_icon_class %}edit{% endblock %}
 {% block body %}
@@ -21,7 +23,7 @@ Create Profile
 <div class="form">
   <form method="post" enctype="multipart/form-data" action=".">
 
-    <h3>About You</h3>
+    <h3>{% trans "About You" %}</h3>
 
     <div class="field" id="nickname">
       <span class="field_label">{{form.nickname.label}}: </span>
@@ -53,7 +55,7 @@ Create Profile
       {% endif %}
     </div>
 
-    <h3>Profile Photo</h3>
+    <h3>{% trans "Profile Photo" %}</h3>
     <div class="field" id="photo">
       {% if form.instance.photo %}
         <img src="{{ profile.photo|scale }}" 
@@ -61,10 +63,10 @@ Create Profile
              />
 		<p> 
 	<span class="field_label">		 
-	Replace photo: 
+	{% trans "Replace photo" %}: 
       {% else %}
 	<span class="field_label">
-	Choose photo:
+	{% trans "Choose photo" %}:
       {% endif %}
 	</span>
       {{form.photo}}
@@ -82,11 +84,12 @@ Create Profile
       {% endif %}
     </div>
 
-    <h3>Your CC Story</h3>
+    <h3>{% trans "Your CC Story" %}</h3>
     <div class="field" id="story">
       <p>
-	Tell us how you've used CC to share your work, find work to re-use, and expand the Commons.
-	  </p>
+	{% blocktrans %}Tell us how you've used CC to share your work,
+	find work to re-use, and expand the Commons.{% endblocktrans %}
+      </p>
 
       {{form.story}}
       {% if form.story.errors %}
@@ -96,15 +99,27 @@ Create Profile
       {% endif %}
     </div>
 
-	<h3 class="notice">Notice</h3>
+	<h3 class="notice">{% trans "Notice" %}</h3>
 	<p class="field" id="legal">
-		To the extent protected by copyright, all information and content you post or upload to this page or elsewhere on <em>creativecommons.net</em>, including any photograph/image you upload and any content you include in <em>Your CC Story,</em> above, you make available and license to the public under the <a href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported</a> license. Read our <a href="/l/termsofuse.html">Terms of Use</a> for more information about your obligations and responsibilities for the information, content and links you post and upload here and otherwise on this website.
+	  {% blocktrans %}To the extent protected by copyright, all
+	  information and content you post or upload to this page or
+	  elsewhere on <em>creativecommons.net</em>, including any
+	  photograph/image you upload and any content you include
+	  in <em>Your CC Story,</em> above, you make available and
+	  license to the public under
+	  the <a href="http://creativecommons.org/licenses/by/3.0/">Creative
+	  Commons Attribution 3.0 Unported</a> license. Read
+	  our <a href="/l/termsofuse.html">Terms of Use</a> for more
+	  information about your obligations and responsibilities for
+	  the information, content and links you post and upload here
+	  and otherwise on this website.{% endblocktrans %}
 	</p>
 
-    <input type="submit" value="Save Profile" />
+    <input type="submit" value='{% trans "Save Profile" %}' />
     {% if profile %}
-	&nbsp;<a href="{% url profile_view user.username %}">cancel</a>
-	{% endif %}
+    &nbsp;<a href="{% url profile_view user.username %}">
+      {% trans "cancel" %}</a>
+    {% endif %}
   </form>
 </div>
 

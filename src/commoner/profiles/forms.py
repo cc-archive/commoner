@@ -1,11 +1,12 @@
 from django import forms
 from django.core.files.storage import default_storage
+from django.utils.translation import ugettext_lazy as _
 
 from commoner.profiles.models import CommonerProfile
 
 class CommonerProfileForm(forms.ModelForm):
 
-    remove_photo = forms.BooleanField(label="Remove photo?",
+    remove_photo = forms.BooleanField(label=_("Remove photo?"),
                                       required=False)
 
     def __init__(self, user, *args, **kwargs):

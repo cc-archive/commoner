@@ -1,3 +1,4 @@
+{% load i18n %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" 
 	"http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
 
@@ -34,14 +35,22 @@
       {% block nav_override %}
       <ul class="box">
         {% if user.is_anonymous %}
-	<li><a href="http://support.creativecommons.org/join">Join</a></li>
-        <li><a href="{% url django.contrib.auth.views.login %}">Login</a></li>
+	<li><a href="http://support.creativecommons.org/join">
+	    {% trans "Join" %}
+	</a></li>
+        <li><a href="{% url django.contrib.auth.views.login %}">
+	    {% trans "Login" %}
+	</a></li>
 	{% else %}
-        <li><a href="{% url profile_view user.username %}">My Profile</a></li>
-        <li><a href="{% url django.contrib.auth.views.logout %}">Logout</a></li>
+        <li><a href="{% url profile_view user.username %}">
+	    {% trans "My Profile" %}
+	</a></li>
+        <li><a href="{% url django.contrib.auth.views.logout %}">
+	    {% trans "Logout" %}
+	</a></li>
 	{% endif %}
 
-	<li><a href="/h/about">Help</a></li>
+	<li><a href="/h/about">{% trans "Help" %}</a></li>
 
       </ul>
     </div>

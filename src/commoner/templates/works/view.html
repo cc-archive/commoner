@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block header %}
 <link about="" typeof="ccnet:Registration" />
@@ -8,14 +9,14 @@
 {% block head_title %}{{ work.title }} -{% endblock %}
 
 {% block page_header %}
-Work Registration
+  {% trans "Work Registration" %}
 {% endblock %}
 {% block page_icon_class %}works{% endblock %}
 
 {% block extra_nav %}
    {% ifequal user work.owner_user %}
-   <li><a href="{% url edit_content work.id %}">edit</a></li>
-   <li><a href="{% url delete_content work.id %}">delete</a></li>
+   <li><a href="{% url edit_content work.id %}">{% trans "edit" %}</a></li>
+   <li><a href="{% url delete_content work.id %}">{% trans "delete" %}</a></li>
    {% endifequal %}
 {% endblock %}
 
@@ -29,7 +30,7 @@ Work Registration
 {% if work.constrained %}
 <ul class="work_constraints" rel="powder:iriset">
   {% if work.has_leading_glob %}
-  <li>Includes all works beginning with this URL
+  <li>{% trans "Includes all works beginning with this URL." %}
   {% for c in work.constraints.all %}
   <span property="powder:{{c.mode}}regex" content="{{c.regex}}" />
   {% endfor %}
@@ -40,18 +41,18 @@ Work Registration
 
 <ul class="work_fields">
   <li>
-    <span class="field_label">Registered By:</span> 
+    <span class="field_label">{% trans "Registered By" %}:</span> 
     <a rel="dct:creator sioc:has_owner" rev="sioc:owner_of"
        href="{{work.owner.get_absolute_url}}">{{ work.owner.display_name }}</a>
   </li>
 
   <li>
-    <span class="field_label">Registered:</span> 
+    <span class="field_label">{% trans "Registered On" %}:</span> 
     <span property="dct:created" datatype="xsd:date">{{ work.registered|date:"Y-m-d" }}</span>
   </li>
 
   <li>
-    <span class="field_label">License:</span> 
+    <span class="field_label">{% trans "License" %}:</span> 
     <a about="{{work.url}}" rel="license" href="{{work.license_url}}">{{ work.license }}</a>
   </li>
 </ul>

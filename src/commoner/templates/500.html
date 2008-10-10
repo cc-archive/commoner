@@ -1,7 +1,11 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block page_header %}Error{% endblock %}
+{% block page_header %}{% trans "An error occured" %}{% endblock %}
 
 {% block body %}
-An error occured while we were working on your request.
+
+{% trans "An error occured while we were working on your request; the
+site administrators have been notified." %}
+
 {% endblock %}

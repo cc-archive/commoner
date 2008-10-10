@@ -7,6 +7,7 @@ from django.template.loader import render_to_string
 from django.db.models import permalink
 from django.contrib.sites.models import Site
 from django.contrib.auth.models import User
+from django.utils.translation import ugettext_lazy as _
 
 class RegistrationManager(models.Manager):
 
@@ -75,4 +76,4 @@ class PartialRegistration(models.Model):
     objects = RegistrationManager()
 
     class Meta:
-        verbose_name="User registration"
+        verbose_name=_("User registration")
