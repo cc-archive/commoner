@@ -32,6 +32,8 @@ setup(
                         'MySQL-python',
                         'PILwoTK',
                         'pycrypto',
+                        'pysqlite',
+                        'lxml',
                         # 'cc.license',
                         ],
 
