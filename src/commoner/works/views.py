@@ -109,9 +109,8 @@ def by_uri(request):
             # still not found
             return HttpResponseNotFound(render_to_string("works/list.html",
                                                           dict(works=[],
-                                                               message=_(u"No works found that match the given URL, %(lookup_uri)s"),
-# % {'lookup_uri:' uri},
-                                           ),
+                                                               message=_(u"No works found that match the given URL, %(lookup_uri)s" % {'lookup_uri:' uri}),
+                                                               ),
                                                          context_instance=RequestContext(request)))
 
     # display the disambiguation list
