@@ -61,6 +61,7 @@ This registration code has already been used.
       <p>
         {{form.agree_to_tos}}
         <span class="field_label">{{form.agree_to_tos.label}}</span>
+	<div class="help">{{form.agree_to_tos.help_text}}</div>
         {% if form.agree_to_tos.errors %}
         <div class="errors">
           {{ form.agree_to_tos.errors }}

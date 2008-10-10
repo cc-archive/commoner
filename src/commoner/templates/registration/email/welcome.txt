@@ -5,6 +5,13 @@ just visit this URL:
 
   http://{{site.domain}}{{registration.get_absolute_url}}
 
+Note you must be at least 13 years old to join the CC Network and
+activate this account.  If you are between 13 years of age and the age
+of majority in your jurisdiction, Creative Commons requires that you
+obtain your parent's permission before doing so.  If you or your
+parents have questions, please contact Creative Commons at
+info@creativecommons.org.
+
 This URL is good for a single registration, so don't forward it or
 share it.
 
