@@ -1,3 +1,4 @@
+{% load i18n %}
 {% load license %}      
 
 <li>
@@ -9,7 +10,7 @@
 <div class="work_constraints" about="{{work.get_absolute_url}}" 
       rel="powder:iriset" style="font-size:95%">
   {% if work.has_leading_glob %}
-  Includes all works beginning with this URL.
+    {% trans "Includes all works beginning with this URL." %}
   {% for c in work.constraints.all %}
   <span property="powder:{{c.mode}}regex" content="{{c.regex}}" />
   {% endfor %}
@@ -21,8 +22,8 @@
   
   {% ifequal user work.owner_user %}
   <span style="float: right;">
-    <a href="{% url edit_content work.id %}">[edit]</a>
-    <a href="{% url delete_content work.id %}">[delete]</a>
+    <a href="{% url edit_content work.id %}">[{% trans "edit" %}]</a>
+    <a href="{% url delete_content work.id %}">[{% trans "delete" %}]</a>
   </span>
   {% endifequal %}
   

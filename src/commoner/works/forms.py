@@ -1,17 +1,18 @@
 from django import forms
+from django.utils.translation import ugettext_lazy as _
 
 from commoner.works import models
 
 class SimpleRegistrationForm(forms.Form):
 
 
-    url = forms.URLField(label="Work URL")
+    url = forms.URLField(label=_(u"Work URL"))
     title = forms.CharField(max_length=255)
-    license_url = forms.URLField(label="License",
-                             help_text="The URL of the license your work is available under.")
+    license_url = forms.URLField(label=_(u"License"),
+                             help_text=_(u"The URL of the license your work is available under."))
 
-    claim_all = forms.BooleanField(label="Register all works beginning with this URL?",
-                                   help_text="Use this option to register large groups of works that you have created. Note this is only appropriate if you own <strong>everything</strong> starting with this URL.",
+    claim_all = forms.BooleanField(label=_(u"Register all works beginning with this URL?"),
+                                   help_text=_(u"Use this option to register large groups of works that you have created. Note this is only appropriate if you own <strong>everything</strong> starting with this URL."),
                                    required=False)
 
     def __init__(self, user, instance={}, **kwargs):

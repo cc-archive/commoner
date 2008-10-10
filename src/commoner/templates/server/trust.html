@@ -1,34 +1,44 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block body %}
 
 {% ifequal trust_root_valid "Valid" %}
   <!-- Trust root has been validated by OpenID 2 mechanism. -->
-  <p>The site <tt>{{ trust_root|escape }}</tt> has requested verification
-  of your OpenID.</p>
+{% blocktrans with trust_root|escape as trust_root%}
+<p>The site <tt>{{ trust_root }}</tt> has requested verification
+of your OpenID.</p>
+{% endblocktrans %}
 {% endifequal %}
 {% ifequal trust_root_valid "Invalid" %}
 <div class="error">
-  <p>This request claims to be from {{ trust_root|escape }} but I have 
-  determined that <em>it is a pack of lies</em>.  Beware, if you release
-  information to them, they are likely to do unconscionable things with it,
-  being the lying liars that they are.</p>
-  <p>Please tell the <em>real</em> {{ trust_root|escape }} that someone is
-  trying to abuse your trust in their good name.</p>
+{% blocktrans with trust_root|escape as trust_root%}
+<p>A site claiming to be {{ trust_root }} has requested that
+you verify your OpenID.  Unfortunately when I attempted to verify this
+claim the site returned an invalid response.  This may mean that
+someone is impersonating {{ trust_root }}.</p>
+
+<p>Please tell the <em>real</em> {{ trust_root }} that someone is
+trying to abuse your trust in their good name.</p>
+{% endblocktrans %}
 </div>
 {% endifequal %}
 {% ifequal trust_root_valid "Unreachable" %}
-  <p>The site <tt>{{ trust_root|escape }}</tt> has requested verification
+{% blocktrans with trust_root|escape as trust_root %}
+  <p>The site <tt>{{ trust_root }}</tt> has requested verification
   of your OpenID.  I have failed to reach it and thus cannot vouch for its
   authenticity.  Perhaps it is on your local network.</p>
+{% endblocktrans %}
 {% endifequal %}
 {% ifequal trust_root_valid "DISCOVERY_FAILED" %}
-  <p>The site <tt>{{ trust_root|escape }}</tt> has requested verification
-  of your OpenID.  However, <tt>{{ trust_root|escape }}</tt> does not 
+{% blocktrans with trust_root|escape as trust_root %}
+  <p>The site <tt>{{ trust_root }}</tt> has requested verification
+  of your OpenID.  However, <tt>{{ trust_root }}</tt> does not 
   implement OpenID 2.0's relying party verification mechanism.  Please use
   extra caution in deciding whether to release information to this party,
-  and ask <tt>{{ trust_root|escape }}</tt> to implement relying party
+  and ask <tt>{{ trust_root }}</tt> to implement relying party
   verification for your future transactions.</p>
+{% endblocktrans %}
 {% endifequal %}
 
 <!-- trust_root_valid is {{ trust_root_valid }} -->
@@ -36,11 +46,11 @@
 <div>
 <form method="post"
       action="{{ trust_handler_url }}">
-  Verify your identity to the relying party?
+  {% trans "Verify your identity to the relying party?" %}
 
   <br/>
-  <input type="submit" value="Yes (Allow)" name="allow" />
-  <input type="submit" value="No (Cancel)" name="cancel" />
+  <input type="submit" value="{% trans 'Yes, continue' %}" name="allow" />
+  <input type="submit" value="{% trans 'No, cancel' %}" name="cancel" />
 </form>
 </div>
 

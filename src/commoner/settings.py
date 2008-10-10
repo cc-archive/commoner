@@ -46,6 +46,7 @@ SECRET_KEY = 'go8++&w46=wjfdsv6rm68=4rx$$o@mx9k3-bk82$nt7m$i8@8d'
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.doc.XViewMiddleware',
 )

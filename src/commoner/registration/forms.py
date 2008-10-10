@@ -8,18 +8,18 @@ from commoner.profiles.models import CommonerProfile
 
 class CompleteRegistrationForm(forms.Form):
 
-    username = forms.CharField(label="Username:", max_length=30,
+    username = forms.CharField(label=_(u"Username"), max_length=30,
                                help_text="https://creativecommons.net/USERNAME")
-    password1 = forms.CharField(label="Password:",
+    password1 = forms.CharField(label=_(u"Password"),
                                 widget=forms.PasswordInput)
-    password2 = forms.CharField(label="Password (again):",
+    password2 = forms.CharField(label=_(u"Password (again):"),
                                 widget=forms.PasswordInput)
-    agree_to_tos = forms.BooleanField(label="I have read and agreed "
-                                       "to the Terms of Use.",
+    agree_to_tos = forms.BooleanField(label=_(u"I have read and agreed "
+                                       "to the Terms of Use."),
                                        widget=forms.CheckboxInput,
-                                       help_text="By agreeing to the Terms of Use you affirm you are at least 13 years of age.  If you are between 13 years old and the age of majority in your jurisdiction, you affirm that you have obtained your parent's or legal guardian's express permission to create an account as required by CC.",
+                                       help_text=_(u"By agreeing to the Terms of Use you affirm you are at least 13 years of age.  If you are between 13 years old and the age of majority in your jurisdiction, you affirm that you have obtained your parent's or legal guardian's express permission to create an account as required by CC."),
 				       error_messages = dict(
-				       required='You must read and agree to the Terms of Use.',
+				       required=_(u'You must read and agree to the Terms of Use.'),
 				       ))
 
     RE_ALNUM = re.compile(r'^\w+$')

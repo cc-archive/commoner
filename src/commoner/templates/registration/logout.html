@@ -1,7 +1,8 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block page_header %}Logout{% endblock %}
+{% block page_header %}{% trans "Logout" %}{% endblock %}
 
 {% block body %}
-You have been logged out.
+{% trans "You have been logged out." %}
 {% endblock %}

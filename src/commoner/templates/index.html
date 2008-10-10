@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block header %}
         <meta http-equiv="x-xrds-location" content="{{base_url}}{% url server_xrds %}" />
@@ -6,27 +7,51 @@
 
 {% block page_icon_class %}index{% endblock %}
 
-{% block page_header %}Welcome to<br/>The Creative Commons Network{% endblock %}
+{% block page_header %}
+	{% trans "Welcome to<br/>The Creative Commons Network" %}
+{% endblock %}
 {% block page_sub_header %}Service currently in beta, data loss and profile corruption is possible. Official&nbsp;site&nbsp;launch expected October 15th. {% endblock %}
 {% block body %}
 
 <ul id="benefit_list">
-	<li><a href="/h/about/#openid"><img src="/m/images/benefits/openid.png" border="0"/></a><h2>OpenID Profile</h2></li>
-	<li><a href="/h/about/#identify"><img src="/m/images/benefits/identify.png" border="0"/></a><h2>Identify Your Works</h2></li>
-	<li><a href="/h/about/#share"><img src="/m/images/benefits/share.png" border="0"/></a><h2>Share Your CC Story</h2></li>
+	<li><a href="/h/about/#openid"><img src="/m/images/benefits/openid.png"
+	border="0"/></a><h2>{% trans "OpenID Profile" %}</h2></li>
+	<li><a href="/h/about/#identify"><img src="/m/images/benefits/identify.png"
+	border="0"/></a><h2>{% trans "Identify Your Works" %}</h2></li>
+	<li><a href="/h/about/#share"><img src="/m/images/benefits/share.png"
+	border="0"/></a><h2>{% trans "Share Your CC Story" %}</h2></li>
 </ul>
 <p>
-Creative Commons, at its core, is about supporting global participatory culture. By joining the Creative Commons Network, you will be joining a worldwide community dedicated to building the Commons &mdash; the pool of content, of knowledge, that is freely and legally accessible to everyone &mdash; a vital public resource in this digital age. 
+{% blocktrans %}Creative Commons, at its core, is about supporting global
+participatory culture. By joining the Creative Commons Network, you
+will be joining a worldwide community dedicated to building the
+Commons &mdash; the pool of content, of knowledge, that is freely and
+legally accessible to everyone &mdash; a vital public resource in this
+digital age. <a href="http://support.creativecommons.org/join">Join 
+today!</a>{% endblocktrans %}
 </p>
 
 <div id="join_network">
-	<h2><a href="http://support.creativecommons.org/join/">Join Today!</a></h2>
+  <h2><a href="http://support.creativecommons.org/join/">
+      {% trans "Join" %}
+  </a></h2>
 </div>
 
 <div id="aboutcc">
 <h1>About CC</h1>
 <p>
-<a href="http://creativecommons.org/">Creative Commons</a> is a non-profit organization that works to increase the amount of content (cultural, educational, and scientific content) in "the commons" &mdash; the body of work that is available to the public for free and legal sharing, use, re-purposing, and remixing. Creative Commons does this by providing free, easy-to-use legal and technical tools that give everyone a simple, standardized way to pre-clear copyrights to their creative work. CC licenses let people easily change their copyright terms from the default, restrictive "all rights reserved" to a more flexible "some rights reserved." To learn more about Creative Commons, please visit our <a href="http://creativecommons.org/">website</a>.
+{% blocktrans %}<a href="http://creativecommons.org/">Creative Commons</a> is a
+non-profit organization that works to increase the amount of content
+(cultural, educational, and scientific content) in "the commons"
+&mdash; the body of work that is available to the public for free and
+legal sharing, use, re-purposing, and remixing. Creative Commons does
+this by providing free, easy-to-use legal and technical tools that
+give everyone a simple, standardized way to pre-clear copyrights to
+their creative work. CC licenses let people easily change their
+copyright terms from the default, restrictive "all rights reserved" to
+a more flexible "some rights reserved." To learn more about Creative
+Commons, please visit
+our <a href="http://creativecommons.org/">website</a>.{% endblocktrans %}
 
 </p>
 </div>

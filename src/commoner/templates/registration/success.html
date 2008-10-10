@@ -1,10 +1,12 @@
 {% extends "base.html" %}
-{% block head_title %}Registration Complete -{% endblock %}
+{% load i18n %}
+{% block head_title %}{% trans "Registration Complete" %} -{% endblock %}
 
-{% block page_header %}Registration Complete{% endblock %}
+{% block page_header %}{% trans "Registration Complete" %}{% endblock %}
 
 {% block body %}
-Registration complete.  <a href="/p/edit/">Edit your
-  profile</a>.
+{% blocktrans %}
+Registration complete.  <a href="/p/edit/">Edit your profile</a>.
+{% endblocktrans %}
 
 {% endblock %}

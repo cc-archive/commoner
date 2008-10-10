@@ -1,6 +1,7 @@
 {% extends "base.html" %}
-{% block head_title %}Complete Registration -{% endblock %}
-{% block page_header %}Complete Registration{% endblock %}
+{% load i18n %}
+{% block head_title %}{% trans "Complete Registration" %} -{% endblock %}
+{% block page_header %}{% trans "Complete Registration" %}{% endblock %}
 
 {% block nav_override %}{% endblock %}
 {% block page_icon_class %}register{% endblock %}
@@ -11,7 +12,7 @@
 
 {% if form.partial.complete %}
 <p class="error">
-This registration code has already been used.
+{% trans "This registration code has already been used." %}
 </p>
 
 {% else %}
@@ -56,7 +57,7 @@ This registration code has already been used.
     </div>
 
     <div class="field" id="agree_to_tos">
-      <h3>Terms of Use</h3>
+      <h3>{% trans "Terms of Use" %}</h3>
       <iframe src="/l/termsofuse.html" class="tos"> </iframe>
       <div>
         {{form.agree_to_tos}}

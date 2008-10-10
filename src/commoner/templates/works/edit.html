@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block header %}
 <script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/yahoo-dom-event/yahoo-dom-event.js"></script> 
@@ -124,9 +125,9 @@ YAHOO.util.Event.onDOMReady(YAHOO.cc.load);
 
 {% block page_header %}
 {% if work %}
-Edit Work Registration
+   {% trans "Edit Work Registration" %}
 {% else %}
-Register Your Work
+   {% trans "Register Your Work" %}
 {% endif %}
 {% endblock %}
 {% block page_icon_class %}edit{% endblock %}
@@ -189,8 +190,8 @@ Register Your Work
       {% endif %}
     </div>
 
-    <input type="submit" value="save" /> 
-    <a href="{{user.get_profile.get_absolute_url}}">cancel</a>
+    <input type="submit" value='{% trans "Save" %}' /> 
+    <a href="{{user.get_profile.get_absolute_url}}">{% trans "Cancel" %}</a>
 
   </form>
 </div>

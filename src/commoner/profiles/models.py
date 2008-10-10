@@ -8,6 +8,7 @@ from django.db.models import permalink
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
 
 from commoner.util import getBaseURL
 
@@ -15,11 +16,11 @@ class CommonerProfile(models.Model):
     
     user = models.ForeignKey(User, unique=True)
 
-    nickname = models.CharField("Screen name", max_length=255, blank=True)
-    photo = models.ImageField(upload_to='p', blank=True, null=True)
+    nickname = models.CharField(_("Screen name"), max_length=255, blank=True)
+    photo = models.ImageField(_("Photo"), upload_to='p', blank=True, null=True)
 
-    homepage = models.URLField(max_length=255, blank=True)
-    location = models.CharField(max_length=255, blank=True)
+    homepage = models.URLField(_("Homepage"), max_length=255, blank=True)
+    location = models.CharField(_("Location"), max_length=255, blank=True)
 
     story = models.TextField(blank=True)
 

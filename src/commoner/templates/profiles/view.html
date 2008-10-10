@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% load thumbnail %}
 
 {% block header %}
@@ -18,16 +19,16 @@
 {% endblock %}
 {% block page_sub_header %}
   {% if profile.active %}
-    Active 
+    {% trans "Active" %} 
   {% else %}
-    Inactive
+    {% trans "Inactive" %}
   {% endif %}
 {% endblock %}
 
 {% block extra_nav %}
 {% if user.is_authenticated %}
   {% ifequal user.username profile_user.username %}
-<li><a href="{% url profile_edit %}">Edit Profile</a></li>
+<li><a href="{% url profile_edit %}">{% trans "Edit Profile" %}</a></li>
   {% endifequal %}{% endif %}
 {% endblock %}
 
@@ -50,7 +51,7 @@
    </ul>
   <div class="clear story">
     {% if profile.story %}
-    <h2>My CC Story</h2>
+    <h2>{% trans "My CC Story" %}</h2>
     <a href="{{profile.get_absolute_url}}" rel="cc:attributionURL"></a>
     {{ profile.story|escape|linebreaks }}
     {% endif %}
@@ -75,16 +76,17 @@
         <div id="badge">
           <img src="{{ profile.badge_img_url }}" alt="CC Network - Badge" title="CC Network" border="0" />
           <p>
-            <strong>Place this badge on your website</strong><br/>
+            <strong>{% trans "Place this badge on your website" %}</strong><br/>
             <input id="network-badge" value='{% include "profiles/badge.html" %}' 
 		   readonly="readonly" onclick="this.select()" type="text" />
           </p>
         </div>
       {% endifequal %}{% endif %}
 	{% ifequal user.username profile_user.username %}
-	<a class="add_work" title="add a work" href="{% url add_content %}">Add</a>
+	<a class="add_work" title="add a work" 
+	   href="{% url add_content %}">{% trans "Add" %}</a>
 	{% endifequal %}
-    <h4>Works I Have Licensed</h4>
+    <h4>{% trans "Works I Have Licensed" %}</h4>
     {% if profile.works.all %}
     <ul class="licensed-works">
       {% for work in profile.works.all|slice:":5" %}
@@ -94,18 +96,23 @@
       <li style="text-align:right">
 	<a rel="rdf:seeAlso" 
 	   href="{% url commoner.profiles.views.works profile_user.username %}">
-	  <em>All...</em>
+	  <em>{% trans "All..." %}</em>
 	</a>
       </li>
     </ul>
     {% else %}
       {% ifequal user.username username %}
-        <span class="no-works">You haven't registered any licensed
+        <span class="no-works">
+	  {% url add_content as url_add_work %}
+	  {% blocktrans %}
+	  You haven't registered any licensed
 	  works at this time; would you like to 
-	  <a href="{% url add_content %}">add one</a>?</span>
+	  <a href="{{ url_add_work }}">add one</a>?</span>
+	{% endblocktrans %}
       {% else %}
-        <span class="no-works">This user has not registered any
-	  licensed works.</span>
+        <span class="no-works">{% blocktrans %}
+	  This user has not registered any licensed works.
+	{% endblocktrans %}</span>
       {% endifequal %}
     {% endif %}
 </div>

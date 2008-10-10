@@ -1,3 +1,4 @@
+{% load i18n %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" 
 	"http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
 
@@ -34,14 +35,22 @@
       {% block nav_override %}
       <ul class="box">
         {% if user.is_anonymous %}
-	<li><a href="http://support.creativecommons.org/join">Join</a></li>
-        <li><a href="{% url django.contrib.auth.views.login %}">Login</a></li>
+	<li><a href="http://support.creativecommons.org/join">
+	    {% trans "Join" %}
+	</a></li>
+        <li><a href="{% url django.contrib.auth.views.login %}">
+	    {% trans "Login" %}
+	</a></li>
 	{% else %}
-        <li><a href="{% url profile_view user.username %}">My Profile</a></li>
-        <li><a href="{% url django.contrib.auth.views.logout %}">Logout</a></li>
+        <li><a href="{% url profile_view user.username %}">
+	    {% trans "My Profile" %}
+	</a></li>
+        <li><a href="{% url django.contrib.auth.views.logout %}">
+	    {% trans "Logout" %}
+	</a></li>
 	{% endif %}
 
-	<li><a href="/h/about">Help</a></li>
+	<li><a href="/h/about">{% trans "Help" %}</a></li>
 
       </ul>
     </div>
@@ -73,11 +82,19 @@
             <a href="http://creativecommons.org/licenses/by/3.0/">
               <img src="http://i.creativecommons.org/l/by/3.0/80x15.png" alt="Creative Commons Attribution 3.0 License" style="border:none;" height="15" width="80" />
             </a>
-            Except where otherwise <a class="subfoot" href="/h/privacy/">noted</a>, content on this site is 
-            licensed under a {%block license_override%}<a rel="license" href="http://creativecommons.org/licenses/by/3.0/" class="subfoot">Creative Commons Attribution 3.0 License</a>{%endblock%}.<br/>
-			Use of this site is governed by the <a href="/l/termsofuse.html">terms of use</a>.  
-			CC Network <a href="http://wiki.creativecommons.org/CC_Network_Development">code</a>
-            is available under the <a href="http://www.fsf.org/licensing/licenses/agpl.html">GNU Affero General Public License</a>.
+	    {% block license_override%}{% blocktrans %}
+            Except where otherwise <a class="subfoot"
+            href="/h/privacy/">noted</a>, content on this site is
+            licensed under a <a rel="license"
+            href="http://creativecommons.org/licenses/by/3.0/"
+            class="subfoot">Creative Commons Attribution 3.0
+            License</a>.<br/>Use of this site is governed by
+            the <a href="/l/termsofuse.html">terms of use</a>. CC
+            Network <a href="http://wiki.creativecommons.org/CC_Network_Development">code</a>
+            is available under
+            the <a href="http://www.fsf.org/licensing/licenses/agpl.html">GNU
+            Affero General Public License</a>.
+	    {% endblocktrans %}{% endblock %}
           </p>
         </div>
       </div>

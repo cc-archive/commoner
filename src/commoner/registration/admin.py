@@ -1,5 +1,6 @@
 from django.contrib import admin
 from commoner.registration.models import PartialRegistration
+from django.utils.translation import ugettext_lazy as _
 
 class PartialRegistrationAdmin(admin.ModelAdmin):
 
@@ -8,7 +9,7 @@ class PartialRegistrationAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
 	    'fields':('last_name', 'first_name', 'email', 'complete', 'transaction_id', 'user'),
-	    'description':'Adding a new registration will send a welcome email.'},
+	    'description':_('Adding a new registration will send a welcome email.')},
 	),
 	)
 

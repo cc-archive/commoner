@@ -5,6 +5,8 @@ from django.template.loader import render_to_string
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
 
+from django.utils.translation import ugettext as _
+
 import forms
 import models
 
@@ -92,7 +94,7 @@ def by_uri(request):
 
     uri = request.GET.get('uri', None)
     if uri is None:
-        raise Http404("No work URI specified.")
+        raise Http404(_(u"No work URI specified."))
 
     works = models.Work.objects.filter(url__exact = uri)
 
@@ -107,14 +109,14 @@ def by_uri(request):
             # still not found
             return HttpResponseNotFound(render_to_string("works/list.html",
                                                           dict(works=[],
-                                                               message="No works found that match the given URL, %s" % uri,
-                                           ),
+                                                               message=_(u"No works found that match the given URL, %(lookup_uri)s" % {'lookup_uri:' uri}),
+                                                               ),
                                                          context_instance=RequestContext(request)))
 
     # display the disambiguation list
     return render_to_response('works/list.html',
                               dict(works=works,
-                                   message="The following matching works were found:",
+                                   message=_(u"The following matching works were found:"),
                                    ),
                               context_instance=RequestContext(request))
 

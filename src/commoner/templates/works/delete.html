@@ -1,25 +1,29 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block page_header %}
-Delete Work Registration
+{% trans "Delete Work Registration" %}
 {% endblock %}
 
 {% block body %}
 
 <p>
-  You are going to remove the registration for
-  <a href="{{content.get_absolute_url}}">{{content.title}}</a>.
+{% blocktrans with content.get_absolute_url as content_url and content.title as content_title %}
+You are going to remove the registration for
+<a href="{{ content_url }}">{{content_title}}</a>.
+{% endblocktrans %}
 </p>
 
 <div class="form">
   <form method="post" enctype="multipart/form-data" action=".">
 
-    <p>
-      Are you sure you wish to continue? This can not be undone.
-    </p>
+    <p>{% blocktrans %}
+Are you sure you wish to continue? This <strong>can not</strong>
+be undone.{% endblocktrans %}</p>
 
-    <input type="submit" name="confirm" value="Yes, delete" />
-    <a href="{{content.user.get_profile.get_absolute_url}}">No, cancel</a>
+    <input type="submit" name="confirm" value='{% trans "Yes, delete" %}' />
+    <a href="{{content.user.get_profile.get_absolute_url}}">
+      {% trans "No, cancel" %}</a>
   </form>
 </div>
 
