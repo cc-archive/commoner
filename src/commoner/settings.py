@@ -28,12 +28,16 @@ LANGUAGE_CODE = 'en-us'
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = os.path.join(os.path.dirname(__file__), '..','..','static','m','user')
+MEDIA_ROOT = os.path.join(os.path.dirname(__file__), '..','..','static','m',)
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = '/m/user/'
+MEDIA_URL = 'm/'
+
+# Legal documents like the Terms of Service
+LEGAL_ROOT = os.path.join(os.path.dirname(__file__), '..','..','static','l',)
+LEGAL_URL = 'l/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.

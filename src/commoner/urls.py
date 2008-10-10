@@ -1,4 +1,3 @@
-
 from django.conf.urls.defaults import patterns, include, handler500, handler404, url
 from django.conf import settings
 
@@ -92,9 +91,10 @@ urlpatterns = patterns(
 
 )
 
-if False :
-    #settings.DEBUG:
+if settings.DEBUG:
     urlpatterns += patterns('',
-        (r'^media/(?P<path>.*)$', 'django.views.static.serve', 
+        (r'^%s(?P<path>.*)$' % settings.MEDIA_URL, 'django.views.static.serve', 
          {'document_root': settings.MEDIA_ROOT}),
+        (r'^%s(?P<path>.*)$' % settings.LEGAL_URL, 'django.views.static.serve', 
+         {'document_root': settings.LEGAL_ROOT}),
     )
