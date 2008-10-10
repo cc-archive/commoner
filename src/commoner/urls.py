@@ -39,6 +39,8 @@ urlpatterns = patterns(
         'django.contrib.auth.views.password_reset_done',),
     url(r'^a/password/reset/complete/$',
         'django.contrib.auth.views.password_reset_complete',),
+    url(r'^a/delete/$', 'commoner.profiles.views.delete',
+        name='delete_account'),
 
     (r'^a/register/complete/$', 
      'django.views.generic.simple.direct_to_template',

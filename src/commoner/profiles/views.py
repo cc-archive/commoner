@@ -2,11 +2,12 @@ from django.shortcuts import render_to_response
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
 
+from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
@@ -42,6 +43,35 @@ def edit_or_create(request):
     return render_to_response('profiles/edit_profile.html',
                               { 'form': form,
                                 'profile': profile },
+                              context_instance=RequestContext(request)
+                              )
+
+def delete(request):
+    """View for deleting a user's account."""
+
+    user = request.user
+    if user.is_anonymous():
+        return HttpResponseForbidden("You must be logged in to delete your account.")
+
+    if request.method == 'POST':
+
+        # make sure it was submitted with the confirm button
+        if request.POST.get('confirm', False):
+
+            # log out the user
+            logout(request)
+
+            # remove the user
+            user.delete()
+            
+            # display the completion form
+            return render_to_response('profiles/delete.html', {},
+                                      context_instance=RequestContext(request))
+
+    # display the confirmation form
+    return render_to_response('profiles/delete.html',
+                              { 'user': user
+                                },
                               context_instance=RequestContext(request)
                               )
 

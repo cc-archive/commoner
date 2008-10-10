@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block page_header %}
+Delete Your Account
+{% endblock %}
+
+{% block body %}
+
+{% if user.is_authenticated %}
+<p>
+  You are about to remove your user account.  This
+  will <strong>permanently</strong> delete you profile and all work
+  registrations.  If you are currently using your profile as an
+  OpenID, it will no longer function.
+</p>
+
+<div class="form">
+  <form method="post" enctype="multipart/form-data" action=".">
+
+    <p>
+      Are you sure you wish to continue? This <strong>can not</strong>
+      be undone.
+    </p>
+
+    <input type="submit" name="confirm" value="Yes, delete" />
+    <a href="{{user.get_profile.get_absolute_url}}">No, cancel</a>
+  </form>
+</div>
+
+{% else %}
+
+<p>You have successfully deleted your account.  Thanks for using the
+  CC Network.  If you have feedback on how we can improve our service,
+  please
+  email <a href="mailto:webmaster@creativecommons.org">webmaster@creativecommons.org</a>.
+</p>
+
+{% endif %}
+
+{% endblock %}
