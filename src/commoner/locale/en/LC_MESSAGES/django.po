@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-10 15:55-0500\n"
+"POT-Creation-Date: 2008-10-10 16:15-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -125,6 +125,25 @@ msgstr ""
 
 #: templates/base.html:53
 msgid "Help"
+msgstr ""
+
+#: templates/base.html:85
+msgid ""
+"\n"
+"            Except where otherwise <a class=\"subfoot\"\n"
+"            href=\"/h/privacy/\">noted</a>, content on this site is\n"
+"            licensed under a <a rel=\"license\"\n"
+"            href=\"http://creativecommons.org/licenses/by/3.0/\"\n"
+"            class=\"subfoot\">Creative Commons Attribution 3.0\n"
+"            License</a>.<br/>Use of this site is governed by\n"
+"            the <a href=\"/l/termsofuse.html\">terms of use</a>. CC\n"
+"            Network <a href=\"http://wiki.creativecommons.org/"
+"CC_Network_Development\">code</a>\n"
+"            is available under\n"
+"            the <a href=\"http://www.fsf.org/licensing/licenses/agpl.html"
+"\">GNU\n"
+"            Affero General Public License</a>.\n"
+"\t    "
 msgstr ""
 
 #: templates/index.html:11
@@ -633,6 +652,23 @@ msgstr ""
 msgid "License"
 msgstr ""
 
+#: templates/works/view.html:61
+msgid ""
+"\n"
+"Except where otherwise <a class=\"subfoot\"\n"
+"\t\t\t  href=\"/h/privacy/\">noted</a>, content on\n"
+"this site is licensed under\n"
+"a <a href=\"http://creativecommons.org/licenses/by/3.0/\"\n"
+"     class=\"subfoot\">Creative Commons Attribution 3.0\n"
+"  License</a>.<br/>Use of this site is governed by\n"
+"the <a href=\"/l/termsofuse.html\">terms of use</a>. CC\n"
+"Network <a href=\"http://wiki.creativecommons.org/CC_Network_Development"
+"\">code</a>\n"
+"is available under\n"
+"the <a href=\"http://www.fsf.org/licensing/licenses/agpl.html\">GNU\n"
+"  Affero General Public License</a>."
+msgstr ""
+
 #: works/forms.py:9
 msgid "Work URL"
 msgstr ""
@@ -661,6 +697,6 @@ msgstr ""
 msgid "No works found that match the given URL, %(lookup_uri)s"
 msgstr ""
 
-#: works/views.py:120
+#: works/views.py:119
 msgid "The following matching works were found:"
 msgstr ""
