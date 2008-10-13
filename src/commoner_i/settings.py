@@ -1,6 +1,6 @@
 import os
 
-DEBUG = TEMPLATE_DEBUG = False
+DEBUG = TEMPLATE_DEBUG = True
 
 ADMINS = (
     ('Creative Commons Webmaster', 'webmaster@creativecommons.org'),
@@ -21,14 +21,13 @@ LANGUAGE_CODE = 'en-us'
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), '..', '..', 'static')
-    )
+MEDIA_ROOT = os.path.join(os.path.dirname(__file__), '..','..','static','m',)
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = '/m/user/'
+MEDIA_URL = '/m/'
+
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
@@ -68,3 +67,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     )
 
 AUTH_PROFILE_MODULE = "profiles.CommonerProfile"
+
+
+# Location (relative to MEDIA_ROOT) where all user-uploaded media are stored.
+# The same rules apply to this as to MEDIA_URL as well -- there must be a
+# trailing slash.
+USER_STORAGE = 'user/'
