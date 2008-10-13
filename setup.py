@@ -28,7 +28,6 @@ setup(
     install_requires = ['setuptools',
                         'Django',
                         'python-openid',
-                        'flup',
                         'MySQL-python',
                         'PILwoTK',
                         'pycrypto',
