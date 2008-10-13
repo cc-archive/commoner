@@ -10,14 +10,15 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
-from commoner.util import getBaseURL
+from commoner.util import getBaseURL, get_storage
 
 class CommonerProfile(models.Model):
     
     user = models.ForeignKey(User, unique=True)
 
     nickname = models.CharField(_("Screen name"), max_length=255, blank=True)
-    photo = models.ImageField(_("Photo"), upload_to='user/p', blank=True, null=True)
+    photo = models.ImageField(_("Photo"), storage=get_storage(), 
+                              upload_to='p', blank=True, null=True)
 
     homepage = models.URLField(_("Homepage"), max_length=255, blank=True)
     location = models.CharField(_("Location"), max_length=255, blank=True)

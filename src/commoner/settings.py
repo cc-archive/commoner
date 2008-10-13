@@ -99,6 +99,11 @@ LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/a/login/'
 
 
+# Location (relative to MEDIA_ROOT) where all user-uploaded media are stored.
+# The same rules apply to this as to MEDIA_URL as well -- there must be a
+# trailing slash.
+USER_STORAGE = 'user/'
+
 # THUMBNAIL_PATH is a path relative to MEDIA_ROOT where
 # thumbnails of user photos are stored
 THUMBNAIL_PATH = 't'

@@ -1,8 +1,4 @@
-
-"""
-Utility code for the Django example consumer and server.
-"""
-
+import os
 from urlparse import urljoin
 
 from django.db import connection
@@ -13,6 +9,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse as reverseURL
 from django.core.urlresolvers import NoReverseMatch
 from django.views.generic.simple import direct_to_template
+from django.core.files.storage import FileSystemStorage
 
 from django.conf import settings
 
@@ -150,7 +147,15 @@ def renderXRDS(request, type_uris, endpoint_urls):
     response['Content-Type'] = YADIS_CONTENT_TYPE
     return response
 
+def get_storage():
+    """Return the storage instance to use for user-uploaded content."""
 
+    print os.path.join(settings.MEDIA_URL, settings.USER_STORAGE)
+    return FileSystemStorage(
+        location = os.path.join(settings.MEDIA_ROOT, settings.USER_STORAGE),
+        base_url = os.path.join(settings.MEDIA_URL, settings.USER_STORAGE))
+
+    
 def base_url_context(request):
     """Django Context Processor which adds the {{base_url}} to the
     context."""

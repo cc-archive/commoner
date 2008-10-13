@@ -2,26 +2,26 @@ import os
 from PIL import Image
 
 from django.conf import settings
-from django.core.files.storage import default_storage
 from django.template import Library
+
+from commoner import util
 
 register = Library()
 
 def _thumbnail(file, x, y):
 
     miniature = os.path.join(settings.THUMBNAIL_PATH, file.name)
-
     filename = file.path
-    miniature_filename = default_storage.path(miniature)
-    miniature_url = default_storage.url(miniature)
+    miniature_filename = util.get_storage().path(miniature)
+    miniature_url = util.get_storage().url(miniature)
 
     # see if the full size image is newer than the thumbnail
     if os.path.exists(miniature_filename) and \
             os.path.getmtime(filename) > os.path.getmtime(miniature_filename):
-        default_storage.delete(miniature)
+        util.get_storage().delete(miniature)
 
     # if the image wasn't already resized, resize it
-    if not default_storage.exists(miniature): 
+    if not util.get_storage().exists(miniature): 
 
         # make sure the directories exist
 	if not(os.path.exists(os.path.dirname(miniature_filename))):
@@ -64,7 +64,6 @@ def scale(file, max_side=150):
 
         return _thumbnail(file, x, y)
     except Exception, e:
-        return e
         return file.url
 
 
