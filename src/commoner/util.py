@@ -150,7 +150,6 @@ def renderXRDS(request, type_uris, endpoint_urls):
 def get_storage():
     """Return the storage instance to use for user-uploaded content."""
 
-    print os.path.join(settings.MEDIA_URL, settings.USER_STORAGE)
     return FileSystemStorage(
         location = os.path.join(settings.MEDIA_ROOT, settings.USER_STORAGE),
         base_url = os.path.join(settings.MEDIA_URL, settings.USER_STORAGE))
