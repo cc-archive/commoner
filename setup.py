@@ -34,6 +34,8 @@ setup(
                         'pycrypto',
                         'pysqlite',
                         'lxml',
+                        'rdfadict',
+                        'simplejson',
                         # 'cc.license',
                         ],
 

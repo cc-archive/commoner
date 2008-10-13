@@ -67,6 +67,7 @@ INSTALLED_APPS = (
     'commoner.registration',
     'commoner.profiles',
     'commoner.works',
+    'commoner.scraper',
     'commoner.server',
 )
 

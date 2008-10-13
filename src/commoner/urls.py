@@ -65,6 +65,10 @@ urlpatterns = patterns(
     url(r'^r/(?P<id>\d+)/', 'commoner.works.views.view',
         name='view_work'),
     
+    # Metadata scraper support
+    url(r'^t/triples', 'commoner.scraper.views.triples',
+        name='scrape_triples'),
+
     # OpenID Support
     url(r'^o/xrds/$', 'commoner.server.views.idpXrds', name="server_xrds"),
     (r'^o/processTrustResult/$', 'commoner.server.views.processTrustResult'),
