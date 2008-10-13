@@ -1,6 +1,6 @@
 import os
 
-DEBUG = TEMPLATE_DEBUG = True
+DEBUG = TEMPLATE_DEBUG = False
 
 ADMINS = (
     ('Creative Commons Webmaster', 'webmaster@creativecommons.org'),
