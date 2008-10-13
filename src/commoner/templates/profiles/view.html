@@ -13,9 +13,7 @@
 {% block head_title %}{{ profile.display_name }} -{% endblock %}
 
 {% block page_header %}
-  <span rel="sioc:member_of" resource="/">
-    {{ profile.display_name }}
-  </span>
+  <span rel="sioc:member_of" property="foaf:nick" resource="/">{{ profile.display_name }}</span>
 {% endblock %}
 {% block page_sub_header %}
   {% if profile.active %}
@@ -37,16 +35,18 @@
 
   {% if profile %}
    {% if profile.photo %}
+  <div rel="foaf:depiction">
     <img src="{{ profile.photo|scale }}" 
          alt="[ {{ profile_user.first_name }}]" 
          />
+  </div>
    {% else %}
     <img src="/m/images/blank-avatar.jpg" alt="[ {{ profile_user.first_name }} ]" />
    {% endif %}
 
    <ul>
      <li property="sioc:name cc:attributionName">{{ profile.full_name }}</li>
-     <li><a href="{{profile.homepage}}">{{ profile.homepage }}</a></li>
+     <li><a rel="foaf:homepage" href="{{profile.homepage}}">{{ profile.homepage }}</a></li>
      <li>{{ profile.location }}</li>
    </ul>
   <div class="clear story">
