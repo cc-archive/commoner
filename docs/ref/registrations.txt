@@ -1,0 +1,6 @@
+Partial Registrations
+=====================
+
+.. automodule:: commoner.registration.models
+   :members:
+   :undoc-members:

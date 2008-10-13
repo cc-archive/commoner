@@ -1,0 +1,6 @@
+Commoner Profiles
+=================
+
+.. automodule:: commoner.profiles.models
+   :members:
+   :undoc-members:

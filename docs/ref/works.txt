@@ -1,0 +1,6 @@
+Work Registrations
+==================
+
+.. automodule:: commoner.works.models
+   :members:
+   :undoc-members:
