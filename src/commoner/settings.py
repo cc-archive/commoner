@@ -1,6 +1,6 @@
 import os
 
-DEBUG = TEMPLATE_DEBUG = True
+DEBUG = TEMPLATE_DEBUG = False
 
 ADMINS = (
     ('Nathan R. Yergler', 'nathan@creativecommons.org'),
