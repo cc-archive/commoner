@@ -4,9 +4,37 @@ Development
 Included Applications
 ---------------------
 
+Commoner is a `Django <http://djangoproject.com>`_ project made up of
+several individual applications.  The applications are within the
+``src/commoner`` directory in a checkout and are intended to work
+together (that is, no attempt has been made to ensure they are able to
+operate independently).  The applications included are:
+
+=================  =====================================================
+Application Name   Purpose
+=================  =====================================================
+profiles           Models and forms for user profile and accounts.
+registration       Models, views for invitations and user registration.
+scraper            Retrieve URLs and extract RDFa for use when 
+		   registering works.
+server             OpenID server implementation
+works              Work registration and related views
+=================  =====================================================
+
 Running Tests
 -------------
 
+After you've checked out the code and run ``buildout`` you can run the
+tests for Commoner using the ``django`` command line script::
+
+  $ ./bin/django test
+
+You can also run tests for a specific application by specifying the
+application name.  For example::
+
+  $ ./bin/django test works
+
+Will run all the tests associated with the works application.
 
 Contributing Changes
 --------------------

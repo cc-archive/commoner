@@ -1,19 +1,43 @@
 Installation
 ============
 
+Download
+--------
+
+Commoner is available from the Creative Commons `git
+<http://git.or.cz/>`_ repository.
+
+To check out the current version::
+
+  $ git clone git://code.creativecommons.org/commoner.git
+
+This will create a directory, ``commoner``, and check out the current
+development version.  To work with the code currently deployed as the
+`CC Network <http://creativecommons.net>`_, switch to the
+``production`` branch::
+
+  $ cd commoner
+  $ git checkout production
+
+Dependencies
+~~~~~~~~~~~~
+
 Commoner uses `buildout <http://python.org/pypi/zc.buildout>`_ to
 manage dependencies.  Buildout will handle retrieving most
 dependencies for you.  To get started, run::
 
   $ python bootstrap.py
 
-This will download `setuptools <>`_ and create the buildout script.
-To retrieve dependencies and create control scripts run::
+This will download `setuptools
+<http://peak.telecommunity.com/DevCenter/setuptools>`_ and create the
+buildout script. To retrieve dependencies and create control scripts
+run::
+
 
   $ ./bin/buildout
 
 Configuration
--------------
+=============
 
 Before you need to set some configuration parameters, including
 database information. If you'd like to do the minimal amount of work
@@ -61,13 +85,114 @@ webserver for testing::
 
 Opening your browser to http://localhost:8000/ will display the
 Commoner homepage with the default look and feel (which is the same as
-creativecommons.net).
+`creativecommons.net <http://creativecommons.net>`_).
 
 
 Production Deployments
-----------------------
+======================
 
+While the built-in server is suitable for testing and development,
+you'll want to use something more robust for production deployments.
+We currently use `mod_wsgi <http://modwsgi.org>`_ with `Apache 2.2
+<http://httpd.apache.org/>`_. 
+
+Symlinks for Static Content
+---------------------------
+
+Configuring mod_wsgi
+--------------------
+
+Here is part of the configuration used for `creativecommons.net
+<http://creativecommons.net>`_::
+
+  <VirtualHost *:80 *:443>
+
+      # Servername, etc...
+
+      # explicitly enable static directories
+      Alias /l/ [vhost_root]/l/
+      Alias /m/ [vhost_root]/m/
+      Alias /s/ [vhost_root]/s/
+      
+      <Directory [vhost_root] >
+          Order deny,allow
+	  Allow from all
+      </Directory>
+
+      WSGIScriptAlias / [commoner_dir]/bin/cc.net.wsgi
+      WSGIDaemonProcess commoner processes=10 threads=1 \
+          home=[commoner_dir] python-eggs=/tmp/egg-cache
+      WSGIProcessGroup commoner
+
+  </VirtualHost>
+
+Replace ``[commoner_dir]`` with the location you've installed Commoner
+in.  Replace ``[vhost_root]`` with the ``DocumentRoot`` of the virtual
+host.
 
 Serving Badges
 --------------
 
+Commoner will serve "badges" which users can include on their web
+pages to link to their profile.  The link generated is annotated with
+`RDFa <http://wiki.creativecommons.org/RDFa>`_ and supports network
+discovery.
+
+Commoner includes a separate ``settings.py`` and ``urls.py`` for
+serving badges on their own domain.  For example, `creativecommons.net
+<http://creativecommons.net>`_ serves badges from
+``i.creativecommons.org``.  Note that while they may be served from
+a separate application (and therefore ``mod_wsgi`` thread pool), the
+badges still rely on the Commoner database to determine if a user is
+active or inactive.  Therefore this documentation assumes both domains
+are hosted on the same machine.
+
+Serving From a Single Virtual Host
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To serve from a single virtual host you will need to edit
+``commoner/settings.py`` and ``commoner/urls.py``.  In
+``commoner/settings.py`` uncomment the alternate ``BADGE_BASE_URL``
+setting::
+
+  # BADGE_BASE_URL defines the root location of Badge views
+  # BADGE_BASE_URL = 'http://i.creativecommons.net/p/'
+
+  # Uncomment the following line and the corresponding line in urls.py
+  # to serve badges from the same host.
+  BADGE_BASE_URL = '/i/p/'
+
+In ``commoner/urls.py`` uncomment the views for the badges::
+
+    # Profile badges
+    url(r'^i/p/(?P<username>\w+)/$', 'commoner_i.views.badge',
+        name='profile_badge'),
+
+Separate Virtual Hosts
+~~~~~~~~~~~~~~~~~~~~~~
+
+To serve from indepedent virtual hosts, edit the ``BADGE_BASE_URL`
+setting in ``commoner/settings.py`` to reflect the absolute path to
+the badges::
+
+  # BADGE_BASE_URL defines the root location of Badge views
+  BADGE_BASE_URL = 'http://your.domain.name.here/p/'
+
+and configure Apache with a Virtual Host for that domain.  For
+example::
+
+  WSGIScriptAlias / [commoner_dir]/bin/i.wsgi
+  WSGIDaemonProcess i.commoner processes=5 threads=1 home=[commoner_dir] \
+      python-eggs=/tmp/egg-cache
+  WSGIProcessGroup i.commoner
+
+
+More Information
+----------------
+
+For more information on deployment configurations see the `Django
+deployment documentation
+<http://docs.djangoproject.com/en/dev/howto/deployment/>`_.
+
+For more information on **mod_wsgi**, see the `project wiki
+<http://code.google.com/p/modwsgi/w/list>`_.

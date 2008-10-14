@@ -1,0 +1,16 @@
+Features
+========
+
+OpenID
+------
+
+Commoner implements Open ID 2.0.  OpenID support is based on the
+`Python OpenID <http://openidenabled.com/python-openid/>`_ library.
+
+Work Registration
+-----------------
+
+One of Commoner's goals is to act as a test bed for exploring digital
+copyright registry technology.  Part of that includes allowing users
+to register works they've created with Commoner.  The ``works``
+application is responsible for this functionality.
