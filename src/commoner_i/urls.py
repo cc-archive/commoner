@@ -6,7 +6,7 @@ from django.contrib import admin
 urlpatterns = patterns(
     '',
 
-    # Profile view
+    # Badge view
     url(r'^p/(?P<username>\w+)/$', 'commoner_i.views.badge',
         name='profile_badge'),
 

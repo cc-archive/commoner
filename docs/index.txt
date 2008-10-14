@@ -1,15 +1,21 @@
 Commoner Documentation
 ====================================
 
-Contents:
+Commoner is an application which implements a simple copyright registry and
+supports `ccREL <http://wiki.creativecommons.org/ccREL>`_/`RDFa
+<http://wiki.creativecommons.org/RDFa>`_ based discovery of work information.
+
+Contents
+--------
 
 .. toctree::
    :maxdepth: 2
-
-   install
-   url_prefixes
-   develop
-   ref/index.txt
+   
+   overview
+   metadata
+   administrators
+   developers
+   license
 
 Indices and tables
 ==================

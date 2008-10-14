@@ -1,0 +1,156 @@
+Metadata Reference
+==================
+
+This section describes the metadata published by Commoner.  For the
+purposes of this document, we assume the following namespaces are
+defined:
+
+============ ====================== ===========================================
+Prefix       Name                   URL
+============ ====================== ===========================================
+cc           Creative Commons       http://creativecommons.org/ns#
+             (`ccREL`_)
+ccnet        creativecommons.net    http://creativecommons.net/n#
+             (Commoner)
+sioc         `SIOC`_                http://rdfs.org/sioc/ns#
+foaf         `FOAF`_                http://xmlns.com/foaf/0.1/"
+rdf          `RDF Syntax`_          http://www.w3.org/1999/02/22-rdf-syntax-ns#
+dct          `DC Terms`_            http://purl.org/dc/terms/
+xsd          `XML Schema`_          http://www.w3.org/2001/XMLSchema#
+sioc_service `SIOC Service Module`_ http://rdfs.org/sioc/services#
+powder       `POWDER`_              http://www.w3.org/2007/05/powder#
+============ ====================== ===========================================
+
+Work Registration
+-----------------
+
+Work registration relies reciprocal metadata published on the work page
+and on the registry.  
+
+Asserting Ownership
+~~~~~~~~~~~~~~~~~~~
+
+The work page publishes ``sioc:has_owner``
+information pointing at the registry page.  Commoner implements this
+in the network "badge" using RDFa.  The triples published on the work
+page are::
+
+  <WORK_PAGE> <http://rdfs.org/sioc/ns#has_owner> <OWNER_PAGE> .
+  <WORK_PAGE> <http://www.w3.org/1999/xhtml/vocab#license> <LICENSE_URL> .
+
+The registry must publish triples describing a reciprocal
+relationship.  Commoner publishes these triples on the profile page,
+the full work list and the individual work pages.  Clients should
+traverse ``rdf:seeAlso`` and ``sioc:has_owner`` to ensure full
+discovery.  The reciprocal relationship is described by
+``sioc:owner_of``.  For example::
+
+  <OWNER_PAGE> <http://rdfs.org/sioc/ns#owner_of> <WORK_PAGE> .
+
+In addition to the reciprocal ownership information, the registry may
+publish metadata connecting the work page to the individual
+registation page.  This is done using ``sioc:parent_of`` and
+``sioc:has_parent``.  The registration page is declared as the
+``sioc:parent_of``  the work page.  The work page is declared to
+``sioc:has_parent`` the registration page.
+
+Wildcards
+:::::::::
+
+Registries may also indicate that a registration is applicable to a
+group of works, indicated by one or more ``powder:iriset``. The
+``iriset`` is a property of the registration page.  Each
+``powder:iriset`` includes zero or more ``powder:includeregex`` and
+zero or more ``powder:excluderegex`` statements.  If a work page
+publishes ownership information which leads to the discovery of a work
+parent, the work page must pass **all** statements (inclusion and
+exclusion) in a ``powder:iriset`` of the parent to verify the claim.
+
+See the `POWDER Grouping of Resources
+<http://www.w3.org/TR/2008/WD-powder-grouping-20080815/#reMatch>`_
+documentation for more details on the regular expression usage.
+
+For example::
+
+  <http://example.org/work> <http://rdfs.org/sioc/ns#has_parent> 
+     <http://registry.example.org/registration/page/> .
+
+  <http://registry.example.org/registration/page/>  
+    <http://rdfs.org/sioc/ns#parent_of> <http://example.org/work> .
+  <http://registry.example.org/registration/page/> 
+     <http://www.w3.org/2007/05/powder#iriset> _:n1 .
+
+  _:n1 <http://www.w3.org/2007/05/powder#includeregex> 
+     "\\:\\/\\/(([^\\/\\?\\#]*)\\@)?([^\\:\\/\\?\\#\\@]*)(\\:([0-9]+))?(\\/work)"@en .
+  _:n1 <http://www.w3.org/2007/05/powder#includeregex> "\\:\\/\\/(([^\\/\\?\\#]*)\\@)?([^\\:\\/\\?\\#\\@]+\\.)?(example\\.org)(\\:([0-9]+))?\\/"@en .
+  _:n1 <http://www.w3.org/2007/05/powder#includeregex> "^(http)\\:\\/\\/"@en .
+
+Describes a relationship which would verify a claim that
+``http://example.org/work/sub-page`` is registered in a group
+registration.
+
+.. admonition:: POWDER Compliance
+
+  Commoner and the specification in this document **DOES NOT** comply
+  with POWDER or the POWDER RDF schema.  We have attempted to reuse
+  vocabulary where appropriate without introducing complexity for 
+  consumers.  This feature may change dramatically in the future to 
+  become compliant.
+
+
+Registration Details
+~~~~~~~~~~~~~~~~~~~~
+
+Details regarding the registration may be published on the
+registration page.  This includes -- but is not limited to -- the
+registration date (``dct:created``) and any ``powder:iriset``.
+
+
+Owner Information
+-----------------
+
+Registries should publish ``sioc:name`` information for work owners.
+``sioc:name`` should be the most accurate name available.  For
+example, the owner's legal name as opposed to their screen name.
+
+Registry Information
+--------------------
+
+Registries should publish information regarding the site.  The minimum
+information is the registry name, ``dct:title``.
+
+Work Lookup Service
+-------------------
+
+Registries may provide a work lookup service which redirects the user
+agent to the specific work registration page, if available.  Commoner
+implements this service as a URL taking a single query-string
+parameter, the URI to look up.
+
+For example::
+
+  GET /r/lookup?uri=http://example.org/work/
+
+would redirect to a work registration page, if it exists.  If one does
+not exist, the HTTP status code is set to 404.
+
+Registries may advertise this service using the SIOC Service module.
+The service is advertised using ``sioc_service:has_service`` and is
+differentiated from other services by
+``sioc_service:service_protocol``.  The protocol for work lookup is
+identified by the URI ``http://wiki.creativecommons.org/work-lookup``.
+
+For example, `creativecommons.net <http://creativecommons.net>`_
+publishes the following two triples::
+
+  <https://creativecommons.net/> <http://rdfs.org/sioc/services#has_service> <https://creativecommons.net/r/lookup/> .
+  <https://creativecommons.net/r/lookup/> <http://rdfs.org/sioc/services#service_protocol> <http://wiki.creativecommons.org/work-lookup> .
+
+.. _ccREL: http://wiki.creativecommons.org/ccREL
+.. _SIOC: http://rdfs.org/sioc/spec/
+.. _FOAF: http://xmlns.com/foaf/spec/
+.. _`RDF Syntax`: http://www.w3.org/TR/rdf-syntax-grammar/
+.. _`DC Terms`: http://dublincore.org/documents/dcmi-terms/
+.. _`XML Schema`: http://www.w3.org/TR/xmlschema11-2/
+.. _`SIOC Service Module`: http://rdfs.org/sioc/spec/#sec-modules
+.. _`POWDER`: http://www.w3.org/2007/powder/
