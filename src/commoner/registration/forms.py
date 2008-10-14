@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django import forms
 
 from commoner.profiles.models import CommonerProfile
+from commoner.registration.models import RESERVED_NAMES
 
 class CompleteRegistrationForm(forms.Form):
 
@@ -33,17 +34,26 @@ class CompleteRegistrationForm(forms.Form):
         """
         Validate that the username is alphanumeric and is not already
         in use.
-        
         """
+
+        # usernames must be at least two characters long
         if len(self.cleaned_data['username']) < 2:
             raise forms.ValidationError(_(u'Usernames must be at least two characters long.'))
 
+        # usernames can only contain letters, numbers and underscores
         if not self.RE_ALNUM.search(self.cleaned_data['username']):
-            raise forms.ValidationError(_(u'Usernames can only contain letters, numbers and underscores'))
+            raise forms.ValidationError(_(u'Usernames can only contain letters, numbers and underscores.'))
+
+        # usernames can not be a reserved value
+        if self.cleaned_data['username'] in RESERVED_NAMES:
+            raise forms.ValidationError(_(u'This username is already taken. Please choose another.'))
+            
+        # make sure this user does not exist
         try:
             user = User.objects.get(username__iexact=self.cleaned_data['username'])
         except User.DoesNotExist:
             return self.cleaned_data['username']
+
         raise forms.ValidationError(_(u'This username is already taken. Please choose another.'))
 
     def clean(self):

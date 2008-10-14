@@ -9,6 +9,8 @@ from django.contrib.sites.models import Site
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
+RESERVED_NAMES = ('admin', )
+
 class RegistrationManager(models.Manager):
 
     def send_welcome(self, registration):
