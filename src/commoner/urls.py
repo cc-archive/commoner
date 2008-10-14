@@ -50,6 +50,10 @@ urlpatterns = patterns(
     url(r'^p/edit/$', 'commoner.profiles.views.edit_or_create', 
         name='profile_edit'),
 
+    # Profile badges
+    #url(r'^i/p/(?P<username>\w+)/$', 'commoner_i.views.badge',
+    #    name='profile_badge'),
+
     # Work Registration management
     url(r'^r/add/', 
         'commoner.works.views.add_or_edit',
