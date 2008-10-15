@@ -36,7 +36,7 @@ master_doc = 'index'
 
 # General substitutions.
 project = u'Commoner'
-copyright = u'2008, Creative Commons; released under the AGPL 3'
+copyright = u'2008, Creative Commons; documentation released under <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>, source released under the <a href="http://www.fsf.org/licensing/licenses/agpl.html">AGPL</a>'
 
 # The default replacements for |version| and |release|, also used in various
 # other places throughout the built documents.
