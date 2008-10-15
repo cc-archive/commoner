@@ -4,6 +4,8 @@ from django.utils.translation import ugettext_lazy as _
 
 class PartialRegistrationAdmin(admin.ModelAdmin):
 
+    list_display = ('email', 'last_name', 'first_name', 'transaction_id')
+    search_fields = ('email', 'last_name', 'first_name', 'transaction_id')
     list_filter = ('complete',)
 
     fieldsets = (
