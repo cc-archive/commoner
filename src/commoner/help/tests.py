@@ -20,4 +20,4 @@ class TestContact(TestCase):
 
         # make sure the contact email was sent
         self.assertEqual(len(mail.outbox), 1)
-        self.assertEqual(mail.outbox[0].to, list(settings.MANAGERS))
+        self.assertEqual(mail.outbox[0].to, [m[1] for m in settings.MANAGERS])

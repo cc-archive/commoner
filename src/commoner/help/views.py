@@ -15,7 +15,7 @@ def contact(request):
             mail.send_mail(form.cleaned_data['subject'], 
                            form.cleaned_data['message'], 
                            form.cleaned_data['sender'],
-                           settings.MANAGERS)
+                           [m[1] for m in settings.MANAGERS])
                            
             return HttpResponseRedirect('/h/contact/thanks/') 
 
