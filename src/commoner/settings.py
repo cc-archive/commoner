@@ -69,6 +69,7 @@ INSTALLED_APPS = (
     'commoner.works',
     'commoner.scraper',
     'commoner.server',
+    'commoner.help',
 )
 
 TEMPLATE_LOADERS = (

@@ -39,6 +39,12 @@ the Creative Commons Network. The CC Network includes:{% endblocktrans %}
     important to you</a>.
 {% endblocktrans %}
   </p></li>
+  <li>
+    <h3>{% trans "Need More Help?" %}</h3>
+    <p>{% url contact_form as contact_form_url %}
+      {% blocktrans %}Have more questions or need additional information?
+      Email <a href="mailto:webmaster@creativecommons.net">webmaster@creativecommons.net</a>
+    or use <a href="{{contact_form_url}}">our contact form</a>.{% endblocktrans %}</p>
 </ul>
 </div>
 

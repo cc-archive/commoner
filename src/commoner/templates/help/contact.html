@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block page_header %}{% trans "Contact Us" %}{% endblock %}
+
+{% block body %}
+
+<div class="form">
+  {% if form.non_field_errors %}
+   <div class="errors">
+     {{ form.non_field_errors }}
+   </div>
+  {% endif %}
+
+
+  <form method="post" enctype="multipart/form-data" action=".">
+
+    <div class="field">
+      <span class="field_label">{{form.sender.label}}</span>
+      {{form.sender}}
+      <div class="help">{{form.sender.help_text}}</div>
+      {% if form.sender.errors %}
+      <div class="errors">
+	{{ form.sender.errors }}
+      </div>
+      {% endif %}
+    </div>
+    <div class="field">
+      <span class="field_label">{{form.subject.label}}</span>
+      {{form.subject}}
+      <div class="help">{{form.subject.help_text}}</div>
+      {% if form.subject.errors %}
+      <div class="errors">
+	{{ form.subject.errors }}
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="field">
+      <span class="field_label">{{form.message.label}}</span><br/>
+      {{form.message}}
+      <div class="help">{{form.message.help_text}}</div>
+      {% if form.message.errors %}
+      <div class="errors">
+	{{ form.message.errors }}
+      </div>
+      {% endif %}
+    </div>
+
+    <input type="submit" value='{% trans "Send Message" %}' /> 
+    <a href="/">{% trans "Cancel" %}</a>
+
+  </form>
+</div>
+
+{% endblock %}
