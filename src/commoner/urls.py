@@ -14,10 +14,14 @@ urlpatterns = patterns(
 	# Help pages
     (r'^h/about/$', 'django.views.generic.simple.direct_to_template',
 	 {'template':'help/about.html'}),
-	(r'^h/openid/$', 'django.views.generic.simple.direct_to_template',
+    (r'^h/openid/$', 'django.views.generic.simple.direct_to_template',
 	 {'template':'help/openid.html'}),
     (r'^h/privacy/$', 'django.views.generic.simple.direct_to_template',
 	 {'template':'help/privacy.html'}),
+    url(r'^h/contact/$', 'commoner.help.views.contact',
+        name='contact_form'),
+    (r'^h/contact/thanks/$', 'django.views.generic.simple.direct_to_template',
+	 {'template':'help/contact_thanks.html'}),
 
     # Account management
     (r'^a/login/$', 'django.contrib.auth.views.login'),
