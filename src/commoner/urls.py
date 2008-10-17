@@ -24,9 +24,10 @@ urlpatterns = patterns(
 	 {'template':'help/contact_thanks.html'}),
 
     # Account management
-    (r'^a/login/$', 'django.contrib.auth.views.login'),
-    (r'^a/logout/$', 'django.contrib.auth.views.logout',
-     {'template_name':'registration/logout.html'}),
+    url(r'^a/login/$', 'commoner.authenticate.views.login',
+        name='login'),
+    url(r'^a/logout/$', 'commoner.authenticate.views.logout',
+        name='logout'),
 
     url(r'^a/password/change/$',
         'django.contrib.auth.views.password_change',

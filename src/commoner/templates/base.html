@@ -38,14 +38,14 @@
 	<li><a href="http://support.creativecommons.org/join">
 	    {% trans "Join" %}
 	</a></li>
-        <li><a href="{% url django.contrib.auth.views.login %}">
+        <li><a href="{% url login %}">
 	    {% trans "Login" %}
 	</a></li>
 	{% else %}
         <li><a href="{% url profile_view user.username %}">
 	    {% trans "My Profile" %}
 	</a></li>
-        <li><a href="{% url django.contrib.auth.views.logout %}">
+        <li><a href="{% url logout %}">
 	    {% trans "Logout" %}
 	</a></li>
 	{% endif %}

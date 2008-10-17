@@ -23,6 +23,11 @@
     {{ form.password }}
   </div>
   
+  <div class="field" id="remember">
+    <span class="field_label">{{ form.remember.label_tag }}: </span>
+    {{ form.remember }}
+  </div>
+  
   <input type="hidden" name="next" value="{{ next }}" />
   <p>
     <input type="submit" value="login" />
