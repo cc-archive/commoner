@@ -73,6 +73,17 @@
           <h3>{% block page_sub_header %}{% endblock %}</h3>
         </div>
       </div>
+
+      {% if messages %}
+      <div class="messages">
+	<ul>
+	  {% for message in messages %}
+	  <li>{{ message|safe }}</li>
+	  {% endfor %}
+	</ul>
+      </div>
+      {% endif %}
+      
       <div class="block page clear">
         {% block body %}
         {% endblock %}
