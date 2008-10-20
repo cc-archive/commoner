@@ -331,3 +331,24 @@ def login_redirect(request, openid_request=None):
             urllib.urlencode([('id', openid_request.identity,),
                               ('next', next_url),])
             ))
+
+def state(request):
+    """Return the state of OpenID authorization for Seatbelt support."""
+
+    result = ["""<?xml version="1.0" encoding="UTF-8" ?>""",
+              """<personaConfig version="1.0" serverIdentifier="creativecommons.net">"""]
+
+    if request.session.get('openid_user', False) and \
+            request.session['openid_user'].get_profile():
+
+        # someone is logged in; add their information
+        user = request.session['openid_user'].get_profile()
+        result.append(
+            """<persona displayName="%s">%s</persona>""" % (
+                user.display_name(), user.get_absolute_url(request=request))
+            )
+
+    result.append("""</personaConfig>""")
+
+    return http.HttpResponse("\n".join(result),
+                             mimetype='text/xml')

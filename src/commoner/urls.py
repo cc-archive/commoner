@@ -9,6 +9,8 @@ urlpatterns = patterns(
     '',
     (r'^$', 'django.views.generic.simple.direct_to_template',
      {'template':'index.html'}),
+    (r'^seatbeltcfg.xml$', 'django.views.generic.simple.direct_to_template',
+     {'template':'seatbeltcfg.xml', 'mimetype':'text/xml'}),
     (r'^admin/(.*)', admin.site.root),
     
     # Help pages
@@ -89,6 +91,9 @@ urlpatterns = patterns(
     url(r'^o/trusted/(?P<id>\d+)/delete/', 
         'commoner.server.views.delete_trusted_party',
         name='openid_delete_trusted'),
+
+    url(r'^o/state/$', 'commoner.server.views.state',
+        name='openid_state'),
 
     # Namespace and RDF support
     (r'^n$', 'django.views.generic.simple.direct_to_template',
