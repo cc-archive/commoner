@@ -1,27 +1,15 @@
-
-"""
-This module implements an example server for the OpenID library.  Some
-functionality has been omitted intentionally; this code is intended to
-be instructive on the use of this library.  This server does not
-perform actual user authentication and serves up only one OpenID URL,
-with the exception of IDP-generated identifiers.
-
-Some code conventions used here:
-
-* 'request' is a Django request object.
-
-* 'openid_request' is an OpenID library request object.
-
-* 'openid_response' is an OpenID library response
-"""
-
 import cgi
 import urllib
+from datetime import datetime
 
 from commoner import util
 from commoner.util import getViewURL, getBaseURL
 
 from django import http
+from django.shortcuts import get_object_or_404, render_to_response
+from django.template import RequestContext
+from django.contrib import auth
+
 from django.views.generic.simple import direct_to_template
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
@@ -35,47 +23,16 @@ from openid.consumer.discover import OPENID_2_0_TYPE
 from openid.extensions import sreg
 from openid.fetchers import HTTPFetchingError
 
-def getOpenIDStore():
-    """
-    Return an OpenID store object fit for the currently-chosen
-    database backend, if any.
-    """
-    return util.getOpenIDStore('/tmp/djopenid_s_store', 's_')
+from util import *
+import forms
+from django.contrib.sites.models import Site
+from models import TrustedRelyingParty
 
 def getServer(request):
     """
     Get a Server object to perform OpenID authentication.
     """
     return Server(getOpenIDStore(), getViewURL(request, endpoint))
-
-def setRequest(request, openid_request):
-    """
-    Store the openid request information in the session.
-    """
-    if openid_request:
-        request.session['openid_request'] = openid_request
-    else:
-        request.session['openid_request'] = None
-
-def getRequest(request):
-    """
-    Get an openid request from the session, if any.
-    """
-    return request.session.get('openid_request')
-
-def server(request):
-    """
-    Respond to requests for the server's primary web page.
-    """
-
-    # ZZZ make sure the XRDS is included in the server root
-
-    return direct_to_template(
-        request,
-        'server/index.html',
-        {'user_url': getViewURL(request, idPage),
-         'server_xrds_url': getViewURL(request, idpXrds),
-         })
 
 def idpXrds(request):
     """
@@ -85,6 +42,48 @@ def idpXrds(request):
     return util.renderXRDS(
         request, [OPENID_2_0_TYPE], [getViewURL(request, endpoint)])
 
+def login(request):
+    """Handle OpenID enable/login requests."""
+
+    s = getServer(request)
+    openid_request = s.decodeRequest(
+        dict(cgi.parse_qsl(request.REQUEST.get('next'))))
+
+    if request.method == 'POST':
+
+        # process the form
+        form = forms.OpenIdLoginForm(request.POST.get('id', None),
+                                     data=request.POST)
+
+        try:
+            if form.is_valid():
+                request.session['openid_expires'] = getOpenIdExpiration()
+                request.session['openid_user'] = \
+                    auth.models.User.objects.get(username=form.username)
+
+                return http.HttpResponseRedirect(request.POST.get('next'))
+        except AssertionError:
+            # treason uncloaked!
+            error_response = ProtocolError(
+                openid_request.message,
+                "This server cannot verify the URL %r" %
+                (openid_request.identity,))
+
+            return displayResponse(request, error_response)
+            
+
+    else:
+        id_url = request.GET.get('id', None)
+        form = forms.OpenIdLoginForm(id_url,
+                                     initial=dict(secret = forms.make_secret(id_url)))
+
+    return render_to_response("server/login.html",
+                              dict(form=form,
+                                   site=Site.objects.get_current(),
+                                   trust_root=openid_request.trust_root,
+                                   next=request.GET.get('next', '')),
+                              context_instance=RequestContext(request))
+
 def endpoint(request):
     """
     Respond to low-level OpenID protocol messages.
@@ -93,19 +92,17 @@ def endpoint(request):
 
     query = util.normalDict(request.GET or request.POST)
 
-    # First, decode the incoming request into something the OpenID
-    # library can use.
+    # Convert the django request to one the OpenID library understand
     try:
         openid_request = s.decodeRequest(query)
     except ProtocolError, why:
-        # This means the incoming request was invalid.
+        # invalid request
         return direct_to_template(
             request,
             'server/endpoint.html',
             {'error': str(why)})
 
-    # If we did not get a request, display text indicating that this
-    # is an endpoint.
+    # make sure we received a request
     if openid_request is None:
         return direct_to_template(
             request,
@@ -125,81 +122,71 @@ def endpoint(request):
 def handleCheckIDRequest(request, openid_request):
     """
     Handle checkid_* requests.  Get input from the user to find out
-    whether she trusts the RP involved.  Possibly, get intput about
+    whether she trusts the RP involved.  Possibly, get input about
     what Simple Registration information, if any, to send in the
     response.
     """
 
-    # Make sure the user is authenticated and active
-    if not(request.user.is_authenticated() and request.user.is_active):
-        # not both authenticated and active
-        
-        # determine what the next URL would be after logging in
-        query = util.normalDict(request.GET or request.POST)
-        query_string = urllib.urlencode(
-            [(k, v) 
-             for k, v in query.iteritems()
-             if k[:7] == 'openid.']
-            )
-        next_url = "%s?%s" % (
-            reverse('commoner.server.views.endpoint'), query_string)
-
-        # redirect to the login page
-        return http.HttpResponseRedirect("%s?%s" % (
-                reverse('django.contrib.auth.views.login'),
-                urllib.urlencode([('next', next_url)])
-                ))
-
-    # YYY if this user is authenticated but not the request user, do something?
-
-    # If the request was an IDP-driven identifier selection request
-    # (i.e., the IDP URL was entered at the RP), then return the
-    # default identity URL for this server. In a full-featured
-    # provider, there could be interaction with the user to determine
-    # what URL should be sent.
-
-    if not openid_request.idSelect():
-
-        id_url = request.user.get_profile().get_absolute_url(
-            request=request)
-
-        # Confirm that this server can actually vouch for that
-        # identifier
-        if id_url != openid_request.identity:
-            # Return an error response
-            error_response = ProtocolError(
-                openid_request.message,
-                "This server cannot verify the URL %r" %
-                (openid_request.identity,))
-
-            return displayResponse(request, error_response)
-
     if openid_request.immediate:
-        # Always respond with 'cancel' to immediate mode requests
-        # because we don't track information about a logged-in user.
-        # If we did, then the answer would depend on whether that user
-        # had trusted the request's trust root and whether the user is
-        # even logged in.
+
+        # immediate mode -- see if the user is logged in
+        if (request.session.get('openid_user', False) and 
+            (request.session.get('openid_expires', datetime.now()) >
+             datetime.now())):
+            
+            # user has logged into OpenID and auth hasn't expired yet
+            # see if they've already said they want to trust this root
+            trusted = request.session['openid_user'].trusted_parties.filter(
+                root__exact = openid_request.trust_root).count() > 0
+            
+            if trusted:
+                openid_response = openid_request.answer(True)
+                return displayResponse(request, openid_response)
+
+        # immediate mode -- we can't say yes, fall back to cancel
         openid_response = openid_request.answer(False)
         return displayResponse(request, openid_response)
-    else:
-        # Store the incoming request object in the session so we can
-        # get to it later.
-        setRequest(request, openid_request)
-        return showDecidePage(request, openid_request)
 
-@login_required
-def showDecidePage(request, openid_request):
-    """
-    Render a page to the user so a trust decision can be made.
+    # Not immediate mode 
+    # ------------------
+    # Check if the user is authenticated and has enabled OpenID
+    if request.session.get('openid_user', False):
+        if request.session['openid_user'].get_profile():
+            # we have a user w/profile
+            if request.session['openid_user'].get_profile().get_absolute_url(
+                request=request) == openid_request.identity:
 
-    @type openid_request: openid.server.server.CheckIDRequest
-    """
+                # and it's the user we were asked to verify
+                if request.session.get('openid_expires', datetime.now()) > \
+                        datetime.now():
+                
+                    # and the authorization hasn't expired
+                
+                    # store the incoming request object
+                    setRequest(request, openid_request)
+
+                    # see if we've previously trusted this root
+                    if request.session['openid_user'].trusted_parties.filter(
+                        root__exact = openid_request.trust_root).count() > 0:
+
+                        # we trust this site
+                        return createOpenIdResponse(request, True)
+
+                    return show_trust_request(request)
+        
+    # need to authenticate the user (or auth expired)
+    return login_redirect(request, openid_request)
+
+def show_trust_request(request):
+
+    openid_request = getRequest(request)
+    if openid_request is None:
+        return http.HttpResponseForbidden('No OpenID request.')
 
     # ZZZ make sure the logged in user matches the request IDP URL
     trust_root = openid_request.trust_root
     return_to = openid_request.return_to
-
+        
     try:
         # Stringify because template's ifequal can only compare to strings.
         trust_root_valid = verifyReturnTo(trust_root, return_to) \
@@ -213,48 +200,47 @@ def showDecidePage(request, openid_request):
         request,
         'server/trust.html',
         {'trust_root': trust_root,
-         'trust_handler_url':getViewURL(request, processTrustResult),
+         'trust_handler_url':getViewURL(request, trust_decision),
          'trust_root_valid': trust_root_valid,
          })
 
-def processTrustResult(request):
+def trust_decision(request):
     """
-    Handle the result of a trust decision and respond to the RP
-    accordingly.
+    Process the result of making a trust decision.
     """
+
+    if request.method == 'POST':
+        # process the result of the trust decision
+        allowed = 'allow' in request.POST
+        remember = 'remember' in request.POST
+
+        return createOpenIdResponse(request, allowed, remember)
+
+    return http.HttpResponseForbidden("Denied.")
+
+def createOpenIdResponse(request, allowed=False, remember=False):
+    """Craft a response (allowed or not) and return it. Before rendering
+    we clear the OpenID request from the session."""
+
     # Get the request from the session so we can construct the
     # appropriate response.
     openid_request = getRequest(request)
 
     # The identifier that this server can vouch for
-    response_identity = request.user.get_profile().get_absolute_url(
-        request=request)
+    response_identity = request.session['openid_user'].get_profile().\
+        get_absolute_url(request=request)
 
-    # If the decision was to allow the verification, respond
-    # accordingly.
-    allowed = 'allow' in request.POST
+    # check if the use wants to remember this root
+    if allowed and remember:
+        request.session['openid_user'].trusted_parties.add(
+            TrustedRelyingParty(root=openid_request.trust_root))
 
     # Generate a response with the appropriate answer.
     openid_response = openid_request.answer(allowed,
                                             identity=response_identity)
 
-    # Send Simple Registration data in the response, if appropriate.
-    if allowed:
-        sreg_data = {
-            'fullname': 'Example User',
-            'nickname': 'example',
-            'dob': '1970-01-01',
-            'email': 'invalid@example.com',
-            'gender': 'F',
-            'postcode': '12345',
-            'country': 'ES',
-            'language': 'eu',
-            'timezone': 'America/New_York',
-            }
-
-        sreg_req = sreg.SRegRequest.fromOpenIDRequest(openid_request)
-        sreg_resp = sreg.SRegResponse.extractResponse(sreg_req, sreg_data)
-        # openid_response.addExtension(sreg_resp)
+    # clear the openId request
+    setRequest(request, None)
 
     return displayResponse(request, openid_response)
 
@@ -286,3 +272,55 @@ def displayResponse(request, openid_response):
         r[header] = value
 
     return r
+
+@login_required
+def settings(request):
+
+    return render_to_response('profiles/openid_settings.html', 
+                              {},
+                              context_instance=RequestContext(request))
+
+@login_required
+def delete_trusted_party(request, id):
+
+    # get the trusted party
+    trusted_party = get_object_or_404(TrustedRelyingParty, id=id)
+    if trusted_party.user != request.user:
+        # prohibited
+        return http.HttpResponseForbidden("Forbidden.")
+
+    if request.method == 'POST':
+
+        # make sure it was submitted with the confirm button
+        if request.POST.get('confirm', False):
+
+            # remove the object
+            trusted_party.delete()
+            
+            # redirect to the settings page
+            return http.HttpResponseRedirect(reverse('openid_settings'))
+
+    return render_to_response('server/delete_trusted_party.html',
+                              dict(trusted_party=trusted_party),
+                              context_instance=RequestContext(request))
+def login_redirect(request, openid_request=None):
+
+    if openid_request is None:
+        openid_request = getRequest(request)
+
+    # determine what the next URL would be after logging in
+    query = util.normalDict(request.GET or request.POST)
+    query_string = urllib.urlencode(
+        [(k, v) 
+         for k, v in query.iteritems()
+         if k[:7] == 'openid.']
+        )
+    next_url = "%s?%s" % (
+        reverse('commoner.server.views.endpoint'), query_string)
+
+    # redirect to the login page
+    return http.HttpResponseRedirect("%s?%s" % (
+            reverse('openid_login'),
+            urllib.urlencode([('id', openid_request.identity,),
+                              ('next', next_url),])
+            ))

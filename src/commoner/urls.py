@@ -11,7 +11,7 @@ urlpatterns = patterns(
      {'template':'index.html'}),
     (r'^admin/(.*)', admin.site.root),
     
-	# Help pages
+    # Help pages
     (r'^h/about/$', 'django.views.generic.simple.direct_to_template',
 	 {'template':'help/about.html'}),
     (r'^h/openid/$', 'django.views.generic.simple.direct_to_template',
@@ -80,8 +80,15 @@ urlpatterns = patterns(
 
     # OpenID Support
     url(r'^o/xrds/$', 'commoner.server.views.idpXrds', name="server_xrds"),
-    (r'^o/processTrustResult/$', 'commoner.server.views.processTrustResult'),
+    (r'^o/trust/$', 'commoner.server.views.trust_decision'),
     (r'^o/endpoint/$', 'commoner.server.views.endpoint'),
+    url(r'^o/login/$', 'commoner.server.views.login',
+        name='openid_login'),
+    url(r'^o/settings/$', 'commoner.server.views.settings',
+        name='openid_settings'),
+    url(r'^o/trusted/(?P<id>\d+)/delete/', 
+        'commoner.server.views.delete_trusted_party',
+        name='openid_delete_trusted'),
 
     # Namespace and RDF support
     (r'^n$', 'django.views.generic.simple.direct_to_template',

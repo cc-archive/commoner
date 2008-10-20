@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+{% block head_title %}{% trans "Verify Your Identity" %} -{% endblock %}
+{% block page_header %}{% trans "Verify Your Identity" %}{% endblock %}
+
 {% block body %}
 
 {% ifequal trust_root_valid "Valid" %}
@@ -43,15 +46,21 @@ trying to abuse your trust in their good name.</p>
 
 <!-- trust_root_valid is {{ trust_root_valid }} -->
 
-<div>
+<p>{% blocktrans%}Verify your identity to the <code>{{trust_root}}</code>?{%endblocktrans %}</p>
+
 <form method="post"
       action="{{ trust_handler_url }}">
-  {% trans "Verify your identity to the relying party?" %}
 
-  <br/>
+  <p>
+  <input type="checkbox" value="on"
+	 name="remember" />
+  <label for="remember">{% trans 'Always trust this site.' %}</label>
+  </p>
+  <p>
   <input type="submit" value="{% trans 'Yes, continue' %}" name="allow" />
   <input type="submit" value="{% trans 'No, cancel' %}" name="cancel" />
+</p>
 </form>
-</div>
+
 
 {% endblock %}

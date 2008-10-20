@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block head_title %}{% trans "Login to your OpenID" %} -{% endblock %}
+{% block page_header %}{% trans "Login to your OpenID" %}{% endblock %}
+{% block body %}
+
+<p>{% blocktrans with site.name as site_name %}
+  Log in to <strong>{{ site_name }}</strong> to continue verifying your
+  identity with <code>{{ trust_root }}</code>.{% endblocktrans %}</p>
+
+<div class="form">
+  {% if form.non_field_errors %}
+   <div class="errors">
+     {{ form.non_field_errors }}
+   </div>
+  {% endif %}
+
+<form method="post" action=".">
+
+  <div class="field" id="username">
+    <span class="field_label">Username: </span>
+    {{ form.username }}
+  </div>
+
+  <div class="field" id="password">
+    <span class="field_label">{{ form.password.label_tag }}: </span>
+    {{ form.password }}
+    {% if form.password.errors %}
+    <div class="errors">
+      {{ form.password.errors }}
+    </div>
+    {% endif %}
+
+  </div>
+
+  {{ form.secret }}
+
+  <input type="hidden" name="next" value="{{ next }}" />
+  <input type="hidden" name="id" value="{{ form.id }}" />
+  <p>
+    <input type="submit" value="login" />
+    &nbsp;&nbsp;&nbsp;<a href="{% url password_reset %}">
+      {% trans "Forgot your password?" %}</a>
+  </p>
+
+</form>
+</div>
+
+{% endblock %}

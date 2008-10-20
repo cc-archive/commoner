@@ -35,17 +35,20 @@
       {% block nav_override %}
       <ul class="box">
         {% if user.is_anonymous %}
+	{% url login as login_url %}
 	<li><a href="http://support.creativecommons.org/join">
 	    {% trans "Join" %}
 	</a></li>
-        <li><a href="{% url login %}">
+        <li><a href="{{ login_url }}">
 	    {% trans "Login" %}
 	</a></li>
 	{% else %}
-        <li><a href="{% url profile_view user.username %}">
+	{% url profile_view user.username as profile_url %}
+	{% url logout as logout_url %}
+        <li><a href="{{profile_url }}">
 	    {% trans "My Profile" %}
 	</a></li>
-        <li><a href="{% url logout %}">
+        <li><a href="{{ logout_url }}">
 	    {% trans "Logout" %}
 	</a></li>
 	{% endif %}
