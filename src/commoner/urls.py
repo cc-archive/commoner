@@ -9,9 +9,11 @@ urlpatterns = patterns(
     '',
     (r'^$', 'django.views.generic.simple.direct_to_template',
      {'template':'index.html'}),
+    (r'^seatbeltcfg.xml$', 'django.views.generic.simple.direct_to_template',
+     {'template':'seatbeltcfg.xml', 'mimetype':'text/xml'}),
     (r'^admin/(.*)', admin.site.root),
     
-	# Help pages
+    # Help pages
     (r'^h/about/$', 'django.views.generic.simple.direct_to_template',
 	 {'template':'help/about.html'}),
     (r'^h/openid/$', 'django.views.generic.simple.direct_to_template',
@@ -24,9 +26,10 @@ urlpatterns = patterns(
 	 {'template':'help/contact_thanks.html'}),
 
     # Account management
-    (r'^a/login/$', 'django.contrib.auth.views.login'),
-    (r'^a/logout/$', 'django.contrib.auth.views.logout',
-     {'template_name':'registration/logout.html'}),
+    url(r'^a/login/$', 'commoner.authenticate.views.login',
+        name='login'),
+    url(r'^a/logout/$', 'commoner.authenticate.views.logout',
+        name='logout'),
 
     url(r'^a/password/change/$',
         'django.contrib.auth.views.password_change',
@@ -79,8 +82,18 @@ urlpatterns = patterns(
 
     # OpenID Support
     url(r'^o/xrds/$', 'commoner.server.views.idpXrds', name="server_xrds"),
-    (r'^o/processTrustResult/$', 'commoner.server.views.processTrustResult'),
+    (r'^o/trust/$', 'commoner.server.views.trust_decision'),
     (r'^o/endpoint/$', 'commoner.server.views.endpoint'),
+    url(r'^o/login/$', 'commoner.server.views.login',
+        name='openid_login'),
+    url(r'^o/settings/$', 'commoner.server.views.settings',
+        name='openid_settings'),
+    url(r'^o/trusted/(?P<id>\d+)/delete/', 
+        'commoner.server.views.delete_trusted_party',
+        name='openid_delete_trusted'),
+
+    url(r'^o/state/$', 'commoner.server.views.state',
+        name='openid_state'),
 
     # Namespace and RDF support
     (r'^n$', 'django.views.generic.simple.direct_to_template',

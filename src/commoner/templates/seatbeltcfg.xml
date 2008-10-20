@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<opConfig version="1.0">
+  <configRevision>1.0.01</configRevision>
+  <title>Creative Commons Network</title>
+  <serverIdentifier>creativecommons.net</serverIdentifier>
+  <description>CC Network OpenID provider</description>
+  <loginUrl>{{base_url}}{% url openid_login %}</loginUrl>
+  <welcomeUrl>{{base_url}}/h/openid/</welcomeUrl>  
+  <loginStateUrl>{{base_url}}{% url openid_state %}</loginStateUrl>
+  <opDomain>creativecommons.net</opDomain>
+  <opCertSHA1Hash>72:59:74:D2:3A:C1:A1:23:0A:D7:F7:53:48:35:87:76:A3:D3:24:CC</opCertSHA1Hash>  
+  <opCertCommonName>creativecommons.net</opCertCommonName>
+
+  <settingsIconUrl>http://i.creativecommons.net/i/32.png</settingsIconUrl>
+  <toolbarGrayIconUrl>http://i.creativecommons.net/i/16-gray.png</toolbarGrayIconUrl>
+  <toolbarHighIconUrl>http://i.creativecommons.net/i/16-color.png</toolbarHighIconUrl>
+  <toolbarGrayBackground>#e0e0e0</toolbarGrayBackground>
+  <toolbarHighBackground>#f2db8b</toolbarHighBackground>
+  <toolbarLoginBackground>#a7e0fb</toolbarLoginBackground>
+  <toolbarGrayBorder>#a0a0a0</toolbarGrayBorder>
+  <toolbarHighBorder>#22ab1b</toolbarHighBorder>
+  <toolbarLoginBorder>#a0a0a0</toolbarLoginBorder>
+  <toolbarGrayText>#505050</toolbarGrayText>
+  <toolbarHighText>#22ab1b</toolbarHighText>
+  <toolbarLoginText>#000000</toolbarLoginText>
+</opConfig>
+

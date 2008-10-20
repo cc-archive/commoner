@@ -33,6 +33,14 @@ def add_or_edit(request, id=None):
         if form.is_valid():
             work = form.save()
 
+            if instance is None:
+                request.user.message_set.create(
+                    message=_(u'Work registered; <a href="%(add_url)s">add another</a>?'
+                      % dict(add_url = reverse('add_content'))) )
+            else:
+                request.user.message_set.create(
+                    message=_(u"Work successfuly edited."))
+
             return HttpResponseRedirect(
                 reverse('view_work', args=(work.id,)))
 
@@ -70,6 +78,9 @@ def delete(request, id):
             if not hasattr(registration, 'feed') and \
                     registration.works.count() == 0:
                 registration.delete()
+
+            request.user.message_set.create(
+                message=_(u"Registration deleted."))
             
             # redirect to the profile
             return HttpResponseRedirect(

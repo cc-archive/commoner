@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load thumbnail %}
+
+{% block header %}
+{% endblock %}
+
+{% block head_title %}{% trans "OpenID Settings" %} -{% endblock %}
+
+{% block page_header %}{% trans "OpenID Settings" %}{% endblock %}
+
+{% block body %}
+
+<h2>Trusted Sites</h2>
+{% if user.trusted_parties.all %}
+<p>{% blocktrans with site.name as site_name %}
+{{site_name}} will always verify your identity to these sites.
+{% endblocktrans %}</p>
+
+<ul>
+  {% for trusted in user.trusted_parties.all %}
+  <li>
+    {{ trusted.root }} 
+    <a href="{% url openid_delete_trusted id=trusted.id %}">
+      {% trans "delete" %}</a>
+  </li>
+  {% endfor %}
+
+</ul>
+
+{% else %}
+<p>{% trans "You have not designated any trusted sites." %}</p>
+{% endif %}
+{% endblock %}

@@ -69,6 +69,7 @@ INSTALLED_APPS = (
     'commoner.works',
     'commoner.scraper',
     'commoner.server',
+    'commoner.authenticate',
     'commoner.help',
 )
 
@@ -101,6 +102,7 @@ LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/a/login/'
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+OPENID_ENABLE_DAYS = 0.25
 
 # Location (relative to MEDIA_ROOT) where all user-uploaded media are stored.
 # The same rules apply to this as to MEDIA_URL as well -- there must be a

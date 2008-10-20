@@ -35,17 +35,20 @@
       {% block nav_override %}
       <ul class="box">
         {% if user.is_anonymous %}
+	{% url login as login_url %}
 	<li><a href="http://support.creativecommons.org/join">
 	    {% trans "Join" %}
 	</a></li>
-        <li><a href="{% url django.contrib.auth.views.login %}">
+        <li><a href="{{ login_url }}">
 	    {% trans "Login" %}
 	</a></li>
 	{% else %}
-        <li><a href="{% url profile_view user.username %}">
+	{% url profile_view user.username as profile_url %}
+	{% url logout as logout_url %}
+        <li><a href="{{profile_url }}">
 	    {% trans "My Profile" %}
 	</a></li>
-        <li><a href="{% url django.contrib.auth.views.logout %}">
+        <li><a href="{{ logout_url }}">
 	    {% trans "Logout" %}
 	</a></li>
 	{% endif %}
@@ -70,6 +73,17 @@
           <h3>{% block page_sub_header %}{% endblock %}</h3>
         </div>
       </div>
+
+      {% if messages %}
+      <div class="messages">
+	<ul>
+	  {% for message in messages %}
+	  <li>{{ message|safe }}</li>
+	  {% endfor %}
+	</ul>
+      </div>
+      {% endif %}
+      
       <div class="block page clear">
         {% block body %}
         {% endblock %}

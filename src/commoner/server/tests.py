@@ -20,6 +20,15 @@ def dummyRequest():
     request.META['SERVER_PROTOCOL'] = 'HTTP'
     return request
 
+class TestSecurity(TestCase):
+    fixtures = ['test_users.json', ]
+
+    def testProcessTrustResultDirect(self):
+        """Accessing process trust result directly shouldn't work."""
+        
+        response = self.client.get('/o/trust/')
+        self.assertEqual(response.status_code, 403)
+
 class TestProcessTrustResult(TestCase):
     fixtures = ['test_users.json', ]
 
@@ -38,13 +47,16 @@ class TestProcessTrustResult(TestCase):
             })
         self.openid_request = CheckIDRequest.fromMessage(message, op_endpoint)
 
+        self.request.session['openid_user'] = User.objects.get(
+            username='normal')
         views.setRequest(self.request, self.openid_request)
 
 
     def test_allow(self):
+        self.request.method = 'POST'
         self.request.POST['allow'] = 'Yes'
 
-        response = views.processTrustResult(self.request)
+        response = views.trust_decision(self.request)
 
         self.failUnlessEqual(response.status_code, 302)
         finalURL = response['location']
@@ -52,17 +64,17 @@ class TestProcessTrustResult(TestCase):
         self.failUnless('openid.identity=' in finalURL, finalURL)
         # self.failUnless('openid.sreg.postcode=12345' in finalURL, finalURL)
 
-    def test_cancel(self):
+    def test_cancel(self):        
+        self.request.method = 'POST'
         self.request.POST['cancel'] = 'Yes'
 
-        response = views.processTrustResult(self.request)
+        response = views.trust_decision(self.request)
 
         self.failUnlessEqual(response.status_code, 302)
         finalURL = response['location']
         self.failUnless('openid.mode=cancel' in finalURL, finalURL)
         self.failIf('openid.identity=' in finalURL, finalURL)
         self.failIf('openid.sreg.postcode=12345' in finalURL, finalURL)
-
 
 
 class TestShowDecidePage(TestCase):
@@ -85,7 +97,7 @@ class TestShowDecidePage(TestCase):
 
         views.setRequest(self.request, self.openid_request)
 
-        response = views.showDecidePage(self.request, self.openid_request)
+        response = views.show_trust_request(self.request)
         self.failUnless('trust_root_valid is Unreachable' in response.content,
                         response)
 

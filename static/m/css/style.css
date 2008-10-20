@@ -485,6 +485,19 @@ a.add_work {
 	-webkit-border-radius: 2px;
 }
 
+.messages {
+    padding: 1px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    background-color: #effda7;
+    margin-bottom: 1em;
+}
+
+.messages ul {
+    margin: 1em;
+    margin-left: 1.5em;
+}
+
 /*** Registration ***/
 
 iframe.tos {
@@ -499,3 +512,4 @@ iframe.tos {
 ul#benefits li {
 	margin-bottom: 1.5em;
 }
+
