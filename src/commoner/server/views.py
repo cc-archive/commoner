@@ -277,7 +277,7 @@ def displayResponse(request, openid_response):
 def settings(request):
 
     return render_to_response('profiles/openid_settings.html', 
-                              {},
+                              dict(site=Site.objects.get_current()),
                               context_instance=RequestContext(request))
 
 @login_required

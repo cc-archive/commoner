@@ -12,8 +12,10 @@
 {% block body %}
 
 <h2>Trusted Sites</h2>
-<p>creativecommons.net will always verify your identity to these
-  sites.</p>
+{% if user.trusted_parties.all %}
+<p>{% blocktrans with site.name as site_name %}
+{{site_name}} will always verify your identity to these sites.
+{% endblocktrans %}</p>
 
 <ul>
   {% for trusted in user.trusted_parties.all %}
@@ -26,4 +28,7 @@
 
 </ul>
 
+{% else %}
+<p>{% trans "You have not designated any trusted sites." %}</p>
+{% endif %}
 {% endblock %}
