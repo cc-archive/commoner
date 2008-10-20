@@ -6,7 +6,7 @@
 
 <p>{% blocktrans with site.name as site_name %}
   Log in to <strong>{{ site_name }}</strong> to continue verifying your
-  identity with <code>{{ trust_root }}</code>.{% endblocktrans %}</p>
+  identity.{% endblocktrans %}</p>
 
 <div class="form">
   {% if form.non_field_errors %}
@@ -18,7 +18,7 @@
 <form method="post" action=".">
 
   <div class="field" id="username">
-    <span class="field_label">Username: </span>
+    <span class="field_label">{{ form.username.label_tag }}: </span>
     {{ form.username }}
   </div>
 

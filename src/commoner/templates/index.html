@@ -2,7 +2,10 @@
 {% load i18n %}
 
 {% block header %}
-        <meta http-equiv="x-xrds-location" content="{{base_url}}{% url server_xrds %}" />
+<meta http-equiv="x-xrds-location" content="{{base_url}}{% url server_xrds %}" />
+<link rel="seatbelt.config" type="application/xml" 
+      href="{{base_url}}/seatbeltcfg.xml" />
+
 {% endblock %}
 
 {% block page_icon_class %}index{% endblock %}

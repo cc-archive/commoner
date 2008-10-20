@@ -1,5 +1,5 @@
 import sha
-import urlparse
+import sha
 
 from django import forms
 from django.conf import settings
@@ -14,6 +14,7 @@ def make_secret(value):
 
 class OpenIdLoginForm(forms.Form):
 
+    username = forms.CharField(label=_(u"Username"))
     password = forms.CharField(label=_(u"Password"),
                                widget=forms.PasswordInput())
     secret = forms.CharField(widget=forms.HiddenInput())
@@ -21,21 +22,18 @@ class OpenIdLoginForm(forms.Form):
     def __init__(self, id_url, **kwargs):
 
         self.id = id_url
-        self.username = urlparse.urlsplit(id_url)[2][1:-1]
 
         super(OpenIdLoginForm, self).__init__(**kwargs)
-
-    def clean_password(self):
-        password = self.cleaned_data['password']
-
-        user = auth.authenticate(username=self.username, 
-                                 password=password)
-        if not user:
-            raise forms.ValidationError(_(u"Incorrect password."))
 
     def clean(self):
         """Verify the secret matches."""
 
+        user = auth.authenticate(username=self.cleaned_data['username'], 
+                                 password=self.cleaned_data['password'])
+        if not user:
+            raise forms.ValidationError(_(u"Incorrect password."))
+
+        
         if self.cleaned_data['secret'] != make_secret(self.id):
             raise AssertionError()
 

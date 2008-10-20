@@ -1,5 +1,6 @@
 import cgi
 import urllib
+import urlparse
 from datetime import datetime
 
 from commoner import util
@@ -46,8 +47,7 @@ def login(request):
     """Handle OpenID enable/login requests."""
 
     s = getServer(request)
-    openid_request = s.decodeRequest(
-        dict(cgi.parse_qsl(request.REQUEST.get('next'))))
+    next = request.REQUEST.get('next', request.META.get('HTTP-REFERER', '/'))
 
     if request.method == 'POST':
 
@@ -59,11 +59,15 @@ def login(request):
             if form.is_valid():
                 request.session['openid_expires'] = getOpenIdExpiration()
                 request.session['openid_user'] = \
-                    auth.models.User.objects.get(username=form.username)
+                    auth.models.User.objects.get(
+                    username__exact=form.cleaned_data['username'])
 
-                return http.HttpResponseRedirect(request.POST.get('next'))
+                return http.HttpResponseRedirect(next)
         except AssertionError:
             # treason uncloaked!
+            openid_request = s.decodeRequest(
+                dict(cgi.parse_qsl(request.REQUEST.get('next'))))
+
             error_response = ProtocolError(
                 openid_request.message,
                 "This server cannot verify the URL %r" %
@@ -73,15 +77,18 @@ def login(request):
             
 
     else:
-        id_url = request.GET.get('id', None)
+        id_url = request.GET.get('id', '')
+        initial = dict(secret = forms.make_secret(id_url))
+        if id_url:
+            initial.update(dict(username = urlparse.urlsplit(id_url)[2][1:-1]))
+
         form = forms.OpenIdLoginForm(id_url,
-                                     initial=dict(secret = forms.make_secret(id_url)))
+                                     initial=initial)
 
     return render_to_response("server/login.html",
                               dict(form=form,
                                    site=Site.objects.get_current(),
-                                   trust_root=openid_request.trust_root,
-                                   next=request.GET.get('next', '')),
+                                   next=next),
                               context_instance=RequestContext(request))
 
 def endpoint(request):
