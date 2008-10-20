@@ -46,16 +46,39 @@ trying to abuse your trust in their good name.</p>
 
 <!-- trust_root_valid is {{ trust_root_valid }} -->
 
-<p>{% blocktrans%}Verify your identity to the <code>{{trust_root}}</code>?{%endblocktrans %}</p>
-
 <form method="post"
       action="{{ trust_handler_url }}">
 
+<p>{% blocktrans %}<code>{{trust_root}}</code> has also asked for the following
+  registration information; which would you like to
+  share?{%endblocktrans %}</p>
+
+
+{% if sreg_requested %}
+
+{% for field in sreg_requested %}
+<input type="checkbox" value="{{field}}" name="allow_sreg" />
+<label>{{field}}</label><br/>
+{% endfor %}
+
+<p>{% blocktrans%}Verify your identity and share selected registration
+  data with <code>{{trust_root}}</code>?{%endblocktrans %}</p>
+
+{% else %}
+
+<p>{% blocktrans%}Verify your identity to the <code>{{trust_root}}</code>?{%endblocktrans %}</p>
+
+{% endif %}
+
   <p>
-  <input type="checkbox" value="on"
+  <input type="radio" value="off" checked="checked"
 	 name="remember" />
-  <label for="remember">{% trans 'Always trust this site.' %}</label>
+  <label for="remember">{% trans 'Just this once.' %}</label>
+  <input type="radio" value="on"
+	 name="remember" />
+  <label for="remember">{% trans 'Always do this.' %}</label>
   </p>
+
   <p>
   <input type="submit" value="{% trans 'Yes, continue' %}" name="allow" />
   <input type="submit" value="{% trans 'No, cancel' %}" name="cancel" />

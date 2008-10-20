@@ -193,7 +193,14 @@ def show_trust_request(request):
     # ZZZ make sure the logged in user matches the request IDP URL
     trust_root = openid_request.trust_root
     return_to = openid_request.return_to
-        
+
+    # see if the server requested SREG
+    sreg_request = sreg.SRegRequest.fromOpenIDRequest(openid_request)
+    if sreg_request.allRequestedFields():
+        sreg_requested = sreg_request.allRequestedFields()
+    else:
+        sreg_requested = []
+
     try:
         # Stringify because template's ifequal can only compare to strings.
         trust_root_valid = verifyReturnTo(trust_root, return_to) \
@@ -209,6 +216,7 @@ def show_trust_request(request):
         {'trust_root': trust_root,
          'trust_handler_url':getViewURL(request, trust_decision),
          'trust_root_valid': trust_root_valid,
+         'sreg_requested':sreg_requested,
          })
 
 def trust_decision(request):
@@ -219,7 +227,7 @@ def trust_decision(request):
     if request.method == 'POST':
         # process the result of the trust decision
         allowed = 'allow' in request.POST
-        remember = 'remember' in request.POST
+        remember = (request.POST.get('remember', 'off') == 'on')
 
         return createOpenIdResponse(request, allowed, remember)
 
@@ -241,11 +249,32 @@ def createOpenIdResponse(request, allowed=False, remember=False):
     if allowed and remember:
         request.session['openid_user'].trusted_parties.add(
             TrustedRelyingParty(root=openid_request.trust_root))
-
+    
     # Generate a response with the appropriate answer.
     openid_response = openid_request.answer(allowed,
                                             identity=response_identity)
 
+    # populate extensions as necessary
+    sreg_request = sreg.SRegRequest.fromOpenIDRequest(openid_request)
+
+    if allowed and sreg_request.allRequestedFields():
+        # see if we're allowing anything
+        sreg_data = {}
+        if request.REQUEST.getlist('allow_sreg'):
+            allowed_fields = request.REQUEST.getlist('allow_sreg')
+            if 'email' in allowed_fields:
+                sreg_data['email'] = request.session['openid_user'].email
+            if 'nickname' in allowed_fields:
+                sreg_data['nickname'] = \
+                    request.session['openid_user'].get_profile().display_name()
+            if 'fullname' in allowed_fields:
+                sreg_data['fullname'] = \
+                    request.session['openid_user'].get_profile().full_name()
+    
+            sreg_resp = sreg.SRegResponse.extractResponse(sreg_request, 
+                                                          sreg_data)
+            openid_response.addExtension(sreg_resp)
+            
     # clear the openId request
     setRequest(request, None)
 
