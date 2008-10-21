@@ -7,7 +7,8 @@ from django.conf import settings
 from commoner import util
 from commoner.util import getViewURL, getBaseURL
 
-__all__ = ['getOpenIdExpiration', 'getOpenIDStore', 
+__all__ = ['authorizeOpenId', 'getOpenIdUser', 'openIdAuthorized',
+           'getOpenIDStore', 
            'setRequest', 'getRequest']
 
 def getOpenIdExpiration():
@@ -16,6 +17,35 @@ def getOpenIdExpiration():
 
     return datetime.datetime.now() + \
         datetime.timedelta(settings.OPENID_ENABLE_DAYS)
+
+def authorizeOpenId(request, user=None):
+    """Authorize this session for OpenID; if user is None the user will 
+    not be manipulated."""
+
+    request.session['openid_expires'] = getOpenIdExpiration()
+    if user is not None:
+        request.session['openid_user'] = user
+
+def openIdAuthorized(request):
+    """Return True if this session is authorized for OpenId."""
+
+    if request.session.get('openid_user', None) is None:
+        return False
+
+    if request.session.get('openid_expires', datetime.datetime.now()) > \
+            datetime.datetime.now():
+        return True
+
+    return False
+
+def getOpenIdUser(request):
+    """Check OpenID authorization for this session; if it's valid,
+    return the associated user.  Otherwise return None."""
+
+    if openIdAuthorized(request):
+        return request.session['openid_user']
+
+    return None
 
 def getOpenIDStore():
     """

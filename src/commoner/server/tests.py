@@ -2,8 +2,9 @@
 from django.test.testcases import TestCase
 from commoner.server import views
 from commoner import util
+import util as server_util
 
-from django.http import HttpRequest
+from django.http import HttpRequest, QueryDict
 from django.contrib.sessions.backends.cache import SessionStore
 from django.contrib.auth.models import User
 
@@ -14,6 +15,8 @@ from openid.yadis.services import applyFilter
 
 def dummyRequest():
     request = HttpRequest()
+    request.POST = QueryDict('', mutable=True)
+    request.GET = QueryDict('', mutable=True)
     request.user = User.objects.get(username='normal')
     request.session = SessionStore("test")
     request.META['HTTP_HOST'] = 'example.invalid'
@@ -47,8 +50,8 @@ class TestProcessTrustResult(TestCase):
             })
         self.openid_request = CheckIDRequest.fromMessage(message, op_endpoint)
 
-        self.request.session['openid_user'] = User.objects.get(
-            username='normal')
+        server_util.authorizeOpenId(self.request, User.objects.get(
+                username='normal'))
         views.setRequest(self.request, self.openid_request)
 
 
