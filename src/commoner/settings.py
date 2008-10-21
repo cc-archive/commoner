@@ -14,13 +14,14 @@ if not DEBUG:
 
 DATABASE_ENGINE = 'mysql'
 
-if DEBUG:
-    DATABASE_ENGINE = 'sqlite3'    # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
 DATABASE_NAME = 'commoner'
-DATABASE_USER = 'commoner'             # Not used with sqlite3.
-DATABASE_PASSWORD = 'creative'         # Not used with sqlite3.
+DATABASE_USER = 'root'             # Not used with sqlite3.
+DATABASE_PASSWORD = ''         # Not used with sqlite3.
 DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
 DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
+
+if DEBUG:
+    DATABASE_NAME='commoner.testing'
 
 TIME_ZONE = 'America/Chicago'
 
