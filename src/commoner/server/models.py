@@ -27,3 +27,6 @@ class TrustedMetadata(models.Model):
     relying_party = models.ForeignKey(TrustedRelyingParty, 
                                       related_name='metadata')
     field_name = models.CharField(max_length=100, choices=SREG_METADATA)
+
+    def __str__(self):
+        return self.field_name
