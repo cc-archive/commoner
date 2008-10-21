@@ -3,6 +3,9 @@
 {% load thumbnail %}
 
 {% block header %}
+<script src="/m/javascript/badge.js"
+	type="text/javascript">
+</script>
 <meta http-equiv="x-xrds-location" content="{{base_url}}{% url server_xrds %}" />
 <link rel="openid.server" href="{{base_url}}{% url commoner.server.views.endpoint %}" />
 <link rel="openid2.provider" href="{{base_url}}{% url commoner.server.views.endpoint %}" />
@@ -73,17 +76,34 @@
 </div>
 
 <div class="column-narrow column">
-    {% if user.is_authenticated %}
-      {% ifequal user.username profile_user.username %}
-        <div id="badge">
-          <img src="{{ profile.badge_img_url }}" alt="CC Network - Badge" title="CC Network" border="0" />
-          <p>
-            <strong>{% trans "Place this badge on your website" %}</strong><br/>
-            <input id="network-badge" value='{% include "profiles/badge.html" %}' 
-		   readonly="readonly" onclick="this.select()" type="text" />
-          </p>
-        </div>
-      {% endifequal %}{% endif %}
+  {% if user.is_authenticated %}
+    {% ifequal user.username profile_user.username %}
+      <h4>{% trans "Place this badge on your website" %}</h4>
+      <div id="badge">
+	<table style="margin: 0 auto;">
+	  <tr valign="bottom">
+	    <td align="center">
+	      <img src="{{ profile.badge_img_url }}" 
+		   alt="CC Network - Badge" title="CC Network"
+		   border="0" /><br/>
+	      <input type="radio" checked="checked" name="badge_size" 
+		     onclick="swapbutton('{{base_url}}{{profile.badge_img_url}}')" />
+	    </td>
+	    <td align="center">
+	      <img src="{{ profile.thin_badge_img_url }}" 
+		   alt="CC Network - Badge" title="CC Network"
+		   border="0" /><br/>
+	      <input type="radio" name="badge_size"
+		     onclick="swapbutton('{{base_url}}{{profile.thin_badge_img_url}}')" />
+	    </td>
+	  </tr>
+	</table>
+        <p>
+          <input id="network-badge" value='{% include "profiles/badge.html" %}' 
+		 readonly="readonly" onclick="this.select()" type="text" />
+        </p>
+      </div>
+    {% endifequal %}{% endif %}
 	{% ifequal user.username profile_user.username %}
 	<a class="add_work" title="add a work" 
 	   href="{% url add_content %}">{% trans "Add" %}</a>
