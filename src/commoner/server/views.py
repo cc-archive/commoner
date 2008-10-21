@@ -405,7 +405,7 @@ def state(request):
     if openIdAuthorized(request):
 
         # someone is logged in; add their information
-        user = request.session['openid_user'].get_profile()
+        user = getOpenIdUser(request).get_profile()
         result.append(
             """<persona displayName="%s">%s</persona>""" % (
                 user.display_name(), user.get_absolute_url(request=request))
