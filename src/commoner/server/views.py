@@ -27,7 +27,7 @@ from openid.fetchers import HTTPFetchingError
 from util import *
 import forms
 from django.contrib.sites.models import Site
-from models import TrustedRelyingParty
+from models import TrustedRelyingParty, TrustedMetadata
 
 def getServer(request):
     """
@@ -134,6 +134,10 @@ def handleCheckIDRequest(request, openid_request):
     response.
     """
 
+    # store the incoming request object
+    setRequest(request, openid_request)
+
+    # check if we're operating in immediate mode
     if openid_request.immediate:
 
         # immediate mode -- see if the user is logged in
@@ -143,16 +147,23 @@ def handleCheckIDRequest(request, openid_request):
             
             # user has logged into OpenID and auth hasn't expired yet
             # see if they've already said they want to trust this root
-            trusted = request.session['openid_user'].trusted_parties.filter(
-                root__exact = openid_request.trust_root).count() > 0
-            
-            if trusted:
-                openid_response = openid_request.answer(True)
-                return displayResponse(request, openid_response)
+            try:
+                trusted_site = request.session['openid_user'].\
+                    trusted_parties.get(root = 
+                                        openid_request.trust_root)
+
+                # we trust this site
+                return createOpenIdResponse(request, True, False,
+                                            [m.field_name for m in
+                                            trusted_site.metadata.all()]
+                                            )
+
+
+            except TrustedRelyingParty.DoesNotExist, e:
+                pass
 
         # immediate mode -- we can't say yes, fall back to cancel
-        openid_response = openid_request.answer(False)
-        return displayResponse(request, openid_response)
+        return createOpenIdResponse(request, allowed=False)
 
     # Not immediate mode 
     # ------------------
@@ -168,16 +179,22 @@ def handleCheckIDRequest(request, openid_request):
                         datetime.now():
                 
                     # and the authorization hasn't expired
-                
-                    # store the incoming request object
-                    setRequest(request, openid_request)
 
                     # see if we've previously trusted this root
-                    if request.session['openid_user'].trusted_parties.filter(
-                        root__exact = openid_request.trust_root).count() > 0:
+                    try:
+                        trusted_site = request.session['openid_user'].\
+                            trusted_parties.get(root = 
+                                                openid_request.trust_root)
 
                         # we trust this site
-                        return createOpenIdResponse(request, True)
+                        return createOpenIdResponse(request, True, False,
+                                                    [m.field_name for m in
+                                                    trusted_site.metadata.all()]
+                                                    )
+
+
+                    except TrustedRelyingParty.DoesNotExist, e:
+                        pass
 
                     return show_trust_request(request)
         
@@ -219,6 +236,22 @@ def show_trust_request(request):
          'sreg_requested':sreg_requested,
          })
 
+def updateStoredTrust(request):
+    """Store the trust_root and selected SREG fields."""
+
+    user = request.session['openid_user']
+    openid_request = getRequest(request)
+
+    # add the trust relationship for the trust_root
+    trusted_rp = TrustedRelyingParty(user=user, root=openid_request.trust_root)
+    trusted_rp.save()
+
+    # add the selected SREG fields
+    if request.REQUEST.getlist('allow_sreg'):
+        allowed_fields = request.REQUEST.getlist('allow_sreg')
+        for field in allowed_fields:
+            trusted_rp.metadata.add(TrustedMetadata(field_name=field))
+
 def trust_decision(request):
     """
     Process the result of making a trust decision.
@@ -229,11 +262,16 @@ def trust_decision(request):
         allowed = 'allow' in request.POST
         remember = (request.POST.get('remember', 'off') == 'on')
 
-        return createOpenIdResponse(request, allowed, remember)
+        if allowed and remember:
+            updateStoredTrust(request)
+
+        return createOpenIdResponse(request, allowed, remember,
+                                    request.POST.getlist('allow_sreg'))
 
     return http.HttpResponseForbidden("Denied.")
 
-def createOpenIdResponse(request, allowed=False, remember=False):
+def createOpenIdResponse(request, allowed=False, remember=False,
+                         allowed_fields=[]):
     """Craft a response (allowed or not) and return it. Before rendering
     we clear the OpenID request from the session."""
 
@@ -245,11 +283,6 @@ def createOpenIdResponse(request, allowed=False, remember=False):
     response_identity = request.session['openid_user'].get_profile().\
         get_absolute_url(request=request)
 
-    # check if the use wants to remember this root
-    if allowed and remember:
-        request.session['openid_user'].trusted_parties.add(
-            TrustedRelyingParty(root=openid_request.trust_root))
-    
     # Generate a response with the appropriate answer.
     openid_response = openid_request.answer(allowed,
                                             identity=response_identity)
@@ -257,23 +290,22 @@ def createOpenIdResponse(request, allowed=False, remember=False):
     # populate extensions as necessary
     sreg_request = sreg.SRegRequest.fromOpenIDRequest(openid_request)
 
+    # add SREG fields if requested
     if allowed and sreg_request.allRequestedFields():
         # see if we're allowing anything
         sreg_data = {}
-        if request.REQUEST.getlist('allow_sreg'):
-            allowed_fields = request.REQUEST.getlist('allow_sreg')
-            if 'email' in allowed_fields:
-                sreg_data['email'] = request.session['openid_user'].email
-            if 'nickname' in allowed_fields:
-                sreg_data['nickname'] = \
-                    request.session['openid_user'].get_profile().display_name()
-            if 'fullname' in allowed_fields:
-                sreg_data['fullname'] = \
-                    request.session['openid_user'].get_profile().full_name()
-    
-            sreg_resp = sreg.SRegResponse.extractResponse(sreg_request, 
-                                                          sreg_data)
-            openid_response.addExtension(sreg_resp)
+        if 'email' in allowed_fields:
+            sreg_data['email'] = request.session['openid_user'].email
+        if 'nickname' in allowed_fields:
+            sreg_data['nickname'] = \
+                request.session['openid_user'].get_profile().display_name()
+        if 'fullname' in allowed_fields:
+            sreg_data['fullname'] = \
+                request.session['openid_user'].get_profile().full_name()
+
+        sreg_resp = sreg.SRegResponse.extractResponse(sreg_request, 
+                                                      sreg_data)
+        openid_response.addExtension(sreg_resp)
             
     # clear the openId request
     setRequest(request, None)
