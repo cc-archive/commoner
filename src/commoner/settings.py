@@ -122,6 +122,8 @@ THUMBNAIL_PATH = 't'
 
 # BADGE_BASE_URL defines the root location of Badge views
 BADGE_BASE_URL = 'http://i.creativecommons.net/p/'
+if DEBUG:
+    BADGE_BASE_URL = '/i/p/'
 
 # Uncomment the following line and the corresponding line in urls.py
 # to serve badges from the same host.

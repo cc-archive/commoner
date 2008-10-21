@@ -57,10 +57,6 @@ urlpatterns = patterns(
     url(r'^p/edit/$', 'commoner.profiles.views.edit_or_create', 
         name='profile_edit'),
 
-    # Profile badges
-    #url(r'^i/p/(?P<username>\w+)/$', 'commoner_i.views.badge',
-    #    name='profile_badge'),
-
     # Work Registration management
     url(r'^r/add/', 
         'commoner.works.views.add_or_edit',
@@ -79,6 +75,10 @@ urlpatterns = patterns(
     # Metadata scraper support
     url(r'^t/triples', 'commoner.scraper.views.triples',
         name='scrape_triples'),
+
+    # Profile badges
+    # (r'^i/', include('commoner_i.urls')),
+
 
     # OpenID Support
     url(r'^o/xrds/$', 'commoner.server.views.idpXrds', name="server_xrds"),
@@ -115,6 +115,13 @@ urlpatterns = patterns(
         {'url':'/%(username)s/'}),
 
 )
+
+if settings.DEBUG:
+    # Profile badges
+    urlpatterns += patterns('',
+                            (r'^i/', include('commoner_i.urls')),
+                            )
+
 
 if settings.DEBUG:
     urlpatterns += patterns('',
