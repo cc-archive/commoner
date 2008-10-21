@@ -201,6 +201,23 @@ def handleCheckIDRequest(request, openid_request):
     # need to authenticate the user (or auth expired)
     return login_redirect(request, openid_request)
 
+def sreg_fields(sreg_request, user, allowed_fields = None):
+
+    sreg_data = {}
+
+    if allowed_fields is None:
+        allowed_fields = sreg_request.allRequestedFields()
+
+    if sreg_request.allRequestedFields():
+        if 'email' in allowed_fields:
+            sreg_data['email'] = user.email
+        if 'nickname' in allowed_fields:
+            sreg_data['nickname'] = user.get_profile().display_name()
+        if 'fullname' in allowed_fields:
+            sreg_data['fullname'] = user.get_profile().full_name()
+
+    return sreg_data
+        
 def show_trust_request(request):
 
     openid_request = getRequest(request)
@@ -213,10 +230,6 @@ def show_trust_request(request):
 
     # see if the server requested SREG
     sreg_request = sreg.SRegRequest.fromOpenIDRequest(openid_request)
-    if sreg_request.allRequestedFields():
-        sreg_requested = sreg_request.allRequestedFields()
-    else:
-        sreg_requested = []
 
     try:
         # Stringify because template's ifequal can only compare to strings.
@@ -233,7 +246,8 @@ def show_trust_request(request):
         {'trust_root': trust_root,
          'trust_handler_url':getViewURL(request, trust_decision),
          'trust_root_valid': trust_root_valid,
-         'sreg_requested':sreg_requested,
+         'sreg_request':sreg_request,
+         'sreg_data' : sreg_fields(sreg_request, request.session['openid_user'])
          })
 
 def updateStoredTrust(request):
@@ -293,15 +307,8 @@ def createOpenIdResponse(request, allowed=False, remember=False,
     # add SREG fields if requested
     if allowed and sreg_request.allRequestedFields():
         # see if we're allowing anything
-        sreg_data = {}
-        if 'email' in allowed_fields:
-            sreg_data['email'] = request.session['openid_user'].email
-        if 'nickname' in allowed_fields:
-            sreg_data['nickname'] = \
-                request.session['openid_user'].get_profile().display_name()
-        if 'fullname' in allowed_fields:
-            sreg_data['fullname'] = \
-                request.session['openid_user'].get_profile().full_name()
+        sreg_data = sreg_fields(sreg_request, request.session['openid_user'],
+                                allowed_fields)
 
         sreg_resp = sreg.SRegResponse.extractResponse(sreg_request, 
                                                       sreg_data)

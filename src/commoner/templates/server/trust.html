@@ -49,17 +49,31 @@ trying to abuse your trust in their good name.</p>
 <form method="post"
       action="{{ trust_handler_url }}">
 
-<p>{% blocktrans %}<code>{{trust_root}}</code> has also asked for the following
-  registration information; which would you like to
-  share?{%endblocktrans %}</p>
+{% if sreg_request.wereFieldsRequested %}
 
+{% if sreg_request.policy_url %}
+<p>{% blocktrans with sreg_request.policy_url as policy_url%}
+<code>{{trust_root}}</code> has also asked for 
+  registration information which will be used under 
+<a href="{{ policy_url }}">this policy</a>. Which information would
+you like to share?{%endblocktrans %}</p>
 
-{% if sreg_requested %}
+{% else %} 
 
-{% for field in sreg_requested %}
+<p>{% blocktrans %}
+<code>{{trust_root}}</code> has also asked for registration
+information; the site did not provide information about how the
+information will be used. Which information would you like to
+share?{%endblocktrans %}</p>
+
+{% endif %}
+
+<p>
+{% for field, data in sreg_data.items %}
 <input type="checkbox" value="{{field}}" name="allow_sreg" />
-<label>{{field}}</label><br/>
+<label>{{field}} ({{data}})</label><br/>
 {% endfor %}
+</p>
 
 <p>{% blocktrans%}Verify your identity and share selected registration
   data with <code>{{trust_root}}</code>?{%endblocktrans %}</p>
