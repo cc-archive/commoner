@@ -35,10 +35,12 @@ setup(
                         'lxml',
                         'rdfadict',
                         'simplejson',
+                        'dmigrations',
                         # 'cc.license',
                         ],
 
-    dependency_links=['http://download.zope.org/distribution/',],
+    dependency_links=['http://download.zope.org/distribution/',
+                      'http://labs.creativecommons.org/~nathan/source/'],
 
     include_package_data = True,
     zip_safe = True,

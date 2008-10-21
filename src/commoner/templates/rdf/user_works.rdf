@@ -7,13 +7,13 @@
     <dct:license
         rdf:resource="http://creativecommons.org/licenses/by/3.0/" />
 
-{% for work in profile.content.all %}
+{% for work in profile.works.all %}
     <sioc:owner_of rdf:resource="{{base_url}}{{work.get_absolute_url}}" />
     <sioc:owner_of rdf:resource="{{work.url}}" />
 {% endfor %}
   </sioc:User>
 
-{% for work in profile.content.all %}
+{% for work in profile.works.all %}
   <ccnet:Registration rdf:about="{{base_url}}{{work.get_absolute_url}}">
     <dct:creator
       rdf:resource="{{base_url}}{{work.user.get_profile.get_absolute_url}}" />

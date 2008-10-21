@@ -27,7 +27,7 @@ from openid.fetchers import HTTPFetchingError
 from util import *
 import forms
 from django.contrib.sites.models import Site
-from models import TrustedRelyingParty
+from models import TrustedRelyingParty, TrustedMetadata
 
 def getServer(request):
     """
@@ -57,10 +57,10 @@ def login(request):
 
         try:
             if form.is_valid():
-                request.session['openid_expires'] = getOpenIdExpiration()
-                request.session['openid_user'] = \
-                    auth.models.User.objects.get(
-                    username__exact=form.cleaned_data['username'])
+                authorizeOpenId(request, 
+                                auth.models.User.objects.get(
+                        username__exact=form.cleaned_data['username'])
+                                )
 
                 return http.HttpResponseRedirect(next)
         except AssertionError:
@@ -134,56 +134,82 @@ def handleCheckIDRequest(request, openid_request):
     response.
     """
 
+    # store the incoming request object
+    setRequest(request, openid_request)
+
+    # check if we're operating in immediate mode
     if openid_request.immediate:
 
         # immediate mode -- see if the user is logged in
-        if (request.session.get('openid_user', False) and 
-            (request.session.get('openid_expires', datetime.now()) >
-             datetime.now())):
+        if openIdAuthorized(request):
             
             # user has logged into OpenID and auth hasn't expired yet
             # see if they've already said they want to trust this root
-            trusted = request.session['openid_user'].trusted_parties.filter(
-                root__exact = openid_request.trust_root).count() > 0
-            
-            if trusted:
-                openid_response = openid_request.answer(True)
-                return displayResponse(request, openid_response)
+            try:
+                trusted_site = getOpenIdUser(request).\
+                    trusted_parties.get(root = 
+                                        openid_request.trust_root)
+
+                # we trust this site
+                return createOpenIdResponse(request, True, False,
+                                            [m.field_name for m in
+                                            trusted_site.metadata.all()]
+                                            )
+
+
+            except TrustedRelyingParty.DoesNotExist, e:
+                pass
 
         # immediate mode -- we can't say yes, fall back to cancel
-        openid_response = openid_request.answer(False)
-        return displayResponse(request, openid_response)
+        return createOpenIdResponse(request, allowed=False)
 
     # Not immediate mode 
     # ------------------
     # Check if the user is authenticated and has enabled OpenID
-    if request.session.get('openid_user', False):
-        if request.session['openid_user'].get_profile():
-            # we have a user w/profile
-            if request.session['openid_user'].get_profile().get_absolute_url(
-                request=request) == openid_request.identity:
+    if openIdAuthorized(request):
 
-                # and it's the user we were asked to verify
-                if request.session.get('openid_expires', datetime.now()) > \
-                        datetime.now():
-                
-                    # and the authorization hasn't expired
-                
-                    # store the incoming request object
-                    setRequest(request, openid_request)
+        # and it's the user we were asked to verify
+        if getOpenIdUser(request).get_profile().get_absolute_url(
+            request=request) == openid_request.identity:
 
-                    # see if we've previously trusted this root
-                    if request.session['openid_user'].trusted_parties.filter(
-                        root__exact = openid_request.trust_root).count() > 0:
+            # see if we've previously trusted this root
+            try:
+                trusted_site = getOpenIdUser(request).\
+                    trusted_parties.get(root = 
+                                        openid_request.trust_root)
 
-                        # we trust this site
-                        return createOpenIdResponse(request, True)
+                # we trust this site
+                return createOpenIdResponse(request, True, False,
+                                            [m.field_name for m in
+                                             trusted_site.metadata.all()]
+                                            )
 
-                    return show_trust_request(request)
+            
+            except TrustedRelyingParty.DoesNotExist, e:
+                pass
+
+            return show_trust_request(request)
         
     # need to authenticate the user (or auth expired)
     return login_redirect(request, openid_request)
 
+def sreg_fields(sreg_request, user, allowed_fields = None):
+
+    sreg_data = {}
+
+    if allowed_fields is None:
+        allowed_fields = sreg_request.allRequestedFields()
+
+    if sreg_request.allRequestedFields():
+        if 'email' in allowed_fields:
+            sreg_data['email'] = user.email
+        if 'nickname' in allowed_fields:
+            sreg_data['nickname'] = user.get_profile().display_name()
+        if 'fullname' in allowed_fields:
+            sreg_data['fullname'] = user.get_profile().full_name()
+
+    return sreg_data
+        
 def show_trust_request(request):
 
     openid_request = getRequest(request)
@@ -193,7 +219,10 @@ def show_trust_request(request):
     # ZZZ make sure the logged in user matches the request IDP URL
     trust_root = openid_request.trust_root
     return_to = openid_request.return_to
-        
+
+    # see if the server requested SREG
+    sreg_request = sreg.SRegRequest.fromOpenIDRequest(openid_request)
+
     try:
         # Stringify because template's ifequal can only compare to strings.
         trust_root_valid = verifyReturnTo(trust_root, return_to) \
@@ -209,7 +238,25 @@ def show_trust_request(request):
         {'trust_root': trust_root,
          'trust_handler_url':getViewURL(request, trust_decision),
          'trust_root_valid': trust_root_valid,
+         'sreg_request':sreg_request,
+         'sreg_data' : sreg_fields(sreg_request, getOpenIdUser(request))
          })
+
+def updateStoredTrust(request):
+    """Store the trust_root and selected SREG fields."""
+
+    user = getOpenIdUser(request)
+    openid_request = getRequest(request)
+
+    # add the trust relationship for the trust_root
+    trusted_rp = TrustedRelyingParty(user=user, root=openid_request.trust_root)
+    trusted_rp.save()
+
+    # add the selected SREG fields
+    if request.REQUEST.getlist('allow_sreg'):
+        allowed_fields = request.REQUEST.getlist('allow_sreg')
+        for field in allowed_fields:
+            trusted_rp.metadata.add(TrustedMetadata(field_name=field))
 
 def trust_decision(request):
     """
@@ -219,13 +266,18 @@ def trust_decision(request):
     if request.method == 'POST':
         # process the result of the trust decision
         allowed = 'allow' in request.POST
-        remember = 'remember' in request.POST
+        remember = (request.POST.get('remember', 'off') == 'on')
 
-        return createOpenIdResponse(request, allowed, remember)
+        if allowed and remember:
+            updateStoredTrust(request)
+
+        return createOpenIdResponse(request, allowed, remember,
+                                    request.POST.getlist('allow_sreg'))
 
     return http.HttpResponseForbidden("Denied.")
 
-def createOpenIdResponse(request, allowed=False, remember=False):
+def createOpenIdResponse(request, allowed=False, remember=False,
+                         allowed_fields=[]):
     """Craft a response (allowed or not) and return it. Before rendering
     we clear the OpenID request from the session."""
 
@@ -234,18 +286,30 @@ def createOpenIdResponse(request, allowed=False, remember=False):
     openid_request = getRequest(request)
 
     # The identifier that this server can vouch for
-    response_identity = request.session['openid_user'].get_profile().\
+    response_identity = getOpenIdUser(request).get_profile().\
         get_absolute_url(request=request)
-
-    # check if the use wants to remember this root
-    if allowed and remember:
-        request.session['openid_user'].trusted_parties.add(
-            TrustedRelyingParty(root=openid_request.trust_root))
 
     # Generate a response with the appropriate answer.
     openid_response = openid_request.answer(allowed,
                                             identity=response_identity)
 
+    # populate extensions as necessary
+    sreg_request = sreg.SRegRequest.fromOpenIDRequest(openid_request)
+
+    if allowed:
+        # renew the authorization
+        authorizeOpenId(request)
+
+        if sreg_request.allRequestedFields():
+            # add SREG fields if requested
+            # see if we're allowing anything
+            sreg_data = sreg_fields(sreg_request, getOpenIdUser(request),
+                                    allowed_fields)
+
+            sreg_resp = sreg.SRegResponse.extractResponse(sreg_request, 
+                                                          sreg_data)
+            openid_response.addExtension(sreg_resp)
+            
     # clear the openId request
     setRequest(request, None)
 
@@ -338,11 +402,10 @@ def state(request):
     result = ["""<?xml version="1.0" encoding="UTF-8" ?>""",
               """<personaConfig version="1.0" serverIdentifier="creativecommons.net">"""]
 
-    if request.session.get('openid_user', False) and \
-            request.session['openid_user'].get_profile():
+    if openIdAuthorized(request):
 
         # someone is logged in; add their information
-        user = request.session['openid_user'].get_profile()
+        user = getOpenIdUser(request).get_profile()
         result.append(
             """<persona displayName="%s">%s</persona>""" % (
                 user.display_name(), user.get_absolute_url(request=request))

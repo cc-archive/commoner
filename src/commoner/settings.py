@@ -14,13 +14,14 @@ if not DEBUG:
 
 DATABASE_ENGINE = 'mysql'
 
-if DEBUG:
-    DATABASE_ENGINE = 'sqlite3'    # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
 DATABASE_NAME = 'commoner'
-DATABASE_USER = 'commoner'             # Not used with sqlite3.
-DATABASE_PASSWORD = 'creative'         # Not used with sqlite3.
+DATABASE_USER = 'root'             # Not used with sqlite3.
+DATABASE_PASSWORD = ''         # Not used with sqlite3.
 DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
 DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
+
+if DEBUG:
+    DATABASE_NAME='commoner_testing'
 
 TIME_ZONE = 'America/Chicago'
 
@@ -45,7 +46,7 @@ LEGAL_URL = '/l/'
 ADMIN_MEDIA_PREFIX = '/admin_media/'
 
 # Don't share this with anybody.
-SECRET_KEY = 'go8++&w46=wjfdsv6rm68=4rx$$o@mx9k3-bk82$nt7m$i8@8d'
+SECRET_KEY = 'your-secret-key-here'
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
@@ -59,6 +60,7 @@ ROOT_URLCONF = 'commoner.urls'
 
 
 INSTALLED_APPS = (
+    'dmigrations',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -91,6 +93,11 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "commoner.util.services_url_context",
     )
 
+# Migration Settings
+DMIGRATIONS_DIR = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '..', '..', 'migrations'))
+DISABLED_SYNCDB = True
+DMIGRATIONS_MYSQL_ENGINE = 'MyISAM'
 
 # Registration Settings
 SITE_ID=1
@@ -115,6 +122,8 @@ THUMBNAIL_PATH = 't'
 
 # BADGE_BASE_URL defines the root location of Badge views
 BADGE_BASE_URL = 'http://i.creativecommons.net/p/'
+if DEBUG:
+    BADGE_BASE_URL = '/i/p/'
 
 # Uncomment the following line and the corresponding line in urls.py
 # to serve badges from the same host.

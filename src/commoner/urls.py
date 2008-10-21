@@ -57,10 +57,6 @@ urlpatterns = patterns(
     url(r'^p/edit/$', 'commoner.profiles.views.edit_or_create', 
         name='profile_edit'),
 
-    # Profile badges
-    #url(r'^i/p/(?P<username>\w+)/$', 'commoner_i.views.badge',
-    #    name='profile_badge'),
-
     # Work Registration management
     url(r'^r/add/', 
         'commoner.works.views.add_or_edit',
@@ -79,6 +75,10 @@ urlpatterns = patterns(
     # Metadata scraper support
     url(r'^t/triples', 'commoner.scraper.views.triples',
         name='scrape_triples'),
+
+    # Profile badges
+    # (r'^i/', include('commoner_i.urls')),
+
 
     # OpenID Support
     url(r'^o/xrds/$', 'commoner.server.views.idpXrds', name="server_xrds"),
@@ -108,13 +108,20 @@ urlpatterns = patterns(
     url(r'^(?P<username>\w+)/works/$', 'commoner.profiles.views.works',
         name='profile_works'),
     url(r'^(?P<username>\w+)/works/rdf$', 'commoner.profiles.views.user_rdf',
-        name='profile_works'),
+        name='profile_rdf'),
     url(r'^(?P<username>\w+)/$', 'commoner.profiles.views.view',
         name='profile_view'),
     (r'^(?P<username>\w+)$', 'django.views.generic.simple.redirect_to',
         {'url':'/%(username)s/'}),
 
 )
+
+if settings.DEBUG:
+    # Profile badges
+    urlpatterns += patterns('',
+                            (r'^i/', include('commoner_i.urls')),
+                            )
+
 
 if settings.DEBUG:
     urlpatterns += patterns('',

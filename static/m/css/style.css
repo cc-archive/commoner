@@ -428,6 +428,7 @@ div#join_network h2 a:hover {
 .profile-info .story {
 	padding-top: 1em;
 }
+
 ul.licensed-works {
 	list-style: none;
 	/*border: 1px solid #ccc;
@@ -455,7 +456,12 @@ ul.licensed-works li.last {
 }
 
 #badge {
-	border-bottom: 1px solid #ddd;
+	/*border: 1px solid #ccc;
+	*/
+	background: url(/m/images/paper-green.png);
+	-moz-border-radius: 8px;
+	padding: 0.5em;
+	margin: 0;
 	padding-bottom: 1.5em;
 	margin-bottom: 2em;
 }
