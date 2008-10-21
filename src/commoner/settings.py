@@ -60,6 +60,7 @@ ROOT_URLCONF = 'commoner.urls'
 
 
 INSTALLED_APPS = (
+    'dmigrations',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -92,6 +93,11 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "commoner.util.services_url_context",
     )
 
+# Migration Settings
+DMIGRATIONS_DIR = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '..', '..', 'migrations'))
+DISABLED_SYNCDB = True
+DMIGRATIONS_MYSQL_ENGINE = 'MyISAM'
 
 # Registration Settings
 SITE_ID=1
