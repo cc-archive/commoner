@@ -108,7 +108,7 @@ urlpatterns = patterns(
     url(r'^(?P<username>\w+)/works/$', 'commoner.profiles.views.works',
         name='profile_works'),
     url(r'^(?P<username>\w+)/works/rdf$', 'commoner.profiles.views.user_rdf',
-        name='profile_works'),
+        name='profile_rdf'),
     url(r'^(?P<username>\w+)/$', 'commoner.profiles.views.view',
         name='profile_view'),
     (r'^(?P<username>\w+)$', 'django.views.generic.simple.redirect_to',

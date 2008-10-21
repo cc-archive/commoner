@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+{% block header %}
+{% if profile %}
+<link rel="meta" type="application/rdf+xml" 
+      href="{{base_url}}{% url profile_rdf username=profile.user.username %}" /> 
+{% endif %}
+{% endblock %}
+
 {% block head_title %}{% trans "Registered Works" %} -{% endblock %}
 
 {% block page_header %}
