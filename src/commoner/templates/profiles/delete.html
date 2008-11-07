@@ -22,7 +22,7 @@
     This <strong>can not</strong> be undone.{% endblocktrans %}</p>
 
     <input type="submit" name="confirm" value='{% trans "Yes, delete" %}' />
-    <a href="{{content.user.get_profile.get_absolute_url}}">
+    <a href="{{user.get_profile.get_absolute_url}}">
       {% trans "No, cancel" %}</a>
   </form>
 </div>
