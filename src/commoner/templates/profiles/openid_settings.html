@@ -11,6 +11,12 @@
 
 {% block body %}
 
+<h2>Your OpenID</h2>
+<p>Use the following URL to log into sites that support OpenID:</p>
+<blockquote>
+ <strong>https://{{site.domain}}/{{user.username}}</strong>
+</blockquote>
+
 <h2>Trusted Sites</h2>
 {% if user.trusted_parties.all %}
 <p>{% blocktrans with site.name as site_name %}
