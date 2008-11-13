@@ -103,6 +103,14 @@
 		 readonly="readonly" onclick="this.select()" type="text" />
         </p>
       </div>
+
+	  <h4>{% trans "Your OpenID URL" %}</h4>
+	  <div id="badge">
+	    <input type="text" onclick="this.select()" readonly="readonly" value='{{base_url}}/{{user.username}}' />
+		<p>
+			<small>&nbsp;{% trans "Use this URL to log into OpenID enabled sites." %}</small>
+		</p>
+	  </div>
     {% endifequal %}{% endif %}
 	{% ifequal user.username profile_user.username %}
 	<a class="add_work" title="add a work" 
