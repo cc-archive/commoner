@@ -79,7 +79,7 @@
   {% if user.is_authenticated %}
     {% ifequal user.username profile_user.username %}
       <h4>{% trans "Place this badge on your website" %}</h4>
-      <div id="badge">
+      <div class="profile-box">
 	<table style="margin: 0 auto;">
 	  <tr valign="bottom">
 	    <td align="center">
@@ -105,7 +105,7 @@
       </div>
 
 	  <h4>{% trans "Your OpenID URL" %}</h4>
-	  <div id="badge">
+	  <div class="profile-box">
 	    <input type="text" onclick="this.select()" readonly="readonly" value='{{base_url}}/{{user.username}}' />
 		<p>
 			<small>&nbsp;{% trans "Use this URL to log into OpenID enabled sites." %}</small>

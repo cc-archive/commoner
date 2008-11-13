@@ -455,7 +455,7 @@ ul.licensed-works li.last {
 	border: none;
 }
 
-#badge {
+.profile-box {
 	/*border: 1px solid #ccc;
 	*/
 	background: url(/m/images/paper-green.png);
@@ -466,17 +466,17 @@ ul.licensed-works li.last {
 	margin-bottom: 2em;
 }
 
-#badge img {
+.profile-box img {
 	float: left;
 	padding-right: 10px;
 }
 
-#badge p {
+.profile-box p {
 	margin-top: 0 !important;
 	line-height: 1.25em;
 }
 
-#badge input {
+.profile-box input {
 	margin-top: 10px;
 	width: 97%;
 }
