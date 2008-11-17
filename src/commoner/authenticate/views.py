@@ -10,12 +10,28 @@ from django.conf import settings
 from django.views.decorators.cache import never_cache
 from django.contrib import auth
 
+from commoner import util
+
 import forms
 
 def login(request, template_name='registration/login.html', 
           redirect_field_name=auth.REDIRECT_FIELD_NAME):
     "Displays the login form and handles the login action."
-    redirect_to = request.REQUEST.get(redirect_field_name, '')
+
+    # get the page to redirect to after login;
+    redirect_to = request.REQUEST.get(redirect_field_name, None)
+
+    if redirect_to is None:
+        # fall back to the referrer if no redirection is specified
+        redirect_to = request.META.get('HTTP_REFERER', '')
+        if redirect_to:
+            # make sure we were redirected from our own domain
+            base_url = util.getBaseURL(request)
+            if redirect_to.find(base_url) == 0:
+                redirect_to = redirect_to[len(base_url) - 1:]
+            else:
+                redirect_to = ""
+
     if request.method == "POST":
         form = forms.LoginForm(data=request.POST)
         if form.is_valid():
