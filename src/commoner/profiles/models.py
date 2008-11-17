@@ -83,7 +83,7 @@ class CommonerProfile(models.Model):
     @property
     def badge_img_url(self):
 
-        return "%s%s" % (settings.BADGE_BASE_URL, self.user.username)
+        return "%s%s/" % (settings.BADGE_BASE_URL, self.user.username)
 
     @property
     def thin_badge_img_url(self):
