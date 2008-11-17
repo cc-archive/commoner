@@ -10,7 +10,12 @@
 <link rel="openid.server" href="{{base_url}}{% url commoner.server.views.endpoint %}" />
 <link rel="openid2.provider" href="{{base_url}}{% url commoner.server.views.endpoint %}" />
 <link rel="meta" type="application/rdf+xml" 
-      href="{{base_url}}{% url profile_rdf username=profile_user.username %}" /> 
+      href="{{base_url}}{% url profile_rdf username=profile_user.username %}" />
+
+<link rel="alternate" type="application/atom+xml" 
+      title="Registered Works (Atom)" 
+      href="{% url profile_works_feed profile_user.username %}">
+
 <link about="" typeof="sioc:User" />
 {% endblock %}
 
@@ -127,6 +132,11 @@
       {% endfor %}
 
       <li style="text-align:right">
+      <a style="float:left;" href="{% url profile_works_feed profile_user.username %}">
+	<img src="/m/images/feed-icon-14x14.png" style="border:0px;"
+	     />
+      </a>
+
 	<a rel="rdf:seeAlso" 
 	   href="{% url commoner.profiles.views.works profile_user.username %}">
 	  <em>{% trans "All..." %}</em>
