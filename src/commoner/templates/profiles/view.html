@@ -13,7 +13,7 @@
       href="{{base_url}}{% url profile_rdf username=profile_user.username %}" />
 
 <link rel="alternate" type="application/atom+xml" 
-      title="Registered Works (Atom)" 
+      title="Registered Works for {{profile_user.get_profile.display_name }}" 
       href="{% url profile_works_feed profile_user.username %}">
 
 <link about="" typeof="sioc:User" />

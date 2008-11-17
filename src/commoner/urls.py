@@ -71,6 +71,8 @@ urlpatterns = patterns(
         name='lookup_work'),
     url(r'^r/(?P<id>\d+)/', 'commoner.works.views.view',
         name='view_work'),
+    url(r'^r/all/atom$', 'commoner.works.feeds.user_works_feed',
+        name='works_feed'),
     
     # Metadata scraper support
     url(r'^t/triples', 'commoner.scraper.views.triples',
@@ -100,7 +102,7 @@ urlpatterns = patterns(
     (r'^n/rdf$', 'django.views.generic.simple.direct_to_template',
      {'template':'rdf/ns.rdf',
       'mimetype':'application/rdf+xml'}),
-    url(r'^r/all.rdf$', 'commoner.profiles.views.all_rdf',
+    url(r'^r/all/rdf$', 'commoner.profiles.views.all_rdf',
         name='all_rdf'),
 
     # Profile views

@@ -3,13 +3,13 @@ from django.http import HttpResponse, Http404
 from django.contrib.syndication.feeds import Feed
 from django.contrib.syndication.feeds import FeedDoesNotExist
 from django.utils.feedgenerator import Atom1Feed
-
-
-
+from django.contrib.sites.models import Site
 
 from django.contrib.auth.models import User
 
 import models
+
+MAX_FEED_LENGTH=20
 
 class WorksFeed(Feed):
     feed_type = Atom1Feed
@@ -18,16 +18,21 @@ class WorksFeed(Feed):
         """Get the user object."""
 
         if len(params) != 1:
-            raise FeedDoesNotExist
+            return None
 
         return User.objects.get(username__exact=params[0])
 
     def title(self, user):
-        return "Registered Works for %s" % user.get_profile().display_name()
+
+        if user is not None:
+            return "Registered Works for %s" % user.get_profile().display_name()
+        else:
+            return "Registered Works"
 
     def link(self, user):
+
         if not user:
-            raise FeedDoesNotExist
+            return "/"
 
         return user.get_profile().get_absolute_url()
 
@@ -36,11 +41,14 @@ class WorksFeed(Feed):
 
     def items(self, user):
 
-        return models.Work.objects.filter(
-            registration__owner__exact = user.id)[:5]
+        if user is not None:
+            return models.Work.objects.filter(
+                registration__owner__exact = user.id)[:MAX_FEED_LENGTH]
+        else:
+            # all works registrations
+            return models.Work.objects.all()[:MAX_FEED_LENGTH]
 
-
-def user_works_feed(request, username):
+def user_works_feed(request, username=None):
     """Wrap the Django feed framework to bend it to our URL-pattern will."""
 
     slug='works'
