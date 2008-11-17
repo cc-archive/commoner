@@ -79,7 +79,6 @@ urlpatterns = patterns(
     # Profile badges
     # (r'^i/', include('commoner_i.urls')),
 
-
     # OpenID Support
     url(r'^o/xrds/$', 'commoner.server.views.idpXrds', name="server_xrds"),
     (r'^o/trust/$', 'commoner.server.views.trust_decision'),
@@ -109,6 +108,8 @@ urlpatterns = patterns(
         name='profile_works'),
     url(r'^(?P<username>\w+)/works/rdf$', 'commoner.profiles.views.user_rdf',
         name='profile_rdf'),
+    url(r'^(?P<username>\w+)/works/atom$', 'commoner.works.feeds.user_works_feed',
+        name='profile_works_feed'),
     url(r'^(?P<username>\w+)/$', 'commoner.profiles.views.view',
         name='profile_view'),
     (r'^(?P<username>\w+)$', 'django.views.generic.simple.redirect_to',
