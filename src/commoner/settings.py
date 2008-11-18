@@ -66,6 +66,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.admin',
     'django.contrib.sites',
+    'django.contrib.sitemaps',
     'commoner.registration',
     'commoner.profiles',
     'commoner.works',

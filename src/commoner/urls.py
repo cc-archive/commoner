@@ -3,7 +3,27 @@ from django.conf import settings
 
 from django.contrib import admin
 
+import profiles
+import works
+from django.contrib.sitemaps import GenericSitemap
+
 admin.autodiscover()
+
+profile_info = dict(
+    queryset = profiles.models.CommonerProfile.objects.all(),
+    date_field = 'updated',
+    )
+work_info = dict(
+    queryset = works.models.Work.objects.all(),
+    date_field = 'updated',
+    )
+
+sitemaps = {
+    'profiles':GenericSitemap(profile_info, priority=0.75,
+                              changefreq='weekly'),
+    'works':GenericSitemap(work_info, priority=1.0,
+                           changefreq='weekly'),
+    }
 
 urlpatterns = patterns(
     '',
@@ -12,6 +32,9 @@ urlpatterns = patterns(
     (r'^seatbeltcfg.xml$', 'django.views.generic.simple.direct_to_template',
      {'template':'seatbeltcfg.xml', 'mimetype':'text/xml'}),
     (r'^admin/(.*)', admin.site.root),
+    
+    (r'^sitemap.xml', 'django.contrib.sitemaps.views.sitemap',
+     {'sitemaps':sitemaps}),
     
     # Help pages
     (r'^h/about/$', 'django.views.generic.simple.direct_to_template',
