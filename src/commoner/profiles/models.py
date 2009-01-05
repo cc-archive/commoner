@@ -13,7 +13,10 @@ from django.utils.translation import ugettext_lazy as _
 from commoner.util import getBaseURL, get_storage
 
 class CommonerProfile(models.Model):
-    
+    """A User [Commoner] Profile; models additional user information 
+    and provides convenience methods for accessing User properties."""
+
+
     user = models.ForeignKey(User, unique=True)
 
     nickname = models.CharField(_("Screen name"), max_length=255, blank=True)
@@ -38,9 +41,20 @@ class CommonerProfile(models.Model):
         return self.nickname or self.user.username
 
     def full_name(self):
+        """Return the full name associated with this profile; this is 
+        a convenience that concatenates the first and last name from the
+        User model."""
+
         return u"%s %s" % (self.user.first_name, self.user.last_name)
 
+    @property
+    def email(self):
+        return self.user.email
+
     def get_absolute_url(self, request=None):
+        """Return the absolute URL for the CommonerProfile; if a
+        request is specified, returns a fully qualified URL."""
+        
         if request is None:
             return reverse('profile_view', args=(self.user.username, ) )
         else:
@@ -70,6 +84,8 @@ class CommonerProfile(models.Model):
 
     @property
     def works(self):
+        """Return a list of Work objects registered with this 
+        profile's User."""
 
         import commoner.works
 
@@ -78,15 +94,20 @@ class CommonerProfile(models.Model):
 
     @property
     def registrations(self):
+        """Return a list of Registration objects registered for this
+        profile's User."""
+
         return self.user.registrations
 
     @property
     def badge_img_url(self):
+        """Return the fully qualified URL for the member badge."""
 
         return "%s%s/" % (settings.BADGE_BASE_URL, self.user.username)
 
     @property
     def thin_badge_img_url(self):
+        """Return the fully qualified URL for the slim member badge."""
 
         return "%s%s/80x15/" % (settings.BADGE_BASE_URL, self.user.username)
     

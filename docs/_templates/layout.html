@@ -1,0 +1,20 @@
+{% extends "!layout.html" %}
+{% block footer %}
+
+<div class="footer">
+  &copy; Copyright 2008, Creative Commons; documentation released
+  under <a rel="license"
+	 href="http://creativecommons.org/licenses/by/3.0/">CC BY
+    3.0</a>, source released under
+  the <a href="http://www.fsf.org/licensing/licenses/agpl.html">AGPL</a>.<br/>
+
+    {%- if last_updated %}
+      {% trans last_updated=last_updated|e %}Last updated on {{ last_updated }}.{% endtrans %}
+    {%- endif %}
+    {%- if show_sphinx %}
+      {% trans sphinx_version=sphinx_version|e %}Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> {{ sphinx_version }}.{% endtrans %}
+    {%- endif %}
+
+</div>
+
+{% endblock %}
