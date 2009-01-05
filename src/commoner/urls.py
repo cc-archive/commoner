@@ -3,7 +3,27 @@ from django.conf import settings
 
 from django.contrib import admin
 
+import profiles
+import works
+from django.contrib.sitemaps import GenericSitemap
+
 admin.autodiscover()
+
+profile_info = dict(
+    queryset = profiles.models.CommonerProfile.objects.all(),
+    date_field = 'updated',
+    )
+work_info = dict(
+    queryset = works.models.Work.objects.all(),
+    date_field = 'updated',
+    )
+
+sitemaps = {
+    'profiles':GenericSitemap(profile_info, priority=0.75,
+                              changefreq='weekly'),
+    'works':GenericSitemap(work_info, priority=1.0,
+                           changefreq='weekly'),
+    }
 
 urlpatterns = patterns(
     '',
@@ -12,6 +32,11 @@ urlpatterns = patterns(
     (r'^seatbeltcfg.xml$', 'django.views.generic.simple.direct_to_template',
      {'template':'seatbeltcfg.xml', 'mimetype':'text/xml'}),
     (r'^admin/(.*)', admin.site.root),
+    
+    url(r'^sitemap.xml', 'django.contrib.sitemaps.views.sitemap',
+     {'sitemaps':sitemaps}, name='sitemap_xml'),
+    (r'^robots.txt', 'django.views.generic.simple.direct_to_template',
+     {'template':'robots.txt', 'mimetype':'text/plain'}),
     
     # Help pages
     (r'^h/about/$', 'django.views.generic.simple.direct_to_template',
@@ -71,6 +96,8 @@ urlpatterns = patterns(
         name='lookup_work'),
     url(r'^r/(?P<id>\d+)/', 'commoner.works.views.view',
         name='view_work'),
+    url(r'^r/all/atom$', 'commoner.works.feeds.user_works_feed',
+        name='works_feed'),
     
     # Metadata scraper support
     url(r'^t/triples', 'commoner.scraper.views.triples',
@@ -78,7 +105,6 @@ urlpatterns = patterns(
 
     # Profile badges
     # (r'^i/', include('commoner_i.urls')),
-
 
     # OpenID Support
     url(r'^o/xrds/$', 'commoner.server.views.idpXrds', name="server_xrds"),
@@ -101,7 +127,7 @@ urlpatterns = patterns(
     (r'^n/rdf$', 'django.views.generic.simple.direct_to_template',
      {'template':'rdf/ns.rdf',
       'mimetype':'application/rdf+xml'}),
-    url(r'^r/all.rdf$', 'commoner.profiles.views.all_rdf',
+    url(r'^r/all/rdf$', 'commoner.profiles.views.all_rdf',
         name='all_rdf'),
 
     # Profile views
@@ -109,6 +135,8 @@ urlpatterns = patterns(
         name='profile_works'),
     url(r'^(?P<username>\w+)/works/rdf$', 'commoner.profiles.views.user_rdf',
         name='profile_rdf'),
+    url(r'^(?P<username>\w+)/works/atom$', 'commoner.works.feeds.user_works_feed',
+        name='profile_works_feed'),
     url(r'^(?P<username>\w+)/$', 'commoner.profiles.views.view',
         name='profile_view'),
     (r'^(?P<username>\w+)$', 'django.views.generic.simple.redirect_to',

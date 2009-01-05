@@ -2,5 +2,30 @@ Commoner Profiles
 =================
 
 .. automodule:: commoner.profiles.models
-   :members:
-   :undoc-members:
+
+   .. autoclass:: CommonerProfile
+      :members: full_name, email, save, active, works, registrations,
+      		badge_img_url, thin_badge_img_url
+      :undoc-members:
+
+      .. attribute:: user
+
+         The User object this profile is attached to.
+
+      .. attribute:: nickname
+
+      .. attribute:: photo
+
+      .. attribute:: homepage
+
+      .. attribute:: location
+
+      .. attribute:: story
+
+      .. attribute:: created
+    
+      .. attribute:: updated
+    
+      .. attribute:: expires
+
+      .. automethod:: get_absolute_url(request=None)
