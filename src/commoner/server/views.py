@@ -286,8 +286,12 @@ def createOpenIdResponse(request, allowed=False, remember=False,
     openid_request = getRequest(request)
 
     # The identifier that this server can vouch for
-    response_identity = getOpenIdUser(request).get_profile().\
-        get_absolute_url(request=request)
+    openid_user = getOpenIdUser(request)
+    if openid_user is not None:
+        response_identity = openid_user.get_profile().\
+            get_absolute_url(request=request)
+    else:
+        response_identity = None
 
     # Generate a response with the appropriate answer.
     openid_response = openid_request.answer(allowed,
