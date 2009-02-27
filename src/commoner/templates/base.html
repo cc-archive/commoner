@@ -88,6 +88,16 @@
       </div>
       {% endif %}
       
+	{% if site_messages %}
+      <div class="messages site_messages">
+	<ul>
+	  {% for message in site_messages %}
+	  <li>{{ message|safe }}</li>
+	  {% endfor %}
+	</ul>
+      </div>
+      {% endif %}
+
       <div class="block page clear">
         {% block body %}
         {% endblock %}

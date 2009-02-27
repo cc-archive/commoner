@@ -74,6 +74,7 @@ INSTALLED_APPS = (
     'commoner.server',
     'commoner.authenticate',
     'commoner.help',
+	'commoner.broadcast',
 )
 
 TEMPLATE_LOADERS = (
@@ -92,6 +93,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.media",
     "commoner.util.base_url_context",
     "commoner.util.services_url_context",
+    "commoner.broadcast.context_processors.messages",
     )
 
 # Migration Settings
