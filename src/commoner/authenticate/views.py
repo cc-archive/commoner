@@ -28,7 +28,7 @@ def login(request, template_name='registration/login.html',
             # make sure we were redirected from our own domain
             base_url = util.getBaseURL(request)
             if redirect_to.find(base_url) == 0 \
-                and not redirect_to.find("logout"):
+                and not redirect_to.find(settings.LOGOUT_URL):
                 redirect_to = redirect_to[len(base_url) - 1:]
             else:
                 redirect_to = ""
