@@ -98,6 +98,8 @@ urlpatterns = patterns(
         name='view_work'),
     url(r'^r/all/atom$', 'commoner.works.feeds.user_works_feed',
         name='works_feed'),
+    url(r'^r/recent/atom$', 'commoner.works.feeds.recent_updates_feed',
+        name='recent_updates_feed'),
     
     # Metadata scraper support
     url(r'^t/triples', 'commoner.scraper.views.triples',

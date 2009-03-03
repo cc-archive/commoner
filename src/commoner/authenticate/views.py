@@ -22,6 +22,7 @@ def login(request, template_name='registration/login.html',
     redirect_to = request.REQUEST.get(redirect_field_name, None)
 
     if redirect_to is None:
+        # redirect_to = reverse('profile_view', args=[''])
         # fall back to the referrer if no redirection is specified
         redirect_to = request.META.get('HTTP_REFERER', '')
         if redirect_to:

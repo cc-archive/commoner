@@ -32,7 +32,7 @@ class Registration(models.Model):
 class Feed(Registration):
 
     url = models.URLField(max_length=255, blank=False, verify_exists=False)
-    license = models.URLField(max_length=255, blank=True)    
+    license = models.URLField(max_length=255, blank=True)
 
 
 
