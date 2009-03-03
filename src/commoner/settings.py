@@ -108,7 +108,9 @@ ACCOUNT_ACTIVATION_DAYS = 14
 
 AUTH_PROFILE_MODULE = "profiles.CommonerProfile"
 DEFAULT_FROM_EMAIL = "noreply@creativecommons.net"
-LOGIN_REDIRECT_URL = '/'
+
+LOGIN_REDIRECT_VIEW = 'profile_view'
+
 LOGIN_URL = '/a/login/'
 LOGOUT_URL = '/a/login/'
 
