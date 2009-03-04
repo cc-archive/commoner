@@ -1,11 +1,11 @@
 from django.contrib import admin
-from commoner.broadcast.models import SimpleAlert, RobustAlert
+from commoner.broadcast.models import Alert, Message
 
-class SimpleAlertAdmin(admin.ModelAdmin):
+class AlertAdmin(admin.ModelAdmin):
     list_display = ['author', 'message', 'date_created']
 
-class RobustAlertAdmin(admin.ModelAdmin):
-    list_display = ['title', 'author', 'start_date', 'end_date', 'enabled']
+class MessageAdmin(admin.ModelAdmin):
+    list_display = ['title', 'start_date', 'end_date', 'enabled']
 
-admin.site.register(SimpleAlert, SimpleAlertAdmin)
-admin.site.register(RobustAlert, RobustAlertAdmin)
+admin.site.register(Alert, AlertAdmin)
+admin.site.register(Message, MessageAdmin)
