@@ -72,7 +72,10 @@ urlpatterns = patterns(
         'django.contrib.auth.views.password_reset_complete',),
     url(r'^a/delete/$', 'commoner.profiles.views.delete',
         name='delete_account'),
-
+    url(r'^a/ack/(?P<message_id>\d+)', 
+        'commoner.broadcast.views.ack',
+        name='ack_message'),
+        
     (r'^a/register/complete/$', 
      'django.views.generic.simple.direct_to_template',
      {'template':'registration/success.html'}),
@@ -131,7 +134,8 @@ urlpatterns = patterns(
       'mimetype':'application/rdf+xml'}),
     url(r'^r/all/rdf$', 'commoner.profiles.views.all_rdf',
         name='all_rdf'),
-
+        
+        
     # Profile views
     url(r'^(?P<username>\w+)/works/$', 'commoner.profiles.views.works',
         name='profile_works'),
