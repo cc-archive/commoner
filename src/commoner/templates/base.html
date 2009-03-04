@@ -92,7 +92,9 @@
       <div class="messages site_messages">
 	<ul>
 	  {% for message in site_messages %}
-	  <li>{{ message|safe }}</li>
+	  	<li>{{ message.content|safe }}
+			{% if message.ack_req %} <a href="{% url ack_message message.id %}">Hide this message.</a>{% endif %}
+		</li>
 	  {% endfor %}
 	</ul>
       </div>
