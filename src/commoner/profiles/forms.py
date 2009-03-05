@@ -27,7 +27,9 @@ class ChangeEmailForm(forms.Form):
         verified_input = self.cleaned_data.get('new_email_verify')
         
         if new_email != verified_input:
-            raise forms.ValidationError(_(u'Your email addresses did not match, try again.'))
+            # if new_email is None then we don't care about the error
+            if new_email:
+                raise forms.ValidationError(_(u'Your email addresses did not match, try again.'))
         
         return self.cleaned_data['new_email_verify']
 
