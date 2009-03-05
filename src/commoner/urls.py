@@ -84,6 +84,8 @@ urlpatterns = patterns(
     # Profile management
     url(r'^p/edit/$', 'commoner.profiles.views.edit_or_create', 
         name='profile_edit'),
+    url(r'^p/email/$', 'commoner.profiles.views.change_email', 
+        name='change_email'),    
 
     # Work Registration management
     url(r'^r/add/', 
