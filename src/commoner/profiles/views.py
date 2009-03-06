@@ -184,8 +184,6 @@ def change_email(request):
         
         if form.is_valid():
             
-            print "the form was valid"
-            
             user = request.user
             user.email = form.cleaned_data['new_email']
             user.save()
