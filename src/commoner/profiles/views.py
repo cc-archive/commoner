@@ -2,6 +2,7 @@ from django.shortcuts import render_to_response
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
+from django.core.mail import send_mail
 from django.http import Http404, HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
@@ -10,6 +11,7 @@ from django.views.generic.list_detail import object_list
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.conf import settings
 
 import forms
 import models
@@ -184,9 +186,17 @@ def change_email(request):
         
         if form.is_valid():
             
+            newaddr = form.cleaned_data['new_email']
             user = request.user
-            user.email = form.cleaned_data['new_email']
+            oldaddr = user.email
+            user.email = newaddr
             user.save()
+            
+            send_mail('Your CC Network E-mail has changed', 
+                      'Hey, your address was updated to %s' % newaddr, 
+                      settings.DEFAULT_FROM_EMAIL,
+                      [oldaddr, newaddr])
+            
             
             return HttpResponseRedirect(reverse('profile_view', 
                                         args=(request.user.username,)))
