@@ -31,7 +31,9 @@ class CommonerProfile(models.Model):
     created = models.DateTimeField(default=datetime.now())
     updated = models.DateTimeField()
     expires = models.DateTimeField(blank=True, null=False)
-
+    
+    redirect_https = models.BooleanField(default=True)
+    
     def __unicode__(self):
         if self.nickname:
             return u"%s (%s)" % (self.user.username, self.nickname)

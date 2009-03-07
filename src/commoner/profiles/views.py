@@ -184,15 +184,13 @@ def change_email(request):
         
         if form.is_valid():
             
-            print "the form was valid"
-            
             user = request.user
             user.email = form.cleaned_data['new_email']
             user.save()
             
             return HttpResponseRedirect(reverse('profile_view', 
                                         args=(request.user.username,)))
-      
+    
     else:
         # just display the form
         form = forms.ChangeEmailForm()
