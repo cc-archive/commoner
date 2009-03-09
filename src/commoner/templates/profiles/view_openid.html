@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load thumbnail %}
+
+{% block header %}
+<script src="/m/javascript/badge.js"
+	type="text/javascript">
+</script>
+<meta http-equiv="x-xrds-location" content="{{base_url}}{% url server_xrds %}" />
+<link rel="openid.server" href="{{base_url}}{% url commoner.server.views.endpoint %}" />
+<link rel="openid2.provider" href="{{base_url}}{% url commoner.server.views.endpoint %}" />
+<link rel="meta" type="application/rdf+xml" 
+      href="{{base_url}}{% url profile_rdf username=profile_user.username %}" />
+
+<link rel="alternate" type="application/atom+xml" 
+      title="Registered Works for {{profile_user.get_profile.display_name }}" 
+      href="{% url profile_works_feed profile_user.username %}">
+
+<link about="" typeof="sioc:User" />
+{% endblock %}
+
+{% block head_title %}{{ profile.display_name }} -{% endblock %}
+
+{% block page_header %}
+  <span rel="sioc:member_of" property="foaf:nick" resource="/">{{ profile.display_name }}</span>
+{% endblock %}
+{% block page_sub_header %}
+  {% if profile.active %}
+    {% trans "Active" %} 
+  {% else %}
+    {% trans "Inactive" %}
+  {% endif %}
+{% endblock %}
+
+{% block extra_nav %}
+{% if user.is_authenticated %}
+  {% ifequal user.username profile_user.username %}
+<li><a href="{% url profile_edit %}">{% trans "Edit Profile" %}</a></li>
+<li><a href="{% url openid_settings %}">{% trans "OpenID Settings" %}</a></li>
+  {% endifequal %}{% endif %}
+{% endblock %}
+
+{% block body %}
+<div class="column-wide column profile-info">
+
+  {% if profile %}
+   {% if profile.photo %}
+  <div rel="foaf:depiction">
+    <img src="{{ profile.photo|scale }}" 
+         alt="[ {{ profile_user.first_name }}]" 
+         />
+  </div>
+   {% else %}
+    <img src="/m/images/blank-avatar.jpg" alt="[ {{ profile_user.first_name }} ]" />
+   {% endif %}
+
+   <ul>
+     <li property="sioc:name cc:attributionName">{{ profile.full_name }}</li>
+     <li><a rel="foaf:homepage" href="{{profile.homepage}}">{{ profile.homepage }}</a></li>
+     <li>{{ profile.location }}</li>
+   </ul>
+  <div class="clear story">
+    {% if profile.story %}
+    <h2>{% trans "My CC Story" %}</h2>
+    <a href="{{profile.get_absolute_url}}" rel="cc:attributionURL"></a>
+    {{ profile.story|escape|linebreaks }}
+    {% endif %}
+
+  </div>
+
+  {% else %}
+  
+  <p>
+    <ul>
+      <li property="sioc:name cc:attributionName">{{ profile_user.first_name }} {{ profile_user.last_name}}</li>
+    </ul>
+  </p>
+
+  {% endif %}
+
+</div>
+
+<div class="column-narrow column">
+  {% if user.is_authenticated %}
+    {% ifequal user.username profile_user.username %}
+      <h4>{% trans "Place this badge on your website" %}</h4>
+      <div class="profile-box">
+	<table style="margin: 0 auto;">
+	  <tr valign="bottom">
+	    <td align="center">
+	      <img src="{{ profile.badge_img_url }}" 
+		   alt="CC Network - Badge" title="CC Network"
+		   border="0" /><br/>
+	      <input type="radio" checked="checked" name="badge_size" 
+		     onclick="swapbutton('{{profile.badge_img_url}}')" />
+	    </td>
+	    <td align="center">
+	      <img src="{{ profile.thin_badge_img_url }}" 
+		   alt="CC Network - Badge" title="CC Network"
+		   border="0" /><br/>
+	      <input type="radio" name="badge_size"
+		     onclick="swapbutton('{{profile.thin_badge_img_url}}')" />
+	    </td>
+	  </tr>
+	</table>
+        <p>
+          <input id="network-badge" value='{% include "profiles/badge.html" %}' 
+		 readonly="readonly" onclick="this.select()" type="text" />
+        </p>
+		<p>
+			<small>&nbsp;{% trans "Use this HTML to embed the badge on your website." %}</small>
+		</p>
+      </div>
+
+	  <h4>{% trans "Your OpenID URL" %}</h4>
+	  <div class="profile-box">
+	    <input type="text" onclick="this.select()" readonly="readonly" value='{{base_url}}/{{user.username}}' />
+		<p>
+			<small>&nbsp;{% trans "Use this URL to log into OpenID enabled sites." %}</small>
+		</p>
+	  </div>
+    {% endifequal %}{% endif %}
+	{% ifequal user.username profile_user.username %}
+	<a class="add_work" title="add a work" 
+	   href="{% url add_content %}">{% trans "Add" %}</a>
+	{% endifequal %}
+    <h4>{% trans "Works I Have Licensed" %}</h4>
+    {% if profile.works.all %}
+    <ul class="licensed-works">
+      {% for work in profile.works.all|slice:":5" %}
+         {% include "works/list_item.html" %}
+      {% endfor %}
+
+      <li style="text-align:right">
+      <a style="float:left;" href="{% url profile_works_feed profile_user.username %}">
+	<img src="/m/images/feed-icon-14x14.png" style="border:0px;"
+	     />
+      </a>
+
+	<a rel="rdf:seeAlso" 
+	   href="{% url commoner.profiles.views.works profile_user.username %}">
+	  <em>{% trans "All..." %}</em>
+	</a>
+      </li>
+    </ul>
+    {% else %}
+      {% ifequal user.username username %}
+        <span class="no-works">
+	  {% url add_content as url_add_work %}
+	  {% blocktrans %}
+	  You haven't registered any licensed
+	  works at this time; would you like to 
+	  <a href="{{ url_add_work }}">add one</a>?</span>
+	{% endblocktrans %}
+      {% else %}
+        <span class="no-works">{% blocktrans %}
+	  This user has not registered any licensed works.
+	{% endblocktrans %}</span>
+      {% endifequal %}
+    {% endif %}
+</div>
+
+<br style="clear: both" />
+
+{% endblock %}
