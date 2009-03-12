@@ -21,6 +21,14 @@
 <link about="" typeof="sioc:User" />
 {% endblock %}
 
+{% block messages %}
+	{% if from_http %}
+	<ul>
+		<li>You must use HTTPS when using this page as your OpenID identifier.</li>
+	</ul>
+	{% endif %}
+{% endblock %}
+
 {% block head_title %}{{ profile.display_name }} -{% endblock %}
 
 {% block page_header %}
