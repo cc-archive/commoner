@@ -7,8 +7,10 @@
 	type="text/javascript">
 </script>
 <meta http-equiv="x-xrds-location" content="{{base_url}}{% url server_xrds %}" />
+{% if not from_http %}
 <link rel="openid.server" href="{{base_url}}{% url commoner.server.views.endpoint %}" />
 <link rel="openid2.provider" href="{{base_url}}{% url commoner.server.views.endpoint %}" />
+{% endif %}
 <link rel="meta" type="application/rdf+xml" 
       href="{{base_url}}{% url profile_rdf username=profile_user.username %}" />
 

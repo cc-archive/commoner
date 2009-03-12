@@ -49,12 +49,12 @@ ADMIN_MEDIA_PREFIX = '/admin_media/'
 SECRET_KEY = 'your-secret-key-here'
 
 MIDDLEWARE_CLASSES = (
-    'commoner.middleware.security.SSLMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.doc.XViewMiddleware',
+    'commoner.middleware.security.SSLMiddleware',
 )
 
 ROOT_URLCONF = 'commoner.urls'

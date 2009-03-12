@@ -123,10 +123,21 @@ def view(request, username, public_profile_field=None,
     if public_profile_field is not None and \
        not getattr(profile_obj, public_profile_field, False):
         profile_obj = None
-
+    
+    if profile_obj.redirect_https and not request.is_secure():
+        newurl = "https://%s%s" % (get_host(request),request.get_full_path())
+        return HttpResponseRedirect(newurl)        
+    
+    # determine if the user is being allowed a redirect
+    from_http = request.session.get('from_http', False)
+    # this should really be in the middleware but oh well
+    if from_http:
+        del request.session['from_http']
+    
     return render_to_response(template_name,
                               { 'profile'  : profile_obj,
                                 'profile_user' : user,
+                                'from_http' : from_http,
                                 'username' : username},
                               context_instance=RequestContext(request))
 
