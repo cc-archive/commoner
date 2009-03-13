@@ -10,6 +10,7 @@ from django.views.generic.list_detail import object_list
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.conf import settings
 
 import forms
 import models
@@ -124,20 +125,15 @@ def view(request, username, public_profile_field=None,
        not getattr(profile_obj, public_profile_field, False):
         profile_obj = None
     
-    if profile_obj.redirect_https and not request.is_secure():
-        newurl = "https://%s%s" % (get_host(request),request.get_full_path())
-        return HttpResponseRedirect(newurl)        
-    
-    # determine if the user is being allowed a redirect
     from_http = request.session.get('from_http', False)
     # this should really be in the middleware but oh well
     if from_http:
-        del request.session['from_http']
+        del request.session['from_http']    
     
     return render_to_response(template_name,
                               { 'profile'  : profile_obj,
-                                'profile_user' : user,
                                 'from_http' : from_http,
+                                'profile_user' : user,
                                 'username' : username},
                               context_instance=RequestContext(request))
 
@@ -195,13 +191,17 @@ def change_email(request):
         
         if form.is_valid():
             
-            user = request.user
-            user.email = form.cleaned_data['new_email']
+            newaddr = form.cleaned_data['new_email']
+            user = profile.user
+            oldaddr = user.email
+            user.email = newaddr
             user.save()
             
+            models.CommonerProfile.objects.send_email_changed(newaddr, oldaddr)
+                        
             return HttpResponseRedirect(reverse('profile_view', 
                                         args=(request.user.username,)))
-    
+      
     else:
         # just display the form
         form = forms.ChangeEmailForm()
