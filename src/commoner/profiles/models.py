@@ -51,8 +51,6 @@ class CommonerProfile(models.Model):
     updated = models.DateTimeField()
     expires = models.DateTimeField(blank=True, null=False)
 
-    redirect_https = models.BooleanField(default=True)
-    
     objects = CommonerProfileManager()
         
     def __unicode__(self):
