@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.http import HttpResponsePermanentRedirect, HttpResponseNotFound, get_host
+from django.http import HttpResponsePermanentRedirect, HttpResponseForbidden, get_host
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
@@ -25,7 +25,7 @@ class SSLMiddleware:
                 
                 # if the user is not legacy then refuse to allow http access
                 if profile.redirect_https:
-                    return HttpResponseNotFound('This key is invalid, use https.')
+                    return HttpResponseForbidden('<h1>Forbidden</h1>This key is invalid, use https.')
                 else:
                     request.session['from_http'] = True
          
