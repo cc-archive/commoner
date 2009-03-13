@@ -21,19 +21,13 @@
 <link about="" typeof="sioc:User" />
 {% endblock %}
 
-{% block messages %}
-	{% if from_http %}
-	<ul>
-		<li>You must use HTTPS when using this page as your OpenID identifier.</li>
-	</ul>
-	{% endif %}
-{% endblock %}
 
 {% block head_title %}{{ profile.display_name }} -{% endblock %}
 
 {% block page_header %}
   <span rel="sioc:member_of" property="foaf:nick" resource="/">{{ profile.display_name }}</span>
 {% endblock %}
+
 {% block page_sub_header %}
   {% if profile.active %}
     {% trans "Active" %} 
@@ -64,6 +58,8 @@
     <img src="/m/images/blank-avatar.jpg" alt="[ {{ profile_user.first_name }} ]" />
    {% endif %}
 
+
+	
    <ul>
      <li property="sioc:name cc:attributionName">{{ profile.full_name }}</li>
      <li><a rel="foaf:homepage" href="{{profile.homepage}}">{{ profile.homepage }}</a></li>
