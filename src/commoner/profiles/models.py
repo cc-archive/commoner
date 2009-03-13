@@ -7,10 +7,29 @@ from django.db import models
 from django.db.models import permalink
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
+from django.template.loader import render_to_string
 
 from commoner.util import getBaseURL, get_storage
+
+class CommonerProfileManager(models.Manager):
+
+    def send_email_changed(self, newaddr, oldaddr):
+        """Send the changed email notification."""
+
+        from django.core.mail import send_mail
+
+        current_site = Site.objects.get_current()
+        subject = render_to_string('profiles/email/subject.txt',
+                                   {'site':current_site}).strip()
+        message = render_to_string('profiles/email/content.txt',
+                                   {'newaddr':newaddr})
+
+        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, 
+                  [newaddr, oldaddr])
+    
 
 class CommonerProfile(models.Model):
     """A User [Commoner] Profile; models additional user information 
@@ -33,7 +52,9 @@ class CommonerProfile(models.Model):
     expires = models.DateTimeField(blank=True, null=False)
     
     redirect_https = models.BooleanField(default=True)
-    
+
+    objects = CommonerProfileManager()
+        
     def __unicode__(self):
         if self.nickname:
             return u"%s (%s)" % (self.user.username, self.nickname)
