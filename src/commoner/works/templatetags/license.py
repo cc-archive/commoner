@@ -1,5 +1,6 @@
 from django import template
 from django.template.defaultfilters import stringfilter
+import re
 
 try:
     import cc.license
@@ -13,10 +14,18 @@ register = template.Library()
 def license_button(license_url):
     """Return the license button URL for a given license."""
 
+    # strip trailing slash
     base_url = license_url.rsplit('/',1)[0]
-    return "%s/80x15.png" % base_url.replace(
-        'http://creativecommons.org/licenses/',
-        'http://i.creativecommons.org/l/')
+    
+    base_urls = {
+        'http://creativecommons.org/licenses/':'http://i.creativecommons.org/l/',
+        'http://creativecommons.org/publicdomain/zero/1.0':'http://i.creativecommons.org/l/publicdomain',
+    }
+    
+    pattern = re.compile('|'.join(map(re.escape, base_urls)))
+    img_url = pattern.sub(lambda m: base_urls[m.group(0)], base_url)
+       
+    return "%s/80x15.png" % img_url
 
 
 @register.filter
