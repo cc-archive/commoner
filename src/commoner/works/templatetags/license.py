@@ -18,8 +18,10 @@ def license_button(license_url):
     base_url = license_url.rsplit('/',1)[0]
     
     base_urls = {
-        'http://creativecommons.org/licenses/':'http://i.creativecommons.org/l/',
-        'http://creativecommons.org/publicdomain/zero/1.0':'http://i.creativecommons.org/l/publicdomain',
+        'http://creativecommons.org/licenses/':
+            'http://i.creativecommons.org/l/',
+        'http://creativecommons.org/publicdomain/zero/1.0':
+            'http://i.creativecommons.org/l/publicdomain',
     }
     
     pattern = re.compile('|'.join(map(re.escape, base_urls)))
