@@ -1,12 +1,16 @@
 from django.conf import settings
 from django.http import HttpResponsePermanentRedirect, HttpResponseForbidden, get_host
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, MiddlewareNotUsed
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 
 from commoner.profiles.views import view as view_profile
 
 class SSLMiddleware:
+    
+    def __init__(self):
+        if settings.TESTING:
+            raise MiddlewareNotUsed
     
     def process_view(self, request, view_func, view_args, view_kwargs):
         
@@ -33,11 +37,11 @@ class SSLMiddleware:
             newurl = "https://%s%s" % (get_host(request),request.get_full_path())
             return HttpResponsePermanentRedirect(newurl)
     
-    # TODO - get the process response to work correctly!
-    # def process_response(self, request, response):
-    #     
-    #     # check if from_http cookie is set
-    #     if request.session.get('from_http', False):
-    #         del request.session['from_http']
-    #         
-    #     return response
+    #TODO - get the process response to work correctly!
+    def process_response(self, request, response):
+        
+        # check if from_http cookie is set
+        if request.session.get('from_http', False):
+            request.session['from_http'] = False
+        
+        return response
