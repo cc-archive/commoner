@@ -1,6 +1,9 @@
 import os
+import sys
 
 DEBUG = TEMPLATE_DEBUG = True
+
+TESTING = len(filter(lambda x: x.find('test') != -1, sys.argv)) > 0
 
 ADMINS = (
     ('Nathan R. Yergler', 'nathan@creativecommons.org'),
@@ -54,7 +57,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.doc.XViewMiddleware',
-    'commoner.middleware.security.SSLMiddleware',
+    'commoner.middleware.security.SSLMiddleware'
 )
 
 ROOT_URLCONF = 'commoner.urls'
