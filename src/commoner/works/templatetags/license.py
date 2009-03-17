@@ -21,7 +21,7 @@ def license_button(license_url):
         'http://creativecommons.org/licenses/':
             'http://i.creativecommons.org/l/',
         'http://creativecommons.org/publicdomain/zero/1.0':
-            'http://i.creativecommons.org/l/publicdomain',
+            'http://i.creativecommons.org/p/',
     }
     
     pattern = re.compile('|'.join(map(re.escape, base_urls)))
