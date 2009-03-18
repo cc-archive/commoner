@@ -5,11 +5,10 @@
 <script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/yahoo-dom-event/yahoo-dom-event.js"></script> 
 <script src="http://yui.yahooapis.com/2.6.0/build/connection/connection-min.js"></script> 
 <script src="http://yui.yahooapis.com/2.6.0/build/json/json-min.js"></script> 
-
+<script src="http://yui.yahooapis.com/2.7.0/build/selector/selector-min.js"></script> 
 <script>
 YAHOO.namespace("cc");
-
-
+var domquery = "";
 YAHOO.cc.license_uri = function(license_uri) {
 
     // ensure that the license_uri is canonical
@@ -73,10 +72,14 @@ YAHOO.cc.success = function (response) {
     
     // see if the work URL has metadata
     if ( (metadata.subjects.indexOf(work_url) > -1) ) {
-
-        YAHOO.util.Dom.get('id_license_url').value = YAHOO.cc.get_license(metadata.triples, work_url);
-        YAHOO.util.Dom.get('id_title').value = YAHOO.cc.get_title(metadata.triples, work_url);
-
+		// this was for the previous method that used an input
+        //YAHOO.util.Dom.get('id_license_url').value = YAHOO.cc.get_license(metadata.triples, work_url);
+        //YAHOO.util.Dom.get('id_title').value = YAHOO.cc.get_title(metadata.triples, work_url);	
+				
+		this.domquery = "option[value|='" + YAHOO.cc.get_license(metadata.triples, work_url) + "']";
+		console.log(this.domquery);
+		var option = YAHOO.util.Selector.query(this.domquery)
+		option[0].selected = true;
     }
 
 } // success
@@ -180,12 +183,12 @@ YAHOO.util.Event.onDOMReady(YAHOO.cc.load);
     </div>
 
     <div class="field">
-      <span class="field_label">{{form.license_url.label}}</span>
-      {{form.license_url}}
-      <div class="help">{{form.license_url.help_text}}</div>
-      {% if form.license_url.errors %}
+      <span class="field_label">{{form.license_name.label}}</span>
+      {{form.license_name}}
+      <div class="help">{{form.license_name.help_text}}</div>
+      {% if form.license_name.errors %}
       <div class="errors">
-	{{ form.license_url.errors }}
+	{{ form.license_name.errors }}
       </div>
       {% endif %}
     </div>

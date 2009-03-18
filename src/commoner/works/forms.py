@@ -4,11 +4,19 @@ from django.utils.translation import ugettext_lazy as _
 from commoner.works import models
 
 class SimpleRegistrationForm(forms.Form):
-
-
+    
+    licenses = (
+        ('http://creativecommons.org/licenses/by/3.0/', 'Attribution'),
+        ('http://creativecommons.org/licenses/by-sa/3.0/', 'Attribution Share Alike'),
+        ('http://creativecommons.org/licenses/by-nd/3.0/', 'Attribution No Derivatives'),
+        ('http://creativecommons.org/licenses/by-nc/3.0/', 'Attribution Non-Commercial'),
+        ('http://creativecommons.org/licenses/by-nc-sa/3.0/', 'Attribution Non-Commercial Share Alike'),
+        ('http://creativecommons.org/licenses/by-nc-nd/3.0/', 'Attribution Non-Commercial No Derivatives'),
+    )
+    
     url = forms.URLField(label=_(u"Work URL"))
     title = forms.CharField(max_length=255)
-    license_url = forms.URLField(label=_(u"License"),
+    license_name = forms.ChoiceField(licenses,label=_(u"License"),
                              help_text=_(u"The URL of the license your work is available under."))
 
     claim_all = forms.BooleanField(label=_(u"Register all works beginning with this URL?"),
