@@ -5,7 +5,10 @@
 <meta http-equiv="x-xrds-location" content="{{base_url}}{% url server_xrds %}" />
 <link rel="seatbelt.config" type="application/xml" 
       href="{{base_url}}/seatbeltcfg.xml" />
-
+		
+<link rel="alternate" type="application/atom+xml" 
+      title="Registered Works (site)" 
+      href="{% url works_feed %}">
 {% endblock %}
 
 {% block page_icon_class %}index{% endblock %}
