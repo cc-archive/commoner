@@ -14,6 +14,7 @@
 
 {% block extra_nav %}
 <li><a href="{% url password_change %}">{% trans "Change Password" %}</a></li>
+<li><a href="{% url change_email %}">{% trans "Change E-mail Address" %}</a></li>
 <li><a href="{% url delete_account %}">{% trans "Delete My Account" %}</a></li>
 {% endblock %}
 {% block page_icon_class %}edit{% endblock %}

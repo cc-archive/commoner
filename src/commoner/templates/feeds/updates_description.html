@@ -1,0 +1,8 @@
+{% load i18n %}
+<a href="{{obj.registration.owner.get_profile.get_absolute_url}}">
+  {{ obj.registration.owner.get_profile.display_name }}
+</a> updated <a href="{{ obj.url }}">{{ obj.url }}</a> on 
+<a href="{{ obj.get_absolute_url}} ">{{ obj.updated|date:"l, F j, Y" }}</a>.
+{% if obj.has_leading_glob %}
+{% trans "Includes all works beginning with this URL." %}
+{% endif %}

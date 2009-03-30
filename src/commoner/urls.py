@@ -72,7 +72,10 @@ urlpatterns = patterns(
         'django.contrib.auth.views.password_reset_complete',),
     url(r'^a/delete/$', 'commoner.profiles.views.delete',
         name='delete_account'),
-
+    url(r'^a/ack/(?P<message_id>\d+)', 
+        'commoner.broadcast.views.ack',
+        name='ack_message'),
+        
     (r'^a/register/complete/$', 
      'django.views.generic.simple.direct_to_template',
      {'template':'registration/success.html'}),
@@ -81,6 +84,8 @@ urlpatterns = patterns(
     # Profile management
     url(r'^p/edit/$', 'commoner.profiles.views.edit_or_create', 
         name='profile_edit'),
+    url(r'^p/email/$', 'commoner.profiles.views.change_email', 
+        name='change_email'),    
 
     # Work Registration management
     url(r'^r/add/', 
@@ -98,6 +103,8 @@ urlpatterns = patterns(
         name='view_work'),
     url(r'^r/all/atom$', 'commoner.works.feeds.user_works_feed',
         name='works_feed'),
+    url(r'^r/recent/atom$', 'commoner.works.feeds.recent_updates_feed',
+        name='recent_updates_feed'),
     
     # Metadata scraper support
     url(r'^t/triples', 'commoner.scraper.views.triples',
@@ -129,7 +136,8 @@ urlpatterns = patterns(
       'mimetype':'application/rdf+xml'}),
     url(r'^r/all/rdf$', 'commoner.profiles.views.all_rdf',
         name='all_rdf'),
-
+        
+        
     # Profile views
     url(r'^(?P<username>\w+)/works/$', 'commoner.profiles.views.works',
         name='profile_works'),

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load thumbnail %}
+
+{% block head_title %}{% trans "Profile" %} -{% endblock %}
+
+{% block page_header %}
+  {% trans "Edit E-mail Address" %}
+{% endblock %}
+
+{% block extra_nav %}
+<li><a href="{% url password_change %}">{% trans "Change Password" %}</a></li>
+<li><a href="{% url change_email %}">{% trans "Change E-mail Address" %}</a></li>
+<li><a href="{% url delete_account %}">{% trans "Delete My Account" %}</a></li>
+{% endblock %}
+{% block page_icon_class %}edit{% endblock %}
+{% block body %}
+
+
+<div class="form">
+  <form method="post" enctype="multipart/form-data" action=".">
+
+    <h3>{% trans "Change E-Mail Address" %}</h3>
+
+    <div class="field" id="new_email">
+      <span class="field_label">{{form.new_email.label}}: </span>
+      {{form.new_email}}
+      {% if form.new_email.errors %}
+      <div class="errors">
+	{{ form.new_email.errors }}
+      </div>
+      {% endif %}
+    </div>
+	<div class="field" id="new_email_verify">
+      <span class="field_label">{{form.new_email_verify.label}}: </span>
+      {{form.new_email_verify}}
+      {% if form.new_email_verify.errors %}
+      <div class="errors">
+	{{ form.new_email_verify.errors }}
+      </div>
+      {% endif %}
+    </div>
+
+
+    <input type="submit" value='{% trans "Change Email Address" %}' />
+    {% if profile %}
+    &nbsp;<a href="{% url profile_view user.username %}">
+      {% trans "cancel" %}</a>
+    {% endif %}
+  </form>
+</div>
+
+{% endblock %}

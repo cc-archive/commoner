@@ -16,7 +16,7 @@ DATABASE_ENGINE = 'mysql'
 
 DATABASE_NAME = 'commoner'
 DATABASE_USER = 'root'             # Not used with sqlite3.
-DATABASE_PASSWORD = ''         # Not used with sqlite3.
+DATABASE_PASSWORD = 'doigoid'         # Not used with sqlite3.
 DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
 DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
 
@@ -74,6 +74,7 @@ INSTALLED_APPS = (
     'commoner.server',
     'commoner.authenticate',
     'commoner.help',
+	'commoner.broadcast',
 )
 
 TEMPLATE_LOADERS = (
@@ -92,6 +93,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.media",
     "commoner.util.base_url_context",
     "commoner.util.services_url_context",
+    "commoner.broadcast.context_processors.messages",
     )
 
 # Migration Settings
@@ -106,8 +108,11 @@ ACCOUNT_ACTIVATION_DAYS = 14
 
 AUTH_PROFILE_MODULE = "profiles.CommonerProfile"
 DEFAULT_FROM_EMAIL = "noreply@creativecommons.net"
-LOGIN_REDIRECT_URL = '/'
+
+LOGIN_REDIRECT_VIEW = 'profile_view'
+
 LOGIN_URL = '/a/login/'
+LOGOUT_URL = '/a/login/'
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 OPENID_ENABLE_DAYS = 0.25

@@ -48,6 +48,18 @@ class WorksFeed(Feed):
             # all works registrations
             return models.Work.objects.all()[:MAX_FEED_LENGTH]
 
+class RecentUpdatesFeed(Feed):
+    
+    feed_type = Atom1Feed
+    title = "Recently Updated Works"    
+    link = ""
+    
+    def description(self):
+        return ""
+    
+    def items(self):
+        return models.Work.objects.order_by("-updated")[:MAX_FEED_LENGTH]
+
 def user_works_feed(request, username=None):
     """Wrap the Django feed framework to bend it to our URL-pattern will."""
 
@@ -58,6 +70,13 @@ def user_works_feed(request, username=None):
     except FeedDoesNotExist:
         raise Http404, "Invalid feed parameters. Slug %r is valid, but other parameters, or lack thereof, are not." % slug
 
+    response = HttpResponse(mimetype=feedgen.mime_type)
+    feedgen.write(response, 'utf-8')
+    return response
+
+def recent_updates_feed(request):
+    """ Wrap the Django feed framework to bend it to our URL-pattern will. """    
+    feedgen = RecentUpdatesFeed(slug='updates', request=request).get_feed()
     response = HttpResponse(mimetype=feedgen.mime_type)
     feedgen.write(response, 'utf-8')
     return response

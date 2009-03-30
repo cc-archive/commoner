@@ -17,9 +17,6 @@
         <link about="{{ services.lookup_work }}" 
 	      rel="sioc_service:service_protocol"
 	      href="http://wiki.creativecommons.org/work-lookup" />
-	<link rel="alternate" type="application/atom+xml" 
-	      title="Registered Works (site)" 
-	      href="{% url works_feed %}">
 
     {% block header %}
 
@@ -88,6 +85,18 @@
       </div>
       {% endif %}
       
+	{% if site_messages %}
+      <div class="messages site_messages">
+	<ul>
+	  {% for message in site_messages %}
+	  	<li>{{ message.content|safe }}
+			{% if message.ack_req %} <a href="{% url ack_message message.id %}">Hide this message.</a>{% endif %}
+		</li>
+	  {% endfor %}
+	</ul>
+      </div>
+      {% endif %}
+
       <div class="block page clear">
         {% block body %}
         {% endblock %}

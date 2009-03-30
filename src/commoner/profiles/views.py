@@ -10,6 +10,7 @@ from django.views.generic.list_detail import object_list
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.conf import settings
 
 import forms
 import models
@@ -171,3 +172,35 @@ def user_rdf(request, username):
                               context_instance=RequestContext(request),
                               mimetype='application/rdf+xml')
 
+@login_required
+def change_email(request):
+    """Edit or create the profile for the given username."""
+    try:
+        profile = request.user.get_profile()
+    except ObjectDoesNotExist:
+        profile=None
+            
+    if request.method == 'POST':
+        form = forms.ChangeEmailForm(data=request.POST)
+        
+        if form.is_valid():
+            
+            newaddr = form.cleaned_data['new_email']
+            user = profile.user
+            oldaddr = user.email
+            user.email = newaddr
+            user.save()
+            
+            models.CommonerProfile.objects.send_email_changed(newaddr, oldaddr)
+                        
+            return HttpResponseRedirect(reverse('profile_view', 
+                                        args=(request.user.username,)))
+      
+    else:
+        # just display the form
+        form = forms.ChangeEmailForm()
+    
+    return render_to_response('profiles/edit_email.html',
+        { 'form': form },
+          context_instance=RequestContext(request)
+    )
