@@ -7,6 +7,9 @@ from commoner.profiles import models
 class TestOpenID(django.test.TestCase):
     fixtures = ['test_https_users.json', ]
     
+    def tearDown(self):
+        settings.TESTING = True
+    
     def test_no_redirect_occurs(self):
         """ Verify that if the user is not legacy, 
         that a redirect is not allowed """
