@@ -20,7 +20,7 @@ def license_button(license_url):
     base_urls = {
         'http://creativecommons.org/licenses':
             'http://i.creativecommons.org/l',
-        'http://creativecommons.org/publicdomain/zero/1.0':
+        'http://creativecommons.org/publicdomain':
             'http://i.creativecommons.org/p',
     }
     
