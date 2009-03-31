@@ -87,6 +87,11 @@
       
 	{% if site_messages %}
       <div class="messages site_messages">
+	{% if site_messages|length_is:"1" %}
+		{% for message in site_messages %}
+		<p>{{ message.content|safe }} <a href="{% url ack_message message.id %}">Hide this message.</a></p>
+		{% endfor %}
+	{% else %}
 	<ul>
 	  {% for message in site_messages %}
 	  	<li>{{ message.content|safe }}
@@ -94,6 +99,7 @@
 		</li>
 	  {% endfor %}
 	</ul>
+	{% endif %}
       </div>
       {% endif %}
 
