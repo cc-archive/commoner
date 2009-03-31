@@ -32,6 +32,15 @@ class TestOpenID(django.test.TestCase):
         # lets just verify that the 301 points there
         self.assertEquals(response['Location'], 'https://testserver/testing/')
         
+        """
+        TODO
+        we should really be testing to make sure that the
+        content on the page that was redirected to does not
+        contain any OpenID header information, but this would
+        require the testrunner running on HTTPS or at least
+        'pretend' to be, which from what I can tell is impossible.
+        """
+        
     def test_argv_test_mode(self):
         """ Ensure the logic in settings.py properly detects the 'test' arg """
         self.assertTrue(settings.TESTING)    
