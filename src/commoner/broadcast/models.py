@@ -49,9 +49,9 @@ class Message(models.Model):
     
     title = models.CharField(_('title'), max_length=100)
     content = models.TextField(_('message content'))
-    start_date = models.DateTimeField(_('start date'))
-    end_date = models.DateTimeField(_('end date'))
-    ack_req = models.BooleanField(_('acknowledgment required?'))
+    start_date = models.DateTimeField(_('start date'), default=datetime.now)
+    end_date = models.DateTimeField(_('end date'), blank=True, null=True)
+    ack_req = models.BooleanField(_('acknowledgment required?'), default=False)
     enabled = models.BooleanField(_('enabled?'), default=False)
     
     objects = models.Manager()
