@@ -16,8 +16,8 @@ class Alert(models.Model):
     """
     
     author = models.ForeignKey(User)
-    message = models.CharField(_('message'), max_length=200)
-    date_created = models.DateTimeField(_('date created'))
+    message = models.CharField(_('Message'), max_length=200)
+    date_created = models.DateTimeField(_('Date created'))
         
     def __unicode__(self):
         return self.message
@@ -47,12 +47,12 @@ class Message(models.Model):
     Message
     """
     
-    title = models.CharField(_('title'), max_length=100)
-    content = models.TextField(_('message content'))
-    start_date = models.DateTimeField(_('start date'), default=datetime.now)
-    end_date = models.DateTimeField(_('end date'), blank=True, null=True)
-    ack_req = models.BooleanField(_('acknowledgment required?'), default=False)
-    enabled = models.BooleanField(_('enabled?'), default=False)
+    title = models.CharField(_('Title'), max_length=100)
+    content = models.TextField(_('Message content'))
+    start_date = models.DateTimeField(_('Start date'), default=datetime.now)
+    end_date = models.DateTimeField(_('End date'), blank=True, null=True)
+    ack_req = models.BooleanField(_('Acknowledgment required?'), default=False)
+    enabled = models.BooleanField(_('Enabled?'), default=False)
     
     objects = models.Manager()
     active = MessageManager()
