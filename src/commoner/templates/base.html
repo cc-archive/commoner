@@ -89,13 +89,15 @@
       <div class="messages site_messages">
 	{% if site_messages|length_is:"1" %}
 		{% for message in site_messages %}
-		<p>{{ message.content|safe }} <a href="{% url ack_message message.id %}">Hide this message.</a></p>
+		<p>{{ message.content|safe }} <a href="{% url ack_message message.id %}">{% blocktrans %}Hide this message.{% endblocktrans %}</a></p>
 		{% endfor %}
 	{% else %}
 	<ul>
 	  {% for message in site_messages %}
 	  	<li>{{ message.content|safe }}
-			{% if message.ack_req %} <a href="{% url ack_message message.id %}">Hide this message.</a>{% endif %}
+			{% if message.ack_req %}
+			<a href="{% url ack_message message.id %}">{% blocktrans %}Hide this message.{% endblocktrans %}</a>
+			{% endif %}
 		</li>
 	  {% endfor %}
 	</ul>
