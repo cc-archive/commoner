@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-10 16:15-0500\n"
+"POT-Creation-Date: 2009-03-31 16:26-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,47 +16,99 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: profiles/forms.py:9
+#: authenticate/forms.py:8
+msgid "Remember me"
+msgstr ""
+
+#: broadcast/models.py:19 help/forms.py:8
+msgid "Message"
+msgstr ""
+
+#: broadcast/models.py:20
+msgid "Date created"
+msgstr ""
+
+#: broadcast/models.py:50
+msgid "Title"
+msgstr ""
+
+#: broadcast/models.py:51
+msgid "Message content"
+msgstr ""
+
+#: broadcast/models.py:52
+msgid "Start date"
+msgstr ""
+
+#: broadcast/models.py:53
+msgid "End date"
+msgstr ""
+
+#: broadcast/models.py:54
+msgid "Acknowledgment required?"
+msgstr ""
+
+#: broadcast/models.py:55
+msgid "Enabled?"
+msgstr ""
+
+#: help/forms.py:6
+msgid "Email address"
+msgstr ""
+
+#: help/forms.py:7
+msgid "Message subject"
+msgstr ""
+
+#: profiles/forms.py:21
+msgid "This email is already in use. Please choose another."
+msgstr ""
+
+#: profiles/forms.py:32
+msgid "Your email addresses did not match, try again."
+msgstr ""
+
+#: profiles/forms.py:38
 msgid "Remove photo?"
 msgstr ""
 
-#: profiles/models.py:19
+#: profiles/models.py:42
 msgid "Screen name"
 msgstr ""
 
-#: profiles/models.py:20
+#: profiles/models.py:43
 msgid "Photo"
 msgstr ""
 
-#: profiles/models.py:22
+#: profiles/models.py:46
 msgid "Homepage"
 msgstr ""
 
-#: profiles/models.py:23
+#: profiles/models.py:47
 msgid "Location"
 msgstr ""
 
-#: registration/admin.py:12
+#: registration/admin.py:14
 msgid "Adding a new registration will send a welcome email."
 msgstr ""
 
-#: registration/forms.py:11
+#: registration/forms.py:12 server/forms.py:17
 msgid "Username"
 msgstr ""
 
-#: registration/forms.py:13
+#: registration/forms.py:14 server/forms.py:18
 msgid "Password"
 msgstr ""
 
-#: registration/forms.py:15
+#: registration/forms.py:16
 msgid "Password (again):"
 msgstr ""
 
-#: registration/forms.py:17
+#: registration/forms.py:18
 msgid "I have read and agreed to the Terms of Use."
 msgstr ""
 
-#: registration/forms.py:20
+#: registration/forms.py:21
 msgid ""
 "By agreeing to the Terms of Use you affirm you are at least 13 years of "
 "age.  If you are between 13 years old and the age of majority in your "
@@ -64,33 +116,37 @@ msgid ""
 "guardian's express permission to create an account as required by CC."
 msgstr ""
 
-#: registration/forms.py:22
+#: registration/forms.py:23
 msgid "You must read and agree to the Terms of Use."
 msgstr ""
 
-#: registration/forms.py:39
+#: registration/forms.py:41
 msgid "Usernames must be at least two characters long."
 msgstr ""
 
-#: registration/forms.py:42
-msgid "Usernames can only contain letters, numbers and underscores"
+#: registration/forms.py:45
+msgid "Usernames can only contain letters, numbers and underscores."
 msgstr ""
 
-#: registration/forms.py:47
+#: registration/forms.py:49 registration/forms.py:57
 msgid "This username is already taken. Please choose another."
 msgstr ""
 
-#: registration/forms.py:59
-#: templates/registration/complete_registration.html:15
+#: registration/forms.py:69
+#: templates/registration/complete_registration.html:12
 msgid "This registration code has already been used."
 msgstr ""
 
-#: registration/forms.py:64
+#: registration/forms.py:74
 msgid "You must type the same password each time"
 msgstr ""
 
-#: registration/models.py:79
+#: registration/models.py:81
 msgid "User registration"
+msgstr ""
+
+#: server/forms.py:34
+msgid "Incorrect password."
 msgstr ""
 
 #: templates/404.html:4
@@ -106,32 +162,37 @@ msgstr ""
 msgid "An error occured"
 msgstr ""
 
-#: templates/base.html:39 templates/index.html:36
+#: templates/base.html:41 templates/index.html:42
 msgid "Join"
 msgstr ""
 
-#: templates/base.html:42 templates/registration/login.html:3
+#: templates/base.html:44 templates/registration/login.html:3
 #: templates/registration/login.html:4
 msgid "Login"
 msgstr ""
 
-#: templates/base.html:46
+#: templates/base.html:50
 msgid "My Profile"
 msgstr ""
 
-#: templates/base.html:49 templates/registration/logout.html:4
+#: templates/base.html:53 templates/registration/logout.html:4
 msgid "Logout"
 msgstr ""
 
-#: templates/base.html:53
+#: templates/base.html:57
 msgid "Help"
 msgstr ""
 
-#: templates/base.html:85
+#: templates/base.html:92 templates/base.html.py:99
+msgid "Hide this message."
+msgstr ""
+
+#: templates/base.html:120
 msgid ""
 "\n"
 "            Except where otherwise <a class=\"subfoot\"\n"
-"            href=\"/h/privacy/\">noted</a>, content on this site is\n"
+"            href=\"http://creativecommons.org/privacy\">noted</a>, content "
+"on this site is\n"
 "            licensed under a <a rel=\"license\"\n"
 "            href=\"http://creativecommons.org/licenses/by/3.0/\"\n"
 "            class=\"subfoot\">Creative Commons Attribution 3.0\n"
@@ -146,23 +207,23 @@ msgid ""
 "\t    "
 msgstr ""
 
-#: templates/index.html:11
+#: templates/index.html:17
 msgid "Welcome to<br/>The Creative Commons Network"
 msgstr ""
 
-#: templates/index.html:18
+#: templates/index.html:24
 msgid "OpenID Profile"
 msgstr ""
 
-#: templates/index.html:20 templates/help/about.html:23
+#: templates/index.html:26 templates/help/about.html:23
 msgid "Identify Your Works"
 msgstr ""
 
-#: templates/index.html:22
+#: templates/index.html:28
 msgid "Share Your CC Story"
 msgstr ""
 
-#: templates/index.html:25
+#: templates/index.html:31
 msgid ""
 "Creative Commons, at its core, is about supporting global\n"
 "participatory culture. By joining the Creative Commons Network, you\n"
@@ -173,7 +234,7 @@ msgid ""
 "today!</a>"
 msgstr ""
 
-#: templates/index.html:43
+#: templates/index.html:49
 msgid ""
 "<a href=\"http://creativecommons.org/\">Creative Commons</a> is a\n"
 "non-profit organization that works to increase the amount of content\n"
@@ -187,6 +248,12 @@ msgid ""
 "a more flexible \"some rights reserved.\" To learn more about Creative\n"
 "Commons, please visit\n"
 "our <a href=\"http://creativecommons.org/\">website</a>."
+msgstr ""
+
+#: templates/feeds/updates_description.html:7
+#: templates/feeds/works_description.html:7 templates/works/list_item.html:13
+#: templates/works/view.html:33
+msgid "Includes all works beginning with this URL."
 msgstr ""
 
 #: templates/help/about.html:3
@@ -241,6 +308,35 @@ msgid ""
 "    important to you</a>.\n"
 msgstr ""
 
+#: templates/help/about.html:43
+msgid "Need More Help?"
+msgstr ""
+
+#: templates/help/about.html:45
+#, python-format
+msgid ""
+"Have more questions or need additional information?\n"
+"      Email <a href=\"mailto:webmaster@creativecommons.net"
+"\">webmaster@creativecommons.net</a>\n"
+"    or use <a href=\"%(contact_form_url)s\">our contact form</a>."
+msgstr ""
+
+#: templates/help/contact.html:4 templates/help/contact_thanks.html:4
+msgid "Contact Us"
+msgstr ""
+
+#: templates/help/contact.html:50
+msgid "Send Message"
+msgstr ""
+
+#: templates/help/contact.html:51 templates/works/edit.html:194
+msgid "Cancel"
+msgstr ""
+
+#: templates/help/contact_thanks.html:10
+msgid "Your message has been sent.  Thanks for contacting us."
+msgstr ""
+
 #: templates/profiles/delete.html:5
 msgid "Delete Your Account"
 msgstr ""
@@ -260,12 +356,15 @@ msgid ""
 "    This <strong>can not</strong> be undone."
 msgstr ""
 
-#: templates/profiles/delete.html:24 templates/works/delete.html:24
+#: templates/profiles/delete.html:24
+#: templates/server/delete_trusted_party.html:18
+#: templates/works/delete.html:24
 msgid "Yes, delete"
 msgstr ""
 
-#: templates/profiles/delete.html:26 templates/server/trust.html:53
-#: templates/works/delete.html:26
+#: templates/profiles/delete.html:26
+#: templates/server/delete_trusted_party.html:20
+#: templates/server/trust.html:98 templates/works/delete.html:26
 msgid "No, cancel"
 msgstr ""
 
@@ -278,11 +377,43 @@ msgid ""
 "\">webmaster@creativecommons.org</a>."
 msgstr ""
 
-#: templates/profiles/edit_profile.html:5
+#: templates/profiles/edit_email.html:5 templates/profiles/edit_profile.html:5
 msgid "Profile"
 msgstr ""
 
-#: templates/profiles/edit_profile.html:9 templates/profiles/view.html:31
+#: templates/profiles/edit_email.html:8
+msgid "Edit E-mail Address"
+msgstr ""
+
+#: templates/profiles/edit_email.html:12
+#: templates/profiles/edit_profile.html:16
+msgid "Change Password"
+msgstr ""
+
+#: templates/profiles/edit_email.html:13
+#: templates/profiles/edit_profile.html:17
+msgid "Change E-mail Address"
+msgstr ""
+
+#: templates/profiles/edit_email.html:14
+#: templates/profiles/edit_profile.html:18
+msgid "Delete My Account"
+msgstr ""
+
+#: templates/profiles/edit_email.html:23
+msgid "Change E-Mail Address"
+msgstr ""
+
+#: templates/profiles/edit_email.html:45
+msgid "Change Email Address"
+msgstr ""
+
+#: templates/profiles/edit_email.html:48
+#: templates/profiles/edit_profile.html:122
+msgid "cancel"
+msgstr ""
+
+#: templates/profiles/edit_profile.html:9 templates/profiles/view.html:38
 msgid "Edit Profile"
 msgstr ""
 
@@ -290,45 +421,37 @@ msgstr ""
 msgid "Create Profile"
 msgstr ""
 
-#: templates/profiles/edit_profile.html:16
-msgid "Change Password"
-msgstr ""
-
-#: templates/profiles/edit_profile.html:17
-msgid "Delete My Account"
-msgstr ""
-
-#: templates/profiles/edit_profile.html:26
+#: templates/profiles/edit_profile.html:27
 msgid "About You"
 msgstr ""
 
-#: templates/profiles/edit_profile.html:58
+#: templates/profiles/edit_profile.html:59
 msgid "Profile Photo"
 msgstr ""
 
-#: templates/profiles/edit_profile.html:66
+#: templates/profiles/edit_profile.html:67
 msgid "Replace photo"
 msgstr ""
 
-#: templates/profiles/edit_profile.html:69
+#: templates/profiles/edit_profile.html:70
 msgid "Choose photo"
 msgstr ""
 
-#: templates/profiles/edit_profile.html:87
+#: templates/profiles/edit_profile.html:88
 msgid "Your CC Story"
 msgstr ""
 
-#: templates/profiles/edit_profile.html:90
+#: templates/profiles/edit_profile.html:91
 msgid ""
 "Tell us how you've used CC to share your work,\n"
 "\tfind work to re-use, and expand the Commons."
 msgstr ""
 
-#: templates/profiles/edit_profile.html:102
+#: templates/profiles/edit_profile.html:103
 msgid "Notice"
 msgstr ""
 
-#: templates/profiles/edit_profile.html:104
+#: templates/profiles/edit_profile.html:105
 msgid ""
 "To the extent protected by copyright, all\n"
 "\t  information and content you post or upload to this page or\n"
@@ -344,43 +467,72 @@ msgid ""
 "\t  and otherwise on this website."
 msgstr ""
 
-#: templates/profiles/edit_profile.html:118
+#: templates/profiles/edit_profile.html:119
 msgid "Save Profile"
 msgstr ""
 
-#: templates/profiles/edit_profile.html:121
-msgid "cancel"
+#: templates/profiles/openid_settings.html:8
+#: templates/profiles/openid_settings.html:10 templates/profiles/view.html:39
+msgid "OpenID Settings"
 msgstr ""
 
-#: templates/profiles/view.html:22
+#: templates/profiles/openid_settings.html:22
+#, python-format
+msgid ""
+"\n"
+"%(site_name)s will always verify your identity to these sites.\n"
+msgstr ""
+
+#: templates/profiles/openid_settings.html:31
+#: templates/works/list_item.html:26 templates/works/view.html:19
+msgid "delete"
+msgstr ""
+
+#: templates/profiles/openid_settings.html:38
+msgid "You have not designated any trusted sites."
+msgstr ""
+
+#: templates/profiles/view.html:29
 msgid "Active"
 msgstr ""
 
-#: templates/profiles/view.html:24
+#: templates/profiles/view.html:31
 msgid "Inactive"
 msgstr ""
 
-#: templates/profiles/view.html:54
+#: templates/profiles/view.html:64
 msgid "My CC Story"
 msgstr ""
 
-#: templates/profiles/view.html:79
+#: templates/profiles/view.html:86
 msgid "Place this badge on your website"
 msgstr ""
 
-#: templates/profiles/view.html:87
+#: templates/profiles/view.html:111
+msgid "Use this HTML to embed the badge on your website."
+msgstr ""
+
+#: templates/profiles/view.html:115
+msgid "Your OpenID URL"
+msgstr ""
+
+#: templates/profiles/view.html:119
+msgid "Use this URL to log into OpenID enabled sites."
+msgstr ""
+
+#: templates/profiles/view.html:125
 msgid "Add"
 msgstr ""
 
-#: templates/profiles/view.html:89
+#: templates/profiles/view.html:127
 msgid "Works I Have Licensed"
 msgstr ""
 
-#: templates/profiles/view.html:99
+#: templates/profiles/view.html:142
 msgid "All..."
 msgstr ""
 
-#: templates/profiles/view.html:107
+#: templates/profiles/view.html:150
 #, python-format
 msgid ""
 "\n"
@@ -390,7 +542,7 @@ msgid ""
 "\t"
 msgstr ""
 
-#: templates/profiles/view.html:113
+#: templates/profiles/view.html:156
 msgid ""
 "\n"
 "\t  This user has not registered any licensed works.\n"
@@ -402,7 +554,7 @@ msgstr ""
 msgid "Complete Registration"
 msgstr ""
 
-#: templates/registration/complete_registration.html:60
+#: templates/registration/complete_registration.html:68
 msgid "Terms of Use"
 msgstr ""
 
@@ -412,8 +564,9 @@ msgid ""
 "  Your username and password didn't match. Please try again.\n"
 msgstr ""
 
-#: templates/registration/login.html:30
+#: templates/registration/login.html:35
 #: templates/registration/password_change_form.html:22
+#: templates/server/login.html:43
 msgid "Forgot your password?"
 msgstr ""
 
@@ -535,7 +688,35 @@ msgid ""
 "Registration complete.  <a href=\"/p/edit/\">Edit your profile</a>.\n"
 msgstr ""
 
-#: templates/server/trust.html:8
+#: templates/server/delete_trusted_party.html:5
+msgid "Delete Trusted Site"
+msgstr ""
+
+#: templates/server/delete_trusted_party.html:13
+#, python-format
+msgid ""
+"\n"
+"Are you sure you wish to delete <strong>%(trusted_party)s</strong>\n"
+"as a trusted site?\n"
+msgstr ""
+
+#: templates/server/login.html:3 templates/server/login.html.py:4
+msgid "Login to your OpenID"
+msgstr ""
+
+#: templates/server/login.html:7
+#, python-format
+msgid ""
+"\n"
+"  Log in to <strong>%(site_name)s</strong> to continue verifying your\n"
+"  identity."
+msgstr ""
+
+#: templates/server/trust.html:4 templates/server/trust.html.py:5
+msgid "Verify Your Identity"
+msgstr ""
+
+#: templates/server/trust.html:11
 #, python-format
 msgid ""
 "\n"
@@ -543,7 +724,7 @@ msgid ""
 "of your OpenID.</p>\n"
 msgstr ""
 
-#: templates/server/trust.html:15
+#: templates/server/trust.html:18
 #, python-format
 msgid ""
 "\n"
@@ -556,7 +737,7 @@ msgid ""
 "trying to abuse your trust in their good name.</p>\n"
 msgstr ""
 
-#: templates/server/trust.html:27
+#: templates/server/trust.html:30
 #, python-format
 msgid ""
 "\n"
@@ -565,7 +746,7 @@ msgid ""
 "  authenticity.  Perhaps it is on your local network.</p>\n"
 msgstr ""
 
-#: templates/server/trust.html:34
+#: templates/server/trust.html:37
 #, python-format
 msgid ""
 "\n"
@@ -577,11 +758,47 @@ msgid ""
 "  verification for your future transactions.</p>\n"
 msgstr ""
 
-#: templates/server/trust.html:49
-msgid "Verify your identity to the relying party?"
+#: templates/server/trust.html:55
+#, python-format
+msgid ""
+"\n"
+"<code>%(trust_root)s</code> has also asked for \n"
+"  registration information which will be used under \n"
+"<a href=\"%(policy_url)s\">this policy</a>. Which information would\n"
+"you like to share?"
 msgstr ""
 
-#: templates/server/trust.html:52
+#: templates/server/trust.html:63
+#, python-format
+msgid ""
+"\n"
+"<code>%(trust_root)s</code> has also asked for registration\n"
+"information; the site did not provide information about how the\n"
+"information will be used. Which information would you like to\n"
+"share?"
+msgstr ""
+
+#: templates/server/trust.html:78
+#, python-format
+msgid ""
+"Verify your identity and share selected registration\n"
+"  data with <code>%(trust_root)s</code>?"
+msgstr ""
+
+#: templates/server/trust.html:83
+#, python-format
+msgid "Verify your identity to the <code>%(trust_root)s</code>?"
+msgstr ""
+
+#: templates/server/trust.html:90
+msgid "Just this once."
+msgstr ""
+
+#: templates/server/trust.html:93
+msgid "Always do this."
+msgstr ""
+
+#: templates/server/trust.html:97
 msgid "Yes, continue"
 msgstr ""
 
@@ -616,24 +833,12 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-#: templates/works/edit.html:194
-msgid "Cancel"
-msgstr ""
-
-#: templates/works/list.html:4 templates/works/list.html.py:7
+#: templates/works/list.html:11 templates/works/list.html.py:14
 msgid "Registered Works"
-msgstr ""
-
-#: templates/works/list_item.html:13 templates/works/view.html:33
-msgid "Includes all works beginning with this URL."
 msgstr ""
 
 #: templates/works/list_item.html:25 templates/works/view.html:18
 msgid "edit"
-msgstr ""
-
-#: templates/works/list_item.html:26 templates/works/view.html:19
-msgid "delete"
 msgstr ""
 
 #: templates/works/view.html:12
@@ -688,15 +893,28 @@ msgid ""
 "starting with this URL."
 msgstr ""
 
-#: works/views.py:97
+#: works/views.py:38
+#, python-format
+msgid "Work registered; <a href=\"%(add_url)s\">add another</a>?"
+msgstr ""
+
+#: works/views.py:42
+msgid "Work successfuly edited."
+msgstr ""
+
+#: works/views.py:83
+msgid "Registration deleted."
+msgstr ""
+
+#: works/views.py:108
 msgid "No work URI specified."
 msgstr ""
 
-#: works/views.py:112
+#: works/views.py:123
 #, python-format
 msgid "No works found that match the given URL, %(lookup_uri)s"
 msgstr ""
 
-#: works/views.py:119
+#: works/views.py:130
 msgid "The following matching works were found:"
 msgstr ""
