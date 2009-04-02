@@ -117,10 +117,21 @@ YAHOO.cc.check = function () {
 
 } // check
 
+/**
+Takes an array of XML nodes and builds a SELECT input 
+out of the elements of the array.  The selectID will be
+the identifier of the SELECT node you would like to update
+(e.g. "id_license_jurisdiction" or "id_license_version")
+
+Callback for the Xpath query of the licenses.xml file
+
+**/
+
 YAHOO.cc.build_select = function(options, selectID) {
 	
 	select = YAHOO.util.Dom.get(selectID);
 	
+	// don't add the options to the select just yet, need to sort first
 	new_options = new Array(options.length);
 	
 	for(var i = 0; i < options.length; i++) {
@@ -128,6 +139,7 @@ YAHOO.cc.build_select = function(options, selectID) {
 		var optId =  options[i].getAttribute('id');
 		var optValue = options[i].getAttribute('id');
 		
+		// want to store the URI of the license
 		if(selectID == 'id_license_version') {
 			optValue = options[i].getAttribute('uri');
 		}
@@ -141,6 +153,7 @@ YAHOO.cc.build_select = function(options, selectID) {
 		sortfun = function(a,b) {
 			return a.text > b.text ? -1 : a.text < b.text ? 1 : 0;
 		};
+	// otherwise sort alpha ascend
 	else
 		sortfun = function(a,b) {
 			return a.text < b.text ? -1 : a.text > b.text ? 1 : 0;
@@ -148,7 +161,7 @@ YAHOO.cc.build_select = function(options, selectID) {
 	
 	new_options.sort(sortfun);
 	
-	// empty the select out
+	// empty the select out and add sorted options to it
 	select.options.length = 0;
 	for (var i = 0; i < new_options.length; i++)
 		select.options[i] = new_options[i];
@@ -157,6 +170,10 @@ YAHOO.cc.build_select = function(options, selectID) {
 	
 }
 
+/**
+Performs an xpath query on the licenses.xml file used by 
+the license_name and license_jurisdiction change events.
+**/
 YAHOO.cc.xquery = function(path) {
 	
 	var xpe = new XPathEvaluator();
