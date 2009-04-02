@@ -210,11 +210,13 @@ YAHOO.cc.load = function() {
 	
 	xmldata = req.responseXML;
 	
-  	YAHOO.util.Event.addListener("id_url", "blur", YAHOO.cc.check);
+	YAHOO.util.Event.addListener("id_url", "blur", YAHOO.cc.check);
   	YAHOO.util.Event.addListener("id_license_name", "change", YAHOO.cc.license_name_listener);
 	YAHOO.util.Event.addListener("id_license_jurisdiction", "change", YAHOO.cc.license_jurisdiction_listener);
 	
 	// need to fire license_name listener
+	YAHOO.util.Event.onAvailable('id_license_name', YAHOO.cc.license_name_listener);
+	YAHOO.util.Event.onAvailable('id_license_jurisdiction', YAHOO.cc.license_jurisdiction_listener);
 	
 } //load
 
