@@ -76,19 +76,13 @@ YAHOO.cc.success = function (response) {
     // see if the work URL has metadata
     if ( (metadata.subjects.indexOf(work_url) > -1) ) {
 		// this was for the previous method that used an input
-        //YAHOO.util.Dom.get('id_license_url').value = YAHOO.cc.get_license(metadata.triples, work_url);
-        //YAHOO.util.Dom.get('id_title').value = YAHOO.cc.get_title(metadata.triples, work_url);	
-				
-		this.domquery = "option[value|='" + YAHOO.cc.get_license(metadata.triples, work_url) + "']";
-		console.log(this.domquery);
-		var option = YAHOO.util.Selector.query(this.domquery)
-		option[0].selected = true;
+        YAHOO.util.Dom.get('id_license_url').value = YAHOO.cc.get_license(metadata.triples, work_url);
+        YAHOO.util.Dom.get('id_title').value = YAHOO.cc.get_title(metadata.triples, work_url);
     }
 
 } // success
 
 YAHOO.cc.failure = function () {
-
     // hide the working indicator
     YAHOO.util.Dom.setStyle("loading_metadata", "display", "none");
     
