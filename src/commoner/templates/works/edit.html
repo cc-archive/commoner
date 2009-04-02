@@ -81,21 +81,7 @@ YAHOO.cc.success = function (response) {
         YAHOO.util.Dom.get('id_license_url').value = license_url;
 		YAHOO.util.Dom.get('id_title').value = YAHOO.cc.get_title(metadata.triples, work_url);
 		
-		// update the license select elements
-		// verify its from creativecommons.org/licenses/
-		base_url = "http://creativecommons.org/licenses/";
-		license_url = license_url.replace(base_url, "").split("/");
-		
-		// if no juris is specified, use '-'
-		if(license_url[2] == "")
-			license_url[2] = '-';
-		
-		// update the select elements	
-		YAHOO.util.Dom.get('id_license_name').value = license_url[0];
-		YAHOO.util.Event.onAvailable('id_license_name', YAHOO.cc.license_name_listener);
-		YAHOO.util.Dom.get('id_license_jurisdiction').value = license_url[2];
-		YAHOO.util.Event.onAvailable('id_license_jurisdiction', YAHOO.cc.license_jurisdiction_listener);
-		YAHOO.util.Dom.get('id_license_version').value = license_url[1];
+		YAHOO.cc.update_select_options(license_url);
     }
 
 } // success
@@ -129,18 +115,37 @@ YAHOO.cc.check = function () {
 
 } // check
 
-/**
-Takes an array of XML nodes and builds a SELECT input 
-out of the elements of the array.  The selectID will be
-the identifier of the SELECT node you would like to update
-(e.g. "id_license_jurisdiction" or "id_license_version")
-
-Callback for the Xpath query of the licenses.xml file
-
-**/
+YAHOO.cc.update_select_options = function(license_url) {
+	
+	// update the license select elements
+	// verify its from creativecommons.org/licenses/
+	base_url = "http://creativecommons.org/licenses/";
+	license = license_url.replace(base_url, "").split("/");
+	
+	// if no juris is specified, use '-'
+	if(license[2] == "")
+		license[2] = '-';
+	
+	// update the select elements	
+	YAHOO.util.Dom.get('id_license_name').value = license[0];
+	YAHOO.util.Event.onContentReady('id_license_name', YAHOO.cc.license_name_listener);
+	YAHOO.util.Dom.get('id_license_jurisdiction').value = license[2];
+	YAHOO.util.Event.onContentReady('id_license_jurisdiction', YAHOO.cc.license_jurisdiction_listener);
+	
+	YAHOO.util.Dom.get('id_license_version').value = license_url;
+	
+}
 
 YAHOO.cc.build_select = function(options, selectID) {
-	
+	/**
+	Takes an array of XML nodes and builds a SELECT input 
+	out of the elements of the array.  The selectID will be
+	the identifier of the SELECT node you would like to update
+	(e.g. "id_license_jurisdiction" or "id_license_version")
+
+	Callback for the Xpath query of the licenses.xml file
+
+	**/
 	select = YAHOO.util.Dom.get(selectID);
 	
 	// don't add the options to the select just yet, need to sort first
@@ -182,12 +187,11 @@ YAHOO.cc.build_select = function(options, selectID) {
 	
 }
 
-/**
-Performs an xpath query on the licenses.xml file used by 
-the license_name and license_jurisdiction change events.
-**/
 YAHOO.cc.xquery = function(path) {
-	
+	/**
+	Performs an xpath query on the licenses.xml file used by 
+	the license_name and license_jurisdiction change events.
+	**/
 	var xpe = new XPathEvaluator();
 	var nsResolver = xpe.createNSResolver(xmldata.ownerDocument == null ?
 		xmldata.documentElement : xmldata.ownerDocument.documentElement);
@@ -201,7 +205,7 @@ YAHOO.cc.xquery = function(path) {
 	return found;
 }
 
-YAHOO.cc.license_name_listener = function() {	
+YAHOO.cc.license_name_listener = function(ev) {	
 	
 	// need to clear versions
 	
@@ -212,11 +216,11 @@ YAHOO.cc.license_name_listener = function() {
 	// update the jurisdictions
 	YAHOO.util.Event.onAvailable('id_license_jurisdiction', YAHOO.cc.license_jurisdiction_listener);
 	
-	return;
+	YAHOO.util.Event.stopEvent(ev)
 	
 }
 
-YAHOO.cc.license_jurisdiction_listener = function() {	
+YAHOO.cc.license_jurisdiction_listener = function(ev) {	
 	
 	license = YAHOO.util.Dom.get('id_license_name');
 	xpath = "//license[@id='"+license.value+"']/jurisdiction[@id='"+this.value+"']/version";
@@ -226,11 +230,11 @@ YAHOO.cc.license_jurisdiction_listener = function() {
 	// update the url
 	YAHOO.cc.license_add_url();
 	
-	return;
+	YAHOO.util.Event.stopEvent(ev);
 	
 }
 
-YAHOO.cc.license_add_url = function() {	
+YAHOO.cc.license_add_url = function(ev) {	
 	
 	// this listener differs from the others so that it can be
 	// called from any of the other option change events
