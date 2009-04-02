@@ -8,7 +8,10 @@
 <script src="http://yui.yahooapis.com/2.7.0/build/selector/selector-min.js"></script> 
 <script>
 YAHOO.namespace("cc");
+
 var domquery = "";
+var xmldata = "";
+
 YAHOO.cc.license_uri = function(license_uri) {
 
     // ensure that the license_uri is canonical
@@ -114,10 +117,84 @@ YAHOO.cc.check = function () {
 
 } // check
 
+YAHOO.cc.build_select = function(options, selectID) {
+	
+	select = YAHOO.util.Dom.get(selectID);
+	// empty this out
+	select.options.length = 0;
+	
+	for(var i = 0; i < options.length; i++) {
+		
+		var optId =  options[i].getAttribute('id');
+		var optValue = options[i].getAttribute('id');
+		
+		if(selectID == 'id_license_version') {
+			optValue = options[i].getAttribute('uri');
+		}
+		
+		select.options[i] = new Option(optId, optValue);
+	}
+	
+	return;
+	
+}
+
+YAHOO.cc.xquery = function(path) {
+	
+	var xpe = new XPathEvaluator();
+	var nsResolver = xpe.createNSResolver(xmldata.ownerDocument == null ?
+		xmldata.documentElement : xmldata.ownerDocument.documentElement);
+	
+	var result = xpe.evaluate(path, xmldata, nsResolver, 0, null);
+	var found = [];
+	var res;
+	while (res = result.iterateNext())
+		found.push(res);
+	
+	return found;
+}
+
+YAHOO.cc.license_name_listener = function() {	
+	
+	// need to clear versions
+	
+	xpath = "//license[@id='"+this.value+"']/jurisdiction";
+	result = YAHOO.cc.xquery(xpath);
+	YAHOO.cc.build_select(result, 'id_license_jurisdiction');
+	
+	// need fire jurisdiction listener
+	
+	return;
+	
+}
+
+YAHOO.cc.license_jurisdiction_listener = function() {	
+	
+	license = YAHOO.util.Dom.get('id_license_name');
+	xpath = "//license[@id='"+license.value+"']/jurisdiction[@id='"+this.value+"']/version";
+	console.log(xpath);
+	result = YAHOO.cc.xquery(xpath);
+	YAHOO.cc.build_select(result, 'id_license_version');
+	
+	return;
+	
+}
+
 YAHOO.cc.load = function() {
 
-  YAHOO.util.Event.addListener("id_url", "blur", YAHOO.cc.check);
-
+	// fetch license.xml data and store
+	var req = new XMLHttpRequest();
+	req.open("GET", "/l/licenses.xml", false);
+	req.send(null);
+	
+	xmldata = req.responseXML;
+	
+  	YAHOO.util.Event.addListener("id_url", "blur", YAHOO.cc.check);
+  	YAHOO.util.Event.addListener("id_license_name", "change", YAHOO.cc.license_name_listener);
+	YAHOO.util.Event.addListener("id_license_jurisdiction", "change", YAHOO.cc.license_jurisdiction_listener);
+	
+	// need to fire license_name listener
+	
 } //load
 
 YAHOO.util.Event.onDOMReady(YAHOO.cc.load);
@@ -184,7 +261,11 @@ YAHOO.util.Event.onDOMReady(YAHOO.cc.load);
 
     <div class="field">
       <span class="field_label">{{form.license_name.label}}</span>
-      {{form.license_name}}
+     	
+		{{form.license_name}}
+	 	<select id="id_license_jurisdiction"></select>
+	 	<select id="id_license_version"></select>
+	  
       <div class="help">{{form.license_name.help_text}}</div>
       {% if form.license_name.errors %}
       <div class="errors">

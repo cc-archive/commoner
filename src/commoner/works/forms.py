@@ -6,12 +6,12 @@ from commoner.works import models
 class SimpleRegistrationForm(forms.Form):
     
     licenses = (
-        ('http://creativecommons.org/licenses/by/3.0/', 'Attribution'),
-        ('http://creativecommons.org/licenses/by-sa/3.0/', 'Attribution Share Alike'),
-        ('http://creativecommons.org/licenses/by-nd/3.0/', 'Attribution No Derivatives'),
-        ('http://creativecommons.org/licenses/by-nc/3.0/', 'Attribution Non-Commercial'),
-        ('http://creativecommons.org/licenses/by-nc-sa/3.0/', 'Attribution Non-Commercial Share Alike'),
-        ('http://creativecommons.org/licenses/by-nc-nd/3.0/', 'Attribution Non-Commercial No Derivatives'),
+        ('by' , 'Attribution'),
+        ('by-sa' , 'Attribution Share Alike'),
+        ('by-nd' , 'Attribution No Derivatives'),
+        ('by-nc' , 'Attribution Non-Commercial'),
+        ('by-nc-sa' , 'Attribution Non-Commercial Share Alike'),
+        ('by-nd-nc' , 'Attribution No Derivatives Non-Commercial'),
     )
     
     url = forms.URLField(label=_(u"Work URL"))
@@ -34,9 +34,9 @@ class SimpleRegistrationForm(forms.Form):
                 title = self._instance.title,
                 license_url = self._instance.license_url,
                 claim_all = self._instance.has_leading_glob())
-
+        
         super(SimpleRegistrationForm, self).__init__(**kwargs)
-
+    
     def save(self):
         """If the registration/work exists, update the existing instance;
         otherwise add a new registration with a work."""
