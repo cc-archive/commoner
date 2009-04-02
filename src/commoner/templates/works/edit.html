@@ -117,11 +117,16 @@ YAHOO.cc.check = function () {
 
 } // check
 
+
+/** 
+we might be able to afford some sorting here, but i don't want
+to mess with that right now
+**/
 YAHOO.cc.build_select = function(options, selectID) {
 	
 	select = YAHOO.util.Dom.get(selectID);
-	// empty this out
-	select.options.length = 0;
+	
+	new_options = new Array(options.length);
 	
 	for(var i = 0; i < options.length; i++) {
 		
@@ -132,12 +137,28 @@ YAHOO.cc.build_select = function(options, selectID) {
 			optValue = options[i].getAttribute('uri');
 		}
 		
-		select.options[i] = new Option(optId, optValue);
+		new_options[i] = new Option(optId, optValue);
+		
 	}
+	
+	new_options.sort(function(a,b){
+		return a.text < b.text ? -1 :
+	    	a.text > b.text ? 1 : 0;});
+	
+	// empty the select out
+	select.options.length = 0;
+	for (var i = 0; i < new_options.length; i++)
+		select.options[i] = new_options[i];
 	
 	return;
 	
 }
+
+function compareValue (option1, option2) {
+  return option1.value < option2.value ? -1 :
+    option1.value > option2.value ? 1 : 0;
+}
+
 
 YAHOO.cc.xquery = function(path) {
 	
@@ -270,6 +291,18 @@ YAHOO.util.Event.onDOMReady(YAHOO.cc.load);
       {% if form.license_name.errors %}
       <div class="errors">
 	{{ form.license_name.errors }}
+      </div>
+      {% endif %}
+    </div>
+
+	<div class="field">
+      <span class="field_label">{{form.license_url.label}}</span>
+     	
+		{{form.license_url}}
+      <div class="help">{{form.license_url.help_text}}</div>
+      {% if form.license_url.errors %}
+      <div class="errors">
+	{{ form.license_url.errors }}
       </div>
       {% endif %}
     </div>

@@ -17,11 +17,14 @@ class SimpleRegistrationForm(forms.Form):
     url = forms.URLField(label=_(u"Work URL"))
     title = forms.CharField(max_length=255)
     license_name = forms.ChoiceField(licenses,label=_(u"License"),
-                             help_text=_(u"The URL of the license your work is available under."))
-
+                             help_text=_(u"The license your work is available under."),
+                             required=False)
+    license_url = forms.URLField(label=_(u"License URL"), 
+                             help_text=_(u"The URL of the license your work is available under."),
+                             required=False)                         
     claim_all = forms.BooleanField(label=_(u"Register all works beginning with this URL?"),
-                                   help_text=_(u"Use this option to register large groups of works that you have created. Note this is only appropriate if you own <strong>everything</strong> starting with this URL."),
-                                   required=False)
+                             help_text=_(u"Use this option to register large groups of works that you have created. Note this is only appropriate if you own <strong>everything</strong> starting with this URL."),
+                             required=False)
 
     def __init__(self, user, instance={}, **kwargs):
         self._user = user
