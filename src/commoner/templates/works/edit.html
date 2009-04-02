@@ -117,11 +117,6 @@ YAHOO.cc.check = function () {
 
 } // check
 
-
-/** 
-we might be able to afford some sorting here, but i don't want
-to mess with that right now
-**/
 YAHOO.cc.build_select = function(options, selectID) {
 	
 	select = YAHOO.util.Dom.get(selectID);
@@ -141,9 +136,17 @@ YAHOO.cc.build_select = function(options, selectID) {
 		
 	}
 	
-	new_options.sort(function(a,b){
-		return a.text < b.text ? -1 :
-	    	a.text > b.text ? 1 : 0;});
+	// we want the versions to be descending
+	if (selectID == 'id_license_version') 
+		sortfun = function(a,b) {
+			return a.text > b.text ? -1 : a.text < b.text ? 1 : 0;
+		};
+	else
+		sortfun = function(a,b) {
+			return a.text < b.text ? -1 : a.text > b.text ? 1 : 0;
+		};
+	
+	new_options.sort(sortfun);
 	
 	// empty the select out
 	select.options.length = 0;
@@ -153,12 +156,6 @@ YAHOO.cc.build_select = function(options, selectID) {
 	return;
 	
 }
-
-function compareValue (option1, option2) {
-  return option1.value < option2.value ? -1 :
-    option1.value > option2.value ? 1 : 0;
-}
-
 
 YAHOO.cc.xquery = function(path) {
 	
@@ -183,7 +180,8 @@ YAHOO.cc.license_name_listener = function() {
 	result = YAHOO.cc.xquery(xpath);
 	YAHOO.cc.build_select(result, 'id_license_jurisdiction');
 	
-	// need fire jurisdiction listener
+	// update the jurisdictions
+	YAHOO.util.Event.onAvailable('id_license_jurisdiction', YAHOO.cc.license_jurisdiction_listener);
 	
 	return;
 	
@@ -193,9 +191,24 @@ YAHOO.cc.license_jurisdiction_listener = function() {
 	
 	license = YAHOO.util.Dom.get('id_license_name');
 	xpath = "//license[@id='"+license.value+"']/jurisdiction[@id='"+this.value+"']/version";
-	console.log(xpath);
 	result = YAHOO.cc.xquery(xpath);
 	YAHOO.cc.build_select(result, 'id_license_version');
+	
+	// update the url
+	YAHOO.cc.license_add_url();
+	
+	return;
+	
+}
+
+YAHOO.cc.license_add_url = function() {	
+	
+	// this listener differs from the others so that it can be
+	// called from any of the other option change events
+	
+	license_url = YAHOO.util.Dom.get('id_license_url');
+	license_version = YAHOO.util.Dom.get('id_license_version');
+	license_url.value = license_version.value;
 	
 	return;
 	
@@ -213,10 +226,12 @@ YAHOO.cc.load = function() {
 	YAHOO.util.Event.addListener("id_url", "blur", YAHOO.cc.check);
   	YAHOO.util.Event.addListener("id_license_name", "change", YAHOO.cc.license_name_listener);
 	YAHOO.util.Event.addListener("id_license_jurisdiction", "change", YAHOO.cc.license_jurisdiction_listener);
+	YAHOO.util.Event.addListener("id_license_version", "change", YAHOO.cc.license_add_url);
 	
 	// need to fire license_name listener
 	YAHOO.util.Event.onAvailable('id_license_name', YAHOO.cc.license_name_listener);
 	YAHOO.util.Event.onAvailable('id_license_jurisdiction', YAHOO.cc.license_jurisdiction_listener);
+	YAHOO.util.Event.onAvailable('id_license_version', YAHOO.cc.license_add_url);
 	
 } //load
 

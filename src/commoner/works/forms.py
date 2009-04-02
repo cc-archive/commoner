@@ -54,7 +54,7 @@ class SimpleRegistrationForm(forms.Form):
             self._instance.url = self.cleaned_data['url']
             self._instance.title = self.cleaned_data['title']
             self._instance.license_url = self.cleaned_data['license_url']
-
+            
             self._instance.save()
 
             # add the leading glob if needed

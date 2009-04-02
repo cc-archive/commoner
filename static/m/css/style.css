@@ -283,6 +283,8 @@ div.form input[type="text"], div.form .field #id_photo {
 	font-size: 102%;
 }
 
+div.form input#id_license_url { width:400px; }
+
 .field_label {
 	display: inline-block;
 	width: 8em;
