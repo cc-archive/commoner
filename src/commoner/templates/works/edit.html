@@ -205,7 +205,7 @@ YAHOO.cc.xquery = function(path) {
 	return found;
 }
 
-YAHOO.cc.license_name_listener = function(ev) {	
+YAHOO.cc.license_name_listener = function() {	
 	
 	// need to clear versions
 	
@@ -214,13 +214,11 @@ YAHOO.cc.license_name_listener = function(ev) {
 	YAHOO.cc.build_select(result, 'id_license_jurisdiction');
 	
 	// update the jurisdictions
-	YAHOO.util.Event.onAvailable('id_license_jurisdiction', YAHOO.cc.license_jurisdiction_listener);
-	
-	YAHOO.util.Event.stopEvent(ev)
+	YAHOO.util.Event.onContentReady('id_license_jurisdiction', YAHOO.cc.license_jurisdiction_listener);
 	
 }
 
-YAHOO.cc.license_jurisdiction_listener = function(ev) {	
+YAHOO.cc.license_jurisdiction_listener = function() {	
 	
 	license = YAHOO.util.Dom.get('id_license_name');
 	xpath = "//license[@id='"+license.value+"']/jurisdiction[@id='"+this.value+"']/version";
@@ -228,13 +226,14 @@ YAHOO.cc.license_jurisdiction_listener = function(ev) {
 	YAHOO.cc.build_select(result, 'id_license_version');
 	
 	// update the url
-	YAHOO.cc.license_add_url();
+	YAHOO.util.Event.onContentReady('id_license_version', YAHOO.cc.license_add_url);
+	//YAHOO.cc.license_add_url();
 	
-	YAHOO.util.Event.stopEvent(ev);
+	// fire the versions listener
 	
 }
 
-YAHOO.cc.license_add_url = function(ev) {	
+YAHOO.cc.license_add_url = function() {	
 	
 	// this listener differs from the others so that it can be
 	// called from any of the other option change events
@@ -263,8 +262,8 @@ YAHOO.cc.load = function() {
 	
 	// need to fire license_name listener
 	YAHOO.util.Event.onAvailable('id_license_name', YAHOO.cc.license_name_listener);
-	YAHOO.util.Event.onAvailable('id_license_jurisdiction', YAHOO.cc.license_jurisdiction_listener);
-	YAHOO.util.Event.onAvailable('id_license_version', YAHOO.cc.license_add_url);
+	//YAHOO.util.Event.onAvailable('id_license_jurisdiction', YAHOO.cc.license_jurisdiction_listener);
+	//YAHOO.util.Event.onAvailable('id_license_version', YAHOO.cc.license_add_url);
 	
 } //load
 
@@ -334,6 +333,7 @@ YAHOO.util.Event.onDOMReady(YAHOO.cc.load);
       <span class="field_label">{{form.license_name.label}}</span>
      	
 		{{form.license_name}}
+		
 	 	<select id="id_license_jurisdiction"></select>
 	 	<select id="id_license_version"></select>
 	  
