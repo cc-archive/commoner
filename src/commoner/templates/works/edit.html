@@ -117,7 +117,8 @@ YAHOO.cc.check = function () {
 
 YAHOO.cc.update_select_options = function(license_url) {
 	
-	// update the license select elements
+	// update the license select elements from a license 'found' from a work
+	
 	// verify its from creativecommons.org/licenses/
 	base_url = "http://creativecommons.org/licenses/";
 	license = license_url.replace(base_url, "").split("/");
@@ -227,9 +228,6 @@ YAHOO.cc.license_jurisdiction_listener = function() {
 	
 	// update the url
 	YAHOO.util.Event.onContentReady('id_license_version', YAHOO.cc.license_add_url);
-	//YAHOO.cc.license_add_url();
-	
-	// fire the versions listener
 	
 }
 
@@ -262,8 +260,6 @@ YAHOO.cc.load = function() {
 	
 	// need to fire license_name listener
 	YAHOO.util.Event.onAvailable('id_license_name', YAHOO.cc.license_name_listener);
-	//YAHOO.util.Event.onAvailable('id_license_jurisdiction', YAHOO.cc.license_jurisdiction_listener);
-	//YAHOO.util.Event.onAvailable('id_license_version', YAHOO.cc.license_add_url);
 	
 } //load
 
