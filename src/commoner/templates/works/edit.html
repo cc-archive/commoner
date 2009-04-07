@@ -193,15 +193,22 @@ YAHOO.cc.xquery = function(path) {
 	Performs an xpath query on the licenses.xml file used by 
 	the license_name and license_jurisdiction change events.
 	**/
-	var xpe = new XPathEvaluator();
-	var nsResolver = xpe.createNSResolver(xmldata.ownerDocument == null ?
-		xmldata.documentElement : xmldata.ownerDocument.documentElement);
-	
-	var result = xpe.evaluate(path, xmldata, nsResolver, 0, null);
 	var found = [];
-	var res;
-	while (res = result.iterateNext())
-		found.push(res);
+	
+	if(YAHOO.env.ua.ie > 0) { 
+		found = xmldata.selectNodes(xpath);
+	}
+	else {
+		var xpe = new XPathEvaluator();
+		var nsResolver = xpe.createNSResolver(xmldata.ownerDocument == null ?
+			xmldata.documentElement : xmldata.ownerDocument.documentElement);
+
+		var result = xpe.evaluate(path, xmldata, nsResolver, 0, null);
+		var res;
+		while (res = result.iterateNext())
+			found.push(res);
+	}
+	
 	
 	return found;
 }
@@ -246,12 +253,21 @@ YAHOO.cc.license_add_url = function() {
 
 YAHOO.cc.load = function() {
 
-	// fetch license.xml data and store
-	var req = new XMLHttpRequest();
-	req.open("GET", "/l/licenses.xml", false);
-	req.send(null);
+	// check if the user is IE
+	if(YAHOO.env.ua.ie > 0) {
+		xmldata = new ActiveXObject("Microsoft.XMLDOM");
+		xmldata.async=false;
+		xmldata.load("books.xml");
+	}
+	// anything not IE, then handle this way
+	else {
+		// fetch license.xml data and store
+		var req = new XMLHttpRequest();
+		req.open("GET", "/l/licenses.xml", false);
+		req.send(null);
+		xmldata = req.responseXML;
+	}
 	
-	xmldata = req.responseXML;
 	
 	YAHOO.util.Event.addListener("id_url", "blur", YAHOO.cc.check);
   	YAHOO.util.Event.addListener("id_license_name", "change", YAHOO.cc.license_name_listener);
