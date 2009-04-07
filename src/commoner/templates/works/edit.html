@@ -12,6 +12,17 @@ YAHOO.namespace("cc");
 var domquery = "";
 var xmldata = "";
 
+// for those using JS<1.6
+if (!Array.indexOf) {
+  Array.prototype.indexOf = function (obj, start) {
+    for (var i = (start || 0); i < this.length; i++) {
+      if (this[i] == obj) {
+        return i;
+      }
+    }
+  }
+}
+
 YAHOO.cc.license_uri = function(license_uri) {
 
     // ensure that the license_uri is canonical
@@ -63,18 +74,18 @@ YAHOO.cc.get_title = function (metadata, subject) {
 } // get_title
 
 YAHOO.cc.success = function (response) {
-
-    if (response.status != 200) return;
-
+	
+	if (response.status != 200) return;
+	
     var work_url = response.argument;
     var metadata = YAHOO.lang.JSON.parse(response.responseText);
     var subject = null;
 
     // hide the working indicator
     YAHOO.util.Dom.setStyle("loading_metadata", "display", "none");
-    
-    // see if the work URL has metadata
-    if ( (metadata.subjects.indexOf(work_url) > -1) ) {
+	
+	// see if the work URL has metadata
+    if ( metadata.subjects.indexOf(work_url) > -1 ) {
 		
 		// update the title text and license url
         license_url = YAHOO.cc.get_license(metadata.triples, work_url);
@@ -89,7 +100,6 @@ YAHOO.cc.success = function (response) {
 YAHOO.cc.failure = function () {
     // hide the working indicator
     YAHOO.util.Dom.setStyle("loading_metadata", "display", "none");
-    
 } // failure
 
 YAHOO.cc.check = function () {
@@ -98,19 +108,20 @@ YAHOO.cc.check = function () {
 
     if (work_url.match('^https?://')) {
 
-	// construct the request callback
-	var callback = {
-	    success: YAHOO.cc.success,
-	    failure: YAHOO.cc.failure,
-	    argument: work_url
-	};
+		// construct the request callback
+		var callback = {
+		    success: YAHOO.cc.success,
+		    failure: YAHOO.cc.failure,
+		    argument: work_url
+		};
 
         // show the working indicator
         YAHOO.util.Dom.setStyle("loading_metadata", "display", "inline");
 
-	var url = '/t/triples?url=' + encodeURIComponent(work_url);
-	YAHOO.util.Connect.asyncRequest('GET', url, callback, null);
-
+		var url = '/t/triples?url=' + encodeURIComponent(work_url);
+		
+		YAHOO.util.Connect.asyncRequest('GET', url, callback, null);
+		
     } // if refered from http[s]:// request
 
 } // check
@@ -120,8 +131,8 @@ YAHOO.cc.update_select_options = function(license_url) {
 	// update the license select elements from a license 'found' from a work
 	
 	// verify its from creativecommons.org/licenses/
-	base_url = "http://creativecommons.org/licenses/";
-	license = license_url.replace(base_url, "").split("/");
+	var base_url = "http://creativecommons.org/licenses/";
+	var license = license_url.replace(base_url, "").split("/");
 	
 	// if no juris is specified, use '-'
 	if(license[2] == "")
@@ -216,7 +227,6 @@ YAHOO.cc.xquery = function(path) {
 YAHOO.cc.license_name_listener = function() {	
 	
 	// need to clear versions
-	
 	xpath = "//license[@id='"+this.value+"']/jurisdiction";
 	result = YAHOO.cc.xquery(xpath);
 	YAHOO.cc.build_select(result, 'id_license_jurisdiction');
@@ -228,8 +238,9 @@ YAHOO.cc.license_name_listener = function() {
 
 YAHOO.cc.license_jurisdiction_listener = function() {	
 	
-	license = YAHOO.util.Dom.get('id_license_name');
-	xpath = "//license[@id='"+license.value+"']/jurisdiction[@id='"+this.value+"']/version";
+	var license = YAHOO.util.Dom.get('id_license_name');
+	
+	xpath = "//license[@id='" + license.value + "']/jurisdiction[@id='" + this.value + "']/version";
 	result = YAHOO.cc.xquery(xpath);
 	YAHOO.cc.build_select(result, 'id_license_version');
 	
@@ -242,6 +253,8 @@ YAHOO.cc.license_add_url = function() {
 	
 	// this listener differs from the others so that it can be
 	// called from any of the other option change events
+	
+	
 	
 	license_url = YAHOO.util.Dom.get('id_license_url');
 	license_version = YAHOO.util.Dom.get('id_license_version');
@@ -257,7 +270,7 @@ YAHOO.cc.load = function() {
 	if(YAHOO.env.ua.ie > 0) {
 		xmldata = new ActiveXObject("Microsoft.XMLDOM");
 		xmldata.async=false;
-		xmldata.load("books.xml");
+		xmldata.load("/l/licenses.xml");
 	}
 	// anything not IE, then handle this way
 	else {
