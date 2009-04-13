@@ -271,12 +271,15 @@ YAHOO.cc.get_country_codes = function(response) {
 	
 	if (response.status != 200) return;
 	
-    var lines = response.responseText.split('\n');
-
+	var lines = response.responseText.split('\n');
+	lines.length -= 1; // unnec blank line at end
+							       
 	for(var i=0; i < lines.length; i++) {
 		var country = lines[i].split(',');
 		YAHOO.cc.country_codes[country[0]] = country[1].replace('"','').replace('"', '');
 	}
+
+	YAHOO.util.Event.onAvailable("id_license_name", YAHOO.cc.license_name_listener);
 	
 	return;
 	
@@ -299,16 +302,13 @@ YAHOO.cc.load = function() {
 		xmldata = req.responseXML;
 	}
 	
-	YAHOO.util.Connect.asyncRequest('GET', '/l/countries.csv', {success:YAHOO.cc.get_country_codes}, null)
-	
 	YAHOO.util.Event.addListener("id_url", "blur", YAHOO.cc.check);
   	YAHOO.util.Event.addListener("id_license_name", "change", YAHOO.cc.license_name_listener);
 	YAHOO.util.Event.addListener("id_license_jurisdiction", "change", YAHOO.cc.license_jurisdiction_listener);
 	YAHOO.util.Event.addListener("id_license_version", "change", YAHOO.cc.license_add_url);
 	
 	// need to fire license_name listener
-	YAHOO.util.Event.onAvailable('id_license_name', YAHOO.cc.license_name_listener);
-	
+	//YAHOO.util.Connect.asyncRequest('GET', '/l/countries.csv', {success:YAHOO.cc.get_country_codes}, null)	
 } //load
 
 YAHOO.util.Event.onDOMReady(YAHOO.cc.load);
@@ -378,7 +378,12 @@ YAHOO.util.Event.onDOMReady(YAHOO.cc.load);
      	
 		{{form.license_name}}
 		
-	 	<select id="id_license_jurisdiction"></select>
+	 	<select id="id_license_jurisdiction">
+		{% for j in form.jurisdictions %}
+		  <option value="{{ j.0|lower }}">{% trans j.1 %}</option>
+		{% endfor %}
+		</select>
+
 	 	<select id="id_license_version"></select>
 	  
       <div class="help">{{form.license_name.help_text}}</div>

@@ -1,5 +1,8 @@
 from django import forms
+from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
+from lxml import etree as ET
+import os
 
 from commoner.works import models
 
@@ -25,6 +28,29 @@ class SimpleRegistrationForm(forms.Form):
     claim_all = forms.BooleanField(label=_(u"Register all works beginning with this URL?"),
                              help_text=_(u"Use this option to register large groups of works that you have created. Note this is only appropriate if you own <strong>everything</strong> starting with this URL."),
                              required=False)
+    
+    def jurisdictions(self):
+        """ Pull in the XML file, get ALL jurisdictions, translate them 1by1 """
+        
+        tree = ET.parse(os.path.join(settings.LEGAL_ROOT, 'licenses.xml'))
+        
+        juris = tree.xpath("/license-info/jurisdictions/jurisdiction-info[@launched='true']/@id")
+        
+        # hackish as all get out, not localized
+        import csv
+        readr = dict(csv.reader(open('/Users/jedoig/Workspace/cc/commoner/src/commoner/works/countries.csv'), delimiter=',', quotechar='"'))
+        readr['UK'] = 'United Kingdom'
+        readr['SCOTLAND'] = 'Scotland'
+        
+        juris[1:].sort()
+
+        """
+        How it should be done by getting the localized name of jurisdiction
+        return [ (j, gettext( "country.%s" % j )) for j in juris ]
+        """
+        
+        return [(j, readr[j.upper()]) for j in juris]
+    
 
     def __init__(self, user, instance={}, **kwargs):
         self._user = user
