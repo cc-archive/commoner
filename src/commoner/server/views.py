@@ -78,6 +78,13 @@ def login(request):
 
     else:
         id_url = request.GET.get('id', '')
+
+        if id_url[-1] != '/':
+            # hrm, this doesn't look like one of our OpenID URLs
+            return render_to_response("server/invalid_id.html",
+                                      {'identity':id_url},
+                                      context_instance=RequestContext(request))
+
         initial = dict(secret = forms.make_secret(id_url))
         if id_url:
             initial.update(dict(username = urlparse.urlsplit(id_url)[2][1:-1]))
