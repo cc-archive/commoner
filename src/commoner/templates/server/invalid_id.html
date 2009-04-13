@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block head_title %}{% trans "Login to your OpenID" %} -{% endblock %}
+{% block page_header %}{% trans "Login to your OpenID" %}{% endblock %}
+{% block body %}
+
+<div class="form">
+
+  {% blocktrans with identity as identity%} The OpenID URL you
+  supplied, <code>{{ identity }}</code>, doesn't appear to be a valid
+  CC Network OpenID.  CC Network OpenIDs usually take the form:
+
+  <code>
+    https://creativecommons.net/username/
+  </code>
+
+  Maybe you forgot the trailing slash?
+  {% endblocktrans %}
+
+</div>
+
+{% endblock %}

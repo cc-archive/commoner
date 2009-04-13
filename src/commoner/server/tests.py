@@ -46,7 +46,6 @@ class TestProcessTrustResult(TestCase):
             'openid.mode': 'checkid_setup',
             'openid.identity': id_url,
             'openid.return_to': 'http://127.0.0.1/%s' % (self.id(),),
-            # 'openid.sreg.required': 'postcode',
             })
         self.openid_request = CheckIDRequest.fromMessage(message, op_endpoint)
 
@@ -65,7 +64,6 @@ class TestProcessTrustResult(TestCase):
         finalURL = response['location']
         self.failUnless('openid.mode=id_res' in finalURL, finalURL)
         self.failUnless('openid.identity=' in finalURL, finalURL)
-        # self.failUnless('openid.sreg.postcode=12345' in finalURL, finalURL)
 
     def test_cancel(self):        
         self.request.method = 'POST'
