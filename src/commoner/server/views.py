@@ -80,7 +80,10 @@ def login(request):
         id_url = request.GET.get('id', '')
         initial = dict(secret = forms.make_secret(id_url))
         if id_url:
-            initial.update(dict(username = urlparse.urlsplit(id_url)[2][1:-1]))
+            id_path = urlparse.urlsplit(id_url)[2]
+            initial.update({'username':
+                                id_path[1:-1] if id_path[-1] == '/' else \
+                                id_path[1:]})
 
         form = forms.OpenIdLoginForm(id_url,
                                      initial=initial)
