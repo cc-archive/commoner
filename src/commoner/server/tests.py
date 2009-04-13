@@ -32,6 +32,24 @@ class TestSecurity(TestCase):
         response = self.client.get('/o/trust/')
         self.assertEqual(response.status_code, 403)
 
+class TestLoginForm(TestCase):
+    fixtures = ['test_users.json', ]
+
+    def test_get_with_real_id(self):
+        """Make sure the ID is extracted for the fully formed URL."""
+
+        response = self.client.get('/o/login/', 
+                                   {'id':'http://example.org/__myid__/'})
+        self.assertContains(response, 'value="__myid__"')
+
+    def test_get_with_redirect_id(self):
+        """Make sure the ID is extracted when specified as a value
+        that'd normally redirect."""
+
+        response = self.client.get('/o/login/', 
+                                   {'id':'http://example.org/__myid__'})
+        self.assertContains(response, 'value="__myid__"')
+
 class TestProcessTrustResult(TestCase):
     fixtures = ['test_users.json', ]
 
