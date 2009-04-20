@@ -9,6 +9,9 @@
 <script>
 YAHOO.namespace("cc");
 
+// I hate not having this in YUI
+$ = YAHOO.util.Dom.get;
+
 var domquery = "";
 var xmldata = "";
 
@@ -161,12 +164,11 @@ YAHOO.cc.build_select = function(options, selectID) {
 
 	**/
 	select = YAHOO.util.Dom.get(selectID);
-	
-	// don't add the options to the select just yet, need to sort first
-	new_options = new Array(options.length);
-	
+	new_options = Array();
+
 	for(var i = 0; i < options.length; i++) {
-		
+	
+	       
 		var optId =  options[i].getAttribute('id');
 		var optValue = options[i].getAttribute('id');
 		
@@ -229,15 +231,35 @@ YAHOO.cc.xquery = function(path) {
 	return found;
 }
 
+YAHOO.cc.hideJurisdictions = function() {
+      	
+        options = $("id_license_jurisdiction");
+	for(var i = 0; i < options.length; i++) {
+	         console.log("hiding " + options[i]);
+	         options[i].style.display = 'none';
+	}
+}
+
 YAHOO.cc.license_name_listener = function() {	
 	
 	// need to clear versions
 	xpath = "//license[@id='"+this.value+"']/jurisdiction";
 	result = YAHOO.cc.xquery(xpath);
-	YAHOO.cc.build_select(result, 'id_license_jurisdiction');
+	
+	YAHOO.cc.hideJurisdictions();
+	var select = $('id_license_jurisdiction');
+	for(var i= 0; i < result.length; i++) {
+	        // toggle the juris not available
+		if(select
+		console.log("toggling " + result[i].getAttribute('id'));
+		$('id_license_jurisdiction_' + result[i].getAttribute('id')).style.display = 'show';
+												
+		$('id_license_jurisdiction_' + result[i].getAttribute('id')).style.visibility = true;
+	}
+	
 	
 	// update the jurisdictions
-	YAHOO.util.Event.onContentReady('id_license_jurisdiction', YAHOO.cc.license_jurisdiction_listener);
+	//YAHOO.util.Event.onContentReady('id_license_jurisdiction', YAHOO.cc.license_jurisdiction_listener);
 	
 }
 
@@ -267,24 +289,6 @@ YAHOO.cc.license_add_url = function() {
 	
 }
 
-YAHOO.cc.get_country_codes = function(response) {
-	
-	if (response.status != 200) return;
-	
-	var lines = response.responseText.split('\n');
-	lines.length -= 1; // unnec blank line at end
-							       
-	for(var i=0; i < lines.length; i++) {
-		var country = lines[i].split(',');
-		YAHOO.cc.country_codes[country[0]] = country[1].replace('"','').replace('"', '');
-	}
-
-	YAHOO.util.Event.onAvailable("id_license_name", YAHOO.cc.license_name_listener);
-	
-	return;
-	
-}
-
 YAHOO.cc.load = function() {
 
 	// check if the user is IE
@@ -307,8 +311,10 @@ YAHOO.cc.load = function() {
 	YAHOO.util.Event.addListener("id_license_jurisdiction", "change", YAHOO.cc.license_jurisdiction_listener);
 	YAHOO.util.Event.addListener("id_license_version", "change", YAHOO.cc.license_add_url);
 	
-	// need to fire license_name listener
-	//YAHOO.util.Connect.asyncRequest('GET', '/l/countries.csv', {success:YAHOO.cc.get_country_codes}, null)	
+	YAHOO.cc.hideJurisdictions();  
+	YAHOO.util.Event.onAvailable("id_license_name", YAHOO.cc.license_name_listener);
+
+	
 } //load
 
 YAHOO.util.Event.onDOMReady(YAHOO.cc.load);
@@ -380,7 +386,7 @@ YAHOO.util.Event.onDOMReady(YAHOO.cc.load);
 		
 	 	<select id="id_license_jurisdiction">
 		{% for j in form.jurisdictions %}
-		  <option value="{{ j.0|lower }}">{% trans j.1 %}</option>
+		  <option value="{{ j.0|lower }}" id="id_license_jurisdiction_{{j.0|lower}}">{% trans j.1 %}</option>
 		{% endfor %}
 		</select>
 
@@ -393,6 +399,21 @@ YAHOO.util.Event.onDOMReady(YAHOO.cc.load);
       </div>
       {% endif %}
     </div>
+    
+    	<div class="field">
+      <span class="field_label">{{form.licenses.label}}</span>
+     	
+		{{form.licenses.render|safe}}
+          
+      <div class="help">{{form.licenses.help_text}}</div>
+      {% if form.licenses.errors %}
+      <div class="errors">
+	{{ form.licenses.errors }}
+      </div>
+      {% endif %}
+    </div>
+
+
 
 	<div class="field">
       <span class="field_label">{{form.license_url.label}}</span>

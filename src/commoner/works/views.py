@@ -47,6 +47,7 @@ def add_or_edit(request, id=None):
     else:
         # just display the form
         form = forms.SimpleRegistrationForm(request.user,
+                                            lang=request.LANGUAGE_CODE,
                                             instance=instance)
         
     return render_to_response('works/edit.html',

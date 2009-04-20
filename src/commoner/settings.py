@@ -27,6 +27,9 @@ TIME_ZONE = 'America/Chicago'
 
 LANGUAGE_CODE = 'en-us'
 
+I18N_CCORG_ROOT = "/Users/jedoig/Workspace/cc/cc.engine/trunk/cc/engine/i18n/po/%s/cc_org.po"
+
+
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__), '..','..','static','m',)
@@ -39,6 +42,12 @@ MEDIA_URL = '/m/'
 # Legal documents like the Terms of Service
 LEGAL_ROOT = os.path.join(os.path.dirname(__file__), '..','..','static','l',)
 LEGAL_URL = '/l/'
+
+# Path to the licenses xml file
+LICENSES_XML = os.path.join(LEGAL_ROOT, 'licenses.xml')
+
+# Path to URL where licenses are based on cc.org
+LICENSES_URL = "http://creativecommons.org/license/"
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
