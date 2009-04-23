@@ -4,18 +4,16 @@
 {% block header %}
 <script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/yahoo-dom-event/yahoo-dom-event.js"></script> 
 <script src="http://yui.yahooapis.com/2.6.0/build/connection/connection-min.js"></script> 
-<script src="http://yui.yahooapis.com/2.6.0/build/json/json-min.js"></script> 
+<script src="http://yui.yahooapis.com/2.6.0/build/json/json-min.js"></script>
+<script src="http://yui.yahooapis.com/2.6.0/build/json/json-min.js"></script>
 <script src="http://yui.yahooapis.com/2.7.0/build/selector/selector-min.js"></script> 
 <script>
 YAHOO.namespace("cc");
 
-// I hate not having this in YUI
+// break lamespace
 $ = YAHOO.util.Dom.get;
 
-var domquery = "";
-var xmldata = "";
-
-YAHOO.cc.country_codes = new Object();
+YAHOO.cc.licenses = Object();
 
 // for those using JS<1.6
 if (!Array.indexOf) {
@@ -235,7 +233,6 @@ YAHOO.cc.hideJurisdictions = function() {
       	
         options = $("id_license_jurisdiction");
 	for(var i = 0; i < options.length; i++) {
-	         console.log("hiding " + options[i]);
 	         options[i].style.display = 'none';
 	}
 }
@@ -249,9 +246,6 @@ YAHOO.cc.license_name_listener = function() {
 	YAHOO.cc.hideJurisdictions();
 	var select = $('id_license_jurisdiction');
 	for(var i= 0; i < result.length; i++) {
-	        // toggle the juris not available
-		if(select
-		console.log("toggling " + result[i].getAttribute('id'));
 		$('id_license_jurisdiction_' + result[i].getAttribute('id')).style.display = 'show';
 												
 		$('id_license_jurisdiction_' + result[i].getAttribute('id')).style.visibility = true;
@@ -289,8 +283,83 @@ YAHOO.cc.license_add_url = function() {
 	
 }
 
-YAHOO.cc.load = function() {
 
+YAHOO.cc.populate = function(select_id, license, jurisdiction) {
+	
+	if(license) {
+		if(jurisdiction)
+			options = YAHOO.cc.licenses[license]['jurisdictions'][jurisdiction]['versions'];
+		else 
+			options = YAHOO.cc.licenses[license]['jurisdictions'];
+	}
+	else
+		options = YAHOO.cc.licenses;
+	
+	s = $(select_id);
+	s.options.length = 0;
+	
+	for(var key in options) {
+		opt = options[key];
+		s.options[s.options.length] = new Option((opt.name?opt.name:key), key);
+	}
+	
+	s.options[0].selected = true;
+	
+}
+
+YAHOO.cc.license_version_listener = function() {
+	
+	var url = 'http://creativecommons.org/licenses/' + 
+			$('id_license_name').value + '/' +
+			$('id_license_version').value + '/';
+	
+	if ($('id_license_jurisdiction').value != '-')
+		url += $('id_license_jurisdiction').value + '/';
+		
+	$('id_license_url').value = url;
+	$('view_license').href = url;
+}
+
+YAHOO.cc.license_jurisdiction_listener = function(){
+	YAHOO.cc.populate('id_license_version', $('id_license_name').value, this.value);
+	YAHOO.util.Event.onAvailable("id_license_version", YAHOO.cc.license_version_listener);
+}
+
+YAHOO.cc.license_name_listener = function(){
+	YAHOO.cc.populate('id_license_jurisdiction', this.value);
+	YAHOO.util.Event.onAvailable("id_license_jurisdiction", YAHOO.cc.license_jurisdiction_listener);
+}
+
+YAHOO.cc.callbacks = {
+	success : function(r) {
+		try {
+			YAHOO.cc.licenses = YAHOO.lang.JSON.parse(r.responseText);
+			
+			// We don't want all the licenses so we'll just include these explicitly
+			//YAHOO.cc.populate('id_license_name');
+			
+			// Update the jurisdictions and versions for the default license selected
+			YAHOO.util.Event.onAvailable("id_license_name", YAHOO.cc.license_name_listener);
+		}
+		catch(e) {
+			console.log(e);
+			// need to display an error to the user or hide the select boxes
+		}
+	}
+}
+
+
+YAHOO.cc.load = function() {
+	
+	YAHOO.util.Event.addListener("id_license_name", "change", YAHOO.cc.license_name_listener);
+	YAHOO.util.Event.addListener("id_license_jurisdiction", "change", YAHOO.cc.license_jurisdiction_listener);
+	YAHOO.util.Event.addListener("id_license_version", "change", YAHOO.cc.license_version_listener);
+	
+	YAHOO.util.Connect.asyncRequest('GET',"/r/licenses.json", YAHOO.cc.callbacks);
+}
+
+
+/*
 	// check if the user is IE
 	if(YAHOO.env.ua.ie > 0) {
 		xmldata = new ActiveXObject("Microsoft.XMLDOM");
@@ -314,8 +383,11 @@ YAHOO.cc.load = function() {
 	YAHOO.cc.hideJurisdictions();  
 	YAHOO.util.Event.onAvailable("id_license_name", YAHOO.cc.license_name_listener);
 
+    
 	
-} //load
+	
+	
+} //load */
 
 YAHOO.util.Event.onDOMReady(YAHOO.cc.load);
 </script>
@@ -384,12 +456,7 @@ YAHOO.util.Event.onDOMReady(YAHOO.cc.load);
      	
 		{{form.license_name}}
 		
-	 	<select id="id_license_jurisdiction">
-		{% for j in form.jurisdictions %}
-		  <option value="{{ j.0|lower }}" id="id_license_jurisdiction_{{j.0|lower}}">{% trans j.1 %}</option>
-		{% endfor %}
-		</select>
-
+	 	<select id="id_license_jurisdiction"></select>
 	 	<select id="id_license_version"></select>
 	  
       <div class="help">{{form.license_name.help_text}}</div>
@@ -399,27 +466,13 @@ YAHOO.util.Event.onDOMReady(YAHOO.cc.load);
       </div>
       {% endif %}
     </div>
-    
-    	<div class="field">
-      <span class="field_label">{{form.licenses.label}}</span>
-     	
-		{{form.licenses.render|safe}}
-          
-      <div class="help">{{form.licenses.help_text}}</div>
-      {% if form.licenses.errors %}
-      <div class="errors">
-	{{ form.licenses.errors }}
-      </div>
-      {% endif %}
-    </div>
-
-
 
 	<div class="field">
       <span class="field_label">{{form.license_url.label}}</span>
      	
 		{{form.license_url}}
       <div class="help">{{form.license_url.help_text}}</div>
+	  <div class="help"><a href="#" id="view_license" target="_blank">Click here</a> to view the selected license.</div>
       {% if form.license_url.errors %}
       <div class="errors">
 	{{ form.license_url.errors }}

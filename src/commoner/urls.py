@@ -105,6 +105,9 @@ urlpatterns = patterns(
         name='works_feed'),
     url(r'^r/recent/atom$', 'commoner.works.feeds.recent_updates_feed',
         name='recent_updates_feed'),
+    url(r'^r/licenses.json$', 'commoner.works.views.licenses_json',
+        name='licenses_json'),
+
     
     # Metadata scraper support
     url(r'^t/triples', 'commoner.scraper.views.triples',

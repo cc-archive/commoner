@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.http import Http404, HttpResponseRedirect, HttpResponseForbidden, HttpResponseNotFound
+from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseNotFound
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template.loader import render_to_string
 from django.template import RequestContext
@@ -7,8 +7,7 @@ from django.core.urlresolvers import reverse
 
 from django.utils.translation import ugettext as _
 
-import forms
-import models
+import forms, models, licenses
 
 @login_required
 def add_or_edit(request, id=None):
@@ -131,4 +130,10 @@ def by_uri(request):
                                    message=_(u"The following matching works were found:"),
                                    ),
                               context_instance=RequestContext(request))
+
+def licenses_json(request):
+
+    lc = licenses.LicenseCatalog(lang=request.LANGUAGE_CODE)
+    
+    return HttpResponse(lc.licenses_json(lang=request.LANGUAGE_CODE), mimetype='application/json')
 
