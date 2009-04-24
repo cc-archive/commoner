@@ -13,11 +13,11 @@ class LicenseSelectorWidget(MultiWidget):
     
     licenses = [
         ('by' , 'Attribution'),
-        ('by-sa' , 'Attribution Share Alike'),
-        ('by-nd' , 'Attribution No Derivatives'),
-        ('by-nc' , 'Attribution Non-Commercial'),
-        ('by-nc-sa' , 'Attribution Non-Commercial Share Alike'),
-        ('by-nd-nc' , 'Attribution No Derivatives Non-Commercial'),
+        ('by-sa' , 'Attribution-ShareAlike'),
+        ('by-nd' , 'Attribution-NoDerivs'),
+        ('by-nc' , 'Attribution-NonCommercial'),
+        ('by-nc-sa' , 'Attribution-NonCommercial-ShareAlike'),
+        ('by-nd-nc' , 'Attribution-NoDerivs-NonCommercial'),
     ]
     
     def __init__(self, attrs=None):

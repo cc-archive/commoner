@@ -92,8 +92,8 @@ class LicenseCatalog:
         
         # form a 'json-like' dictionary to dump
         values = dict(
-            [(l,{'name':cl.get(l,l),'jurisdictions': dict([
-                (j, {'name':cj.get(j,j), 'versions': dict([
+            [(cl.get(l,l),{'code':l,'jurisdictions': dict([
+                (cj.get(j,j), {'code':j, 'versions': dict([
                     (v, v)
                     for v in li[l][j] ]) })
                 for j in li[l] ]) })

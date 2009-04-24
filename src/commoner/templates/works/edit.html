@@ -84,7 +84,7 @@ YAHOO.cc.success = function (response) {
         YAHOO.util.Dom.get('id_license_url').value = license_url;
 		YAHOO.util.Dom.get('id_title').value = YAHOO.cc.get_title(metadata.triples, work_url);
 		
-		YAHOO.cc.update_select_options(license_url);
+		// need to update the drop downs	
     }
 
 } // success
@@ -134,10 +134,10 @@ YAHOO.cc.populate = function(select_id, license, jurisdiction) {
 	
 	for(var key in options) {
 		opt = options[key];
-		s.options[s.options.length] = new Option((opt.name?opt.name:key), key);
+		s.options[s.options.length] = new Option(key, (opt.code?opt.code:key));
 	}
 	
-	s.options[0].selected = true;
+	s.options[s.options.length-1].selected = true;
 	
 }
 
@@ -155,12 +155,19 @@ YAHOO.cc.license_version_listener = function() {
 }
 
 YAHOO.cc.license_jurisdiction_listener = function(){
-	YAHOO.cc.populate('id_license_select_2', $('id_license_select_0').value, this.value);
+	
+	// it would be much simpler to use the codes instead of the names, but that would
+	// disrupt our sorting algorithm on the backend
+	license_name = $('id_license_select_0').options[$('id_license_select_0').selectedIndex].text;
+	juris_name = this.options[this.selectedIndex].text;
+	
+	YAHOO.cc.populate('id_license_select_2', license_name, juris_name);
 	YAHOO.util.Event.onAvailable("id_license_select_2", YAHOO.cc.license_version_listener);
 }
 
 YAHOO.cc.license_name_listener = function(){
-	YAHOO.cc.populate('id_license_select_1', this.value);
+	license_name = this.options[this.selectedIndex].text;
+	YAHOO.cc.populate('id_license_select_1', license_name);
 	YAHOO.util.Event.onAvailable("id_license_select_1", YAHOO.cc.license_jurisdiction_listener);
 }
 
@@ -188,7 +195,7 @@ YAHOO.cc.load = function() {
 	YAHOO.util.Event.addListener("id_license_select_0", "change", YAHOO.cc.license_name_listener);
 	YAHOO.util.Event.addListener("id_license_select_1", "change", YAHOO.cc.license_jurisdiction_listener);
 	YAHOO.util.Event.addListener("id_license_select_2", "change", YAHOO.cc.license_version_listener);
-	
+	YAHOO.util.Event.addListener("id_url", "blur", YAHOO.cc.check);
 	YAHOO.util.Connect.asyncRequest('GET',"/r/licenses.json", YAHOO.cc.callbacks);
 }
 
