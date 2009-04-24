@@ -52,8 +52,8 @@ class LicenseCatalog:
 
                     # Unported uses a different msgid
                     msgid = "country.%s" % j
-                    if j == '-':
-                        msgid = "util.Unported"
+                    
+                    if j == '-': msgid = "util.Unported"
 
                     if msgid not in catalog:
                         self.catalogs[lang]['j'][j] = j
@@ -61,16 +61,13 @@ class LicenseCatalog:
                         self.catalogs[lang]['j'][j] = catalog[msgid].string
     
     def __init__(self, lang):
-
+        
+        # only do this once
         if len(self.licenses) == 0:
 
-            self.lang = lang
             t = ET.parse(settings.LICENSES_XML)
 
-            """
-            Generates a dictionary mapping to what can be found in the XML
-            """
-            
+            # create a dict of what is returned from the xpath's
             self.licenses = dict(
                 [ (l.get('id'), dict([
                     (j.get('id'), 
@@ -81,20 +78,19 @@ class LicenseCatalog:
                         l.get('id') )]))
                 for l in t.xpath( self.XPATHS['licenses'] % 'standard' ) ])
             
-            
-            
+        # if the language is not cached
         if lang not in self.catalogs:
+            # translate for this lang
             self._localize(lang)
 
     def licenses_json(self, lang):
         
-        cl =  dict(sorted([(k,v) for k,v in self.catalogs[lang]['l'].items()],
-                    key=lambda(k,v):v))
-        cj =  dict(sorted([(k,v) for k,v in self.catalogs[lang]['j'].items()], 
-                    key=lambda(k,v):v))
-        
+        # abbreviations for readability
+        cl = self.catalogs[lang]['l']
+        cj = self.catalogs[lang]['j']
         li = self.licenses     
-
+        
+        # form a 'json-like' dictionary to dump
         values = dict(
             [(l,{'name':cl.get(l,l),'jurisdictions': dict([
                 (j, {'name':cj.get(j,j), 'versions': dict([
@@ -103,6 +99,7 @@ class LicenseCatalog:
                 for j in li[l] ]) })
              for l in li ])
         
+        # dump a json string and sort the keys
         return simplejson.dumps(values, sort_keys=True)
         
 

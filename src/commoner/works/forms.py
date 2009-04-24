@@ -6,20 +6,9 @@ from commoner.works import models, license_selector
 
 class SimpleRegistrationForm(forms.Form):
     
-    licenses = (
-        ('by' , 'Attribution'),
-        ('by-sa' , 'Attribution Share Alike'),
-        ('by-nd' , 'Attribution No Derivatives'),
-        ('by-nc' , 'Attribution Non-Commercial'),
-        ('by-nc-sa' , 'Attribution Non-Commercial Share Alike'),
-        ('by-nd-nc' , 'Attribution No Derivatives Non-Commercial'),
-    )
-    
     url = forms.URLField(label=_(u"Work URL"))
     title = forms.CharField(max_length=255)
-    license_name = forms.ChoiceField(licenses,label=_(u"License"),
-                             help_text=_(u"The license your work is available under."),
-                             required=False)
+    
     license_url = forms.URLField(label=_(u"License URL"), 
                              help_text=_(u"The URL of the license your work is available under."),
                              required=False)                         
@@ -27,12 +16,14 @@ class SimpleRegistrationForm(forms.Form):
                              help_text=_(u"Use this option to register large groups of works that you have created. Note this is only appropriate if you own <strong>everything</strong> starting with this URL."),
                              required=False)
     
+    license_select = license_selector.LicenseSelectorField('en', label=_(u"License"))
+    
     def __init__(self, user, lang=settings.LANGUAGE_CODE, instance={}, **kwargs):
         self._user = user
         self._instance = instance
         
         # need to add the license select fields for the user's lang
-        self.licenses = license_selector.LicenseField(lang)
+        self.license = license_selector.LicenseSelectorField(lang, label=_(u"License"))
 
         if self._instance and 'data' not in kwargs:
             # we have an instance, but no new data POSTed
