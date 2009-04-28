@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block head_title %}{% trans "Metrics" %} -{% endblock %}
+
+{% block page_header %}
+  {% trans "Metrics" %}
+{% endblock %}
+
+{% block body %}
+
+<table cellspacing='5'>
+	<tr>
+		<th>Number of users:</th>
+		<td>{{ totals.users }}</td>
+	</tr>
+	<tr>
+		<th>Number of registered works:</th>
+		<td>{{ totals.works }}</td>
+	</tr>
+	<tr>
+		<th>Average number of works per user:</th>
+		<td>{{ totals.works_avg }}</td>
+	</tr>
+</table>
+
+<table width="100%">
+	<thead>
+		<tr>
+			<th>Month End</th>
+			<th>Users</th>
+			<th>Change</th>
+			<th>Works</th>
+			<th>Change</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for s in stats %}
+		<tr>
+			<td>{{ s.end_month }}</td>
+			
+			<td>{{ s.users_new }}</td>
+			<td>{{ s.users_growth }}%</td>
+			
+			<td>{{ s.works_new }}</td>
+			<td>{{ s.works_growth }}%</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+{% endblock %}

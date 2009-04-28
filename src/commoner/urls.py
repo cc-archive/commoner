@@ -49,6 +49,8 @@ urlpatterns = patterns(
         name='contact_form'),
     (r'^h/contact/thanks/$', 'django.views.generic.simple.direct_to_template',
 	 {'template':'help/contact_thanks.html'}),
+    url(r'^h/metrics/$', 'commoner.metrics.views.stats', name='metrics'),    
+
 
     # Account management
     url(r'^a/login/$', 'commoner.authenticate.views.login',
