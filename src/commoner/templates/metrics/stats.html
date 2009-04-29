@@ -18,10 +18,6 @@
 		<th>Number of registered works:</th>
 		<td>{{ totals.works }}</td>
 	</tr>
-	<tr>
-		<th>Average number of works per user:</th>
-		<td>{{ totals.works_avg }}</td>
-	</tr>
 </table>
 
 <table width="100%">
@@ -40,10 +36,10 @@
 			<td>{{ s.end_month }}</td>
 			
 			<td>{{ s.users_new }}</td>
-			<td>{{ s.users_growth }}%</td>
+			<td>{% if forloop.first %}-{% else %}{{ s.users_growth }}%{% endif %}</td>
 			
 			<td>{{ s.works_new }}</td>
-			<td>{{ s.works_growth }}%</td>
+			<td>{% if forloop.first %}-{% else %}{{ s.works_growth }}%{% endif %}</td>
 		</tr>
 		{% endfor %}
 	</tbody>

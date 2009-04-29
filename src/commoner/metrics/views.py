@@ -44,39 +44,38 @@ def stats(request):
                 registered__lt=month+relativedelta(months=+1)
             ).aggregate(num_of_works=Count('title'))
         
+        
         # need to make statistics more elegant
         try:
-            u_growth = (u['num_of_users'] - stats[len(stats)-1]['users_new']) / \
-                float(stats[len(stats)-1]['users_new'])
-            w_growth = (w['num_of_works'] - stats[len(stats)-1]['works_new']) / \
-                float(stats[len(stats)-1]['works_new'])
+            u_growth = u['num_of_users'] / float(totals['users'])
+            w_growth = w['num_of_works'] / float(totals['works'])
         except ZeroDivisionError:
             u_growth = u['num_of_users']
             w_growth = w['num_of_works']
         except IndexError:
             u_growth = 0
             w_growth = 0
+        
+        totals['users'] += u['num_of_users']
+        totals['works'] += w['num_of_works']
             
         stats.append({
             'end_month':month.strftime("%Y-%m"), 
-            'users_new':u['num_of_users'],
+            'users_new':totals['users'],
             'users_growth': int(u_growth * 100),
-            'works_new':w['num_of_works'], 
+            'works_new':totals['works'],
             'works_growth': int(w_growth * 100),
         })
         
-        # we could use an aggregate for these, but this is cheaper
-        totals['users'] += u['num_of_users']
-        totals['works'] += w['num_of_works']
         
     # flexing the Django aggregation muscles
+    """
     works = CommonerProfile.objects.annotate(
                 num_works=Count('user__registrations__works')
             ).aggregate(
                 mean=Avg('num_works')
             )
-    # sane mean = total works / total profiles
-    
     totals['works_avg'] = works['mean']
+    """
     
     return render_to_response('metrics/stats.html', {'stats':stats,'totals':totals})
