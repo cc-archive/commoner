@@ -19,7 +19,6 @@ setup(
         'console_scripts' : [
             'register = commoner.registration.scripts:register',
             'welcome = commoner.registration.scripts:welcome',
-            'django = commoner.scripts:manage',
             'noop = commoner.scripts:noop',
             'idjango = commoner_i.scripts:manage',
             ]
@@ -34,7 +33,6 @@ setup(
                         'lxml',
                         'rdfadict',
                         'simplejson',
-                        'dmigrations',
                         'python-dateutil',
                         ],
                         
