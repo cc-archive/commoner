@@ -50,7 +50,9 @@ def stats(request):
                 float(stats[len(stats)-1]['users_new'])
             w_growth = (w['num_of_works'] - stats[len(stats)-1]['works_new']) / \
                 float(stats[len(stats)-1]['works_new'])
-                
+        except ZeroDivisionError:
+            u_growth = u['num_of_users']
+            w_growth = w['num_of_works']
         except IndexError:
             u_growth = 0
             w_growth = 0
