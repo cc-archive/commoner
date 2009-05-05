@@ -23,7 +23,7 @@ class SimpleRegistrationForm(forms.Form):
         self._instance = instance
         
         # need to add the license select fields for the user's lang
-        self.license = license_selector.LicenseSelectorField(lang, label=_(u"License"))
+        self.license_select = license_selector.LicenseSelectorField(lang, label=_(u"License"))
 
         if self._instance and 'data' not in kwargs:
             # we have an instance, but no new data POSTed
