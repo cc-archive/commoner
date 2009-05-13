@@ -174,6 +174,8 @@ YAHOO.cc.license_name_listener = function(){
 YAHOO.cc.callbacks = {
 	success : function(r) {
 		try {
+			
+			console.log("Worked");
 			YAHOO.cc.licenses = YAHOO.lang.JSON.parse(r.responseText);
 			
 			// We don't want all the licenses so we'll just include these explicitly
@@ -183,7 +185,7 @@ YAHOO.cc.callbacks = {
 			YAHOO.util.Event.onAvailable("id_license_select_0", YAHOO.cc.license_name_listener);
 		}
 		catch(e) {
-			console.log(e);
+			console.log("Error " + e);
 			// need to display an error to the user or hide the select boxes
 		}
 	}
@@ -196,7 +198,8 @@ YAHOO.cc.load = function() {
 	YAHOO.util.Event.addListener("id_license_select_1", "change", YAHOO.cc.license_jurisdiction_listener);
 	YAHOO.util.Event.addListener("id_license_select_2", "change", YAHOO.cc.license_version_listener);
 	YAHOO.util.Event.addListener("id_url", "blur", YAHOO.cc.check);
-	YAHOO.util.Connect.asyncRequest('GET',"/r/licenses.json", YAHOO.cc.callbacks);
+
+	YAHOO.util.Connect.asyncRequest('GET',"/l/license.json", YAHOO.cc.callbacks);
 }
 
 YAHOO.util.Event.onDOMReady(YAHOO.cc.load);

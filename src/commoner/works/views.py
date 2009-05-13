@@ -135,5 +135,5 @@ def licenses_json(request, lang=None):
     if lang is None:
         lang = request.LANGUAGE_CODE
     lc = licenses.LicenseCatalog(lang)
-    return HttpResponse(lc.licenses_json(lang=request.LANGUAGE_CODE), mimetype='application/json')
+    return HttpResponse(lc.licenses_json(lang), mimetype='application/json')
 
