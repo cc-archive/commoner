@@ -57,6 +57,26 @@ def add_or_edit(request, id=None):
                               )
 
 @login_required
+def add_feed(request):
+    
+    if request.method == 'POST':
+        
+        form = forms.FeedRegistrationForm(user=request.user, data=request.POST)
+        
+        if form.is_valid():
+            
+            form.save() 
+                    
+    else:
+        form = forms.FeedRegistrationForm(user=request.user)
+        
+    return render_to_response('works/add_feed.html',
+                              { 'form': form },
+                              context_instance=RequestContext(request)
+                              )
+    
+
+@login_required
 def delete(request, id):
 
     instance = get_object_or_404(models.Work, id=id)

@@ -71,3 +71,36 @@ class SimpleRegistrationForm(forms.Form):
                 models.Constraint.objects.add_leading_glob(work)
 
             return work
+            
+class FeedRegistrationForm(forms.Form):
+    
+    url = forms.URLField(label=_(u"Feed URL"))
+    license_url = forms.URLField(label=_(u"License"),
+                             help_text=_(u"The URL of the license your work is available under."))
+                             
+    consume_works = forms.BooleanField(label=_(u"Register the works listed in this feed."))
+    monitor_updates = forms.BooleanField(label=_(u"Check this field regular and register new items."))
+
+    def __init__(self, user, **kwargs):
+        self._user = user
+        super(FeedRegistrationForm, self).__init__(**kwargs)
+    
+    def clean_url(self):
+        
+        return self.cleaned_data['url']
+    
+    def save(self):
+        
+        registration = models.Registration(owner=self._user)
+        registration.save()
+        
+        print "url = %s" % self.cleaned_data['url']
+        
+        feed = models.Feed(url=self.cleaned_data['url'],
+                           license_url=self.cleaned_data['license_url'],
+                           consume_works=self.cleaned_data['consume_works'],
+                           monitor_updates=self.cleaned_data['monitor_updates'],
+                           registration=registration)
+        feed.save()
+        
+        

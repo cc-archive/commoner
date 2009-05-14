@@ -29,13 +29,24 @@ class Registration(models.Model):
 
         super(Registration, self).save()
 
-class Feed(Registration):
-
+class Feed(models.Model):
+    
+    registration = models.ForeignKey(Registration,
+                                     related_name='feeds')
+    
+    """ This model wasn't being used in the previous version, I imagine it was
+    stubbed here for future development """
+    
     url = models.URLField(max_length=255, blank=False, verify_exists=False)
-    license = models.URLField(max_length=255, blank=True)
-
-
-
+    license_url = models.URLField(max_length=255, blank=True)
+    
+    consume = models.BooleanField(default=False, 
+                help_text="Add the works found in this feed as new registrations.")
+    
+    monitored = models.BooleanField(default=False, 
+                help_text="Run a cron job to periodically consume the works in this feed.")
+    
+    
 class Work(models.Model):
 
     registration = models.ForeignKey(Registration,
@@ -47,7 +58,7 @@ class Work(models.Model):
 
     title = models.CharField(max_length=255, blank=True)
     license_url = models.URLField(max_length=255, blank=True,
-                              help_text="The URL of the license your work is available under.")
+                            help_text="The URL of the license your work is available under.")
 
     registered = models.DateTimeField(default=datetime.now())
     updated = models.DateTimeField()
