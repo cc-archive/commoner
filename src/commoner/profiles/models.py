@@ -113,7 +113,17 @@ class CommonerProfile(models.Model):
 
         return commoner.works.models.Work.objects.filter(
             registration__owner__exact = self.user.id)
-
+            
+    @property
+    def feeds(self):
+        """Return a list of Feed objects registered with this 
+        profile's User."""
+          
+        import commoner.works
+        
+        return commoner.works.models.Feed.objects.filter(
+            registration__owner__exact = self.user.id)  
+            
     @property
     def registrations(self):
         """Return a list of Registration objects registered for this

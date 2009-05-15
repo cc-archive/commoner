@@ -77,30 +77,60 @@ class FeedRegistrationForm(forms.Form):
     url = forms.URLField(label=_(u"Feed URL"))
     license_url = forms.URLField(label=_(u"License"),
                              help_text=_(u"The URL of the license your work is available under."))
-                             
-    consume_works = forms.BooleanField(label=_(u"Register the works listed in this feed."))
-    monitor_updates = forms.BooleanField(label=_(u"Check this field regular and register new items."))
 
-    def __init__(self, user, **kwargs):
+    def __init__(self, user, instance={}, **kwargs):
+        
         self._user = user
+        self._instance = instance
+        
+        if self._instance and 'data' not in kwargs:
+            # we have an instance, but no new data POSTed
+            kwargs['data'] = dict(
+                url = self._instance.url,
+                license_url = self._instance.license_url)
+        
         super(FeedRegistrationForm, self).__init__(**kwargs)
     
     def clean_url(self):
         
-        return self.cleaned_data['url']
+        url = self.cleaned_data['url']
+        
+        # we should verify whether or not this url is an actual feed or not
+        import feedparser
+        feed = feedparser.parse(url)
+        
+        if feed.version == '':
+        
+            raise forms.ValidationError('The URL you have entered does not appear to be a valid RSS or Atom feed.')
+            
+        return url
     
     def save(self):
         
-        registration = models.Registration(owner=self._user)
-        registration.save()
+        if self._instance:
+            
+            # has the feed url changed?
+            if self._instance.url != self.cleaned_data['url']:
+                
+                self._instance.url = self.cleaned_data['url']
+                self._instance.consume()
+                
+            self._instance.license_url = self.cleaned_data['license_url']
+            self._instance.save()
+                        
+            return self._instance
+            
+        else:
+            
+            registration = models.Registration(owner=self._user)
+            registration.save()
         
-        print "url = %s" % self.cleaned_data['url']
-        
-        feed = models.Feed(url=self.cleaned_data['url'],
-                           license_url=self.cleaned_data['license_url'],
-                           consume_works=self.cleaned_data['consume_works'],
-                           monitor_updates=self.cleaned_data['monitor_updates'],
-                           registration=registration)
-        feed.save()
-        
+            feed = models.Feed(url=self.cleaned_data['url'],
+                               license_url=self.cleaned_data['license_url'],
+                               cron_enabled=True,
+                               registration=registration)
+            feed.save()
+            feed.consume()
+            
+            return feed
         

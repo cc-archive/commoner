@@ -57,18 +57,32 @@ def add_or_edit(request, id=None):
                               )
 
 @login_required
-def add_feed(request):
+def add_edit_feed(request, id=None):
     
+    if id is not None:
+        
+        instance = get_object_or_404(models.Feed, id=id)
+        
+        if instance.owner_user != request.user:
+            return HttpResponseForbidden("Forbidden.")
+        
+    else:
+        instance = None
+        
     if request.method == 'POST':
         
-        form = forms.FeedRegistrationForm(user=request.user, data=request.POST)
+        form = forms.FeedRegistrationForm(user=request.user, instance=instance, data=request.POST)
         
         if form.is_valid():
             
-            form.save() 
+            form.save()
+            
+            return HttpResponseRedirect(
+                reverse('profile_view', args=(request.user.username,)))
                     
     else:
-        form = forms.FeedRegistrationForm(user=request.user)
+        
+        form = forms.FeedRegistrationForm(user=request.user, instance=instance)
         
     return render_to_response('works/add_feed.html',
                               { 'form': form },

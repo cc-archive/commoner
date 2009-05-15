@@ -134,11 +134,13 @@ def view(request, username, public_profile_field=None,
 def works(request, username):
 
     user = get_object_or_404(User, username=username)
+    feeds = user.get_profile().feeds.all()
     works = user.get_profile().works.all()
 
     # display the complete list of works
     return render_to_response('works/list.html',
                               dict(works=works,
+                                   feeds=feeds,
                                    profile_user=user,
                                    profile=user.get_profile(),
                                    ),

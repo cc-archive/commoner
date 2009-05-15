@@ -25,7 +25,18 @@
 <h3>{{ message }}</h3>
 {% endif %}
 
+{% if feeds %}
+<h3>Registered Feeds</h3>
+<ul class="licensed-works">
+	{% for feed in feeds %}
+         <li><a href="{{feed.url}}">{{feed.url}}</a> <a href="{% url edit_feed feed.id %}">[edit]</a></li>
+      {% endfor %}
+    </ul>
+<br />
+{% endif %}
+
 {% if works %}
+
     <ul class="licensed-works">
       {% for work in works %}
          {% include "works/list_item.html" %}

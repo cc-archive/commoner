@@ -28,24 +28,6 @@ class Registration(models.Model):
         self.updated = datetime.now()
 
         super(Registration, self).save()
-
-class Feed(models.Model):
-    
-    registration = models.ForeignKey(Registration,
-                                     related_name='feeds')
-    
-    """ This model wasn't being used in the previous version, I imagine it was
-    stubbed here for future development """
-    
-    url = models.URLField(max_length=255, blank=False, verify_exists=False)
-    license_url = models.URLField(max_length=255, blank=True)
-    
-    consume = models.BooleanField(default=False, 
-                help_text="Add the works found in this feed as new registrations.")
-    
-    monitored = models.BooleanField(default=False, 
-                help_text="Run a cron job to periodically consume the works in this feed.")
-    
     
 class Work(models.Model):
 
@@ -248,3 +230,50 @@ class Constraint(models.Model):
 
         return self.REGEXES[self.constraint].replace('var', self.regex_var)
 
+class Feed(models.Model):
+
+    registration = models.ForeignKey(Registration,
+                                     related_name='feeds')
+
+    """ This model wasn't being used in the previous version, I imagine it was
+    stubbed here for future development """
+
+    url = models.URLField(max_length=255, blank=False, verify_exists=False)
+    license_url = models.URLField(max_length=255, blank=True)
+    cron_enabled = models.BooleanField(default=True, 
+                help_text="Run a cron job to periodically consume the works in this feed.")
+
+    consumed = models.DateTimeField()
+
+    def __unicode__(self):
+        return "%s - %s" % (self.registration.owner, self.url)
+
+    @property
+    def owner_user(self):
+        return self.registration.owner
+
+    def consume(self):
+
+        import feedparser
+        feed = feedparser.parse(self.url)
+
+        for entry in feed.entries:
+            
+            # check if this is a dup.
+            
+            work = Work(registration=self.registration,
+                        license_url=self.license_url,
+                        url=entry.link,
+                        title=entry.title)
+
+            try:
+                work.save()
+            except:
+                # ignore it for right now
+                pass
+
+    def save(self):
+        # set the updated timestamp
+        self.consumed = datetime.now()
+
+        super(Feed, self).save()
