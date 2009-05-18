@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.http import HttpResponsePermanentRedirect, get_host
+from django.http import HttpResponseRedirect, get_host
 from django.core.exceptions import MiddlewareNotUsed
 
 class HttpsRedirectMiddleware:
@@ -19,7 +19,7 @@ class HttpsRedirectMiddleware:
             
             request.session['from_http'] = True
             
-            return HttpResponsePermanentRedirect(newurl)
+            return HttpResponseRedirect(newurl)
 
     def process_response(self, request, response):
         
@@ -35,8 +35,8 @@ class HttpsRedirectMiddleware:
             if request.session.get('from_http_redirect', False):
                 
                 # the process is done
-                del request.session['from_http']
-                del request.session['from_http_redirect']
+                request.session['from_http'] = False
+                request.session['from_http_redirect'] = False
                 
             else:
                 # the redirected request is being processed
