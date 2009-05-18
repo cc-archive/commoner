@@ -19,7 +19,7 @@ class HttpsRedirectMiddleware:
             
             request.session['from_http'] = True
             
-            #return HttpResponsePermanentRedirect(newurl)
+            return HttpResponsePermanentRedirect(newurl)
 
     def process_response(self, request, response):
         
