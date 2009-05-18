@@ -49,6 +49,7 @@
 {% block body %}
 <div class="column-wide column profile-info">
 
+{% ifequal user.username profile_user.username %}
   {% if from_http %}
 	
 	<div class="messages">
@@ -60,6 +61,7 @@
 		{% endif %}
 		</ul>
 	</div>
+{% endifequal %}
 
   {% endif %}
 
