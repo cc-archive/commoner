@@ -126,8 +126,7 @@ def view(request, username, public_profile_field=None,
         profile_obj = None
     
     from_http = request.session.get('from_http', False)
-    # this should really be in the middleware but oh well
-    
+        
     return render_to_response(template_name,
                               { 'profile'  : profile_obj,
                                 'from_http' : from_http,

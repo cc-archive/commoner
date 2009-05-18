@@ -104,7 +104,13 @@ class CommonerProfile(models.Model):
         """Return True if the profile is not expired."""
 
         return (datetime.now() < self.expires)
-
+    
+    @property
+    def is_legacy(self):
+        """ Return True if the user isn't forced to use HTTPS for OpenID. """
+        
+        return not self.redirect_https
+    
     @property
     def works(self):
         """Return a list of Work objects registered with this 

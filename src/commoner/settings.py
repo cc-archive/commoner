@@ -18,8 +18,8 @@ if not DEBUG:
 DATABASE_ENGINE = 'mysql'
 
 DATABASE_NAME = 'commoner'
-DATABASE_USER = 'root'             # Not used with sqlite3.
-DATABASE_PASSWORD = 'doigoid'         # Not used with sqlite3.
+DATABASE_USER = ''             # Not used with sqlite3.
+DATABASE_PASSWORD = ''         # Not used with sqlite3.
 DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
 DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
 
@@ -57,7 +57,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.doc.XViewMiddleware',
-    'commoner.middleware.security.SSLMiddleware'
+    'commoner.middleware.HttpsRedirectMiddleware'
 )
 
 ROOT_URLCONF = 'commoner.urls'
