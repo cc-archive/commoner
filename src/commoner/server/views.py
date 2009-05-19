@@ -180,8 +180,11 @@ def handleCheckIDRequest(request, openid_request):
     if openIdAuthorized(request):
 
         # and it's the user we were asked to verify
-        if getOpenIdUser(request).get_profile().get_absolute_url(
-            request=request) == openid_request.identity:
+        if openid_request.identity in (
+            IDENTIFIER_SELECT,
+            getOpenIdUser(request).get_profile().get_absolute_url(
+                request=request),
+            ):
 
             # see if we've previously trusted this root
             try:
