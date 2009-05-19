@@ -23,6 +23,7 @@ from openid.consumer.discover import OPENID_IDP_2_0_TYPE
 from openid.consumer.discover import OPENID_2_0_TYPE
 from openid.extensions import sreg
 from openid.fetchers import HTTPFetchingError
+from openid.message import IDENTIFIER_SELECT
 
 from util import *
 import forms
@@ -79,7 +80,10 @@ def login(request):
     else:
         id_url = request.GET.get('id', '')
 
-        if id_url[-1] != '/':
+        if id_url and \
+                id_url[-1] != '/' and \
+                id_url not in (IDENTIFIER_SELECT,):
+
             # hrm, this doesn't look like one of our OpenID URLs
             return render_to_response("server/invalid_id.html",
                                       {'identity':id_url},
@@ -385,6 +389,7 @@ def delete_trusted_party(request, id):
     return render_to_response('server/delete_trusted_party.html',
                               dict(trusted_party=trusted_party),
                               context_instance=RequestContext(request))
+
 def login_redirect(request, openid_request=None):
 
     if openid_request is None:
