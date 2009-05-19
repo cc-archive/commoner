@@ -90,7 +90,7 @@ def login(request):
                                       context_instance=RequestContext(request))
 
         initial = dict(secret = forms.make_secret(id_url))
-        if id_url:
+        if id_url and id_url not in (IDENTIFIER_SELECT,):
             initial.update(dict(username = urlparse.urlsplit(id_url)[2][1:-1]))
 
         form = forms.OpenIdLoginForm(id_url,
