@@ -12,11 +12,11 @@ MANAGERS = ADMINS
 if not DEBUG:
     SEND_BROKEN_LINK_EMAILS = True
 
-DATABASE_ENGINE = 'mysql'
+DATABASE_ENGINE = 'sqlite3'
 
 DATABASE_NAME = 'commoner'
-DATABASE_USER = 'root'             # Not used with sqlite3.
-DATABASE_PASSWORD = 'doigoid'         # Not used with sqlite3.
+DATABASE_USER = ''             # Not used with sqlite3.
+DATABASE_PASSWORD = ''         # Not used with sqlite3.
 DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
 DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
 

@@ -23,6 +23,7 @@ from openid.consumer.discover import OPENID_IDP_2_0_TYPE
 from openid.consumer.discover import OPENID_2_0_TYPE
 from openid.extensions import sreg
 from openid.fetchers import HTTPFetchingError
+from openid.message import IDENTIFIER_SELECT
 
 from util import *
 import forms
@@ -78,8 +79,18 @@ def login(request):
 
     else:
         id_url = request.GET.get('id', '')
+
+        if id_url and \
+                id_url[-1] != '/' and \
+                id_url not in (IDENTIFIER_SELECT,):
+
+            # hrm, this doesn't look like one of our OpenID URLs
+            return render_to_response("server/invalid_id.html",
+                                      {'identity':id_url},
+                                      context_instance=RequestContext(request))
+
         initial = dict(secret = forms.make_secret(id_url))
-        if id_url:
+        if id_url and id_url not in (IDENTIFIER_SELECT,):
             initial.update(dict(username = urlparse.urlsplit(id_url)[2][1:-1]))
 
         form = forms.OpenIdLoginForm(id_url,
@@ -169,8 +180,11 @@ def handleCheckIDRequest(request, openid_request):
     if openIdAuthorized(request):
 
         # and it's the user we were asked to verify
-        if getOpenIdUser(request).get_profile().get_absolute_url(
-            request=request) == openid_request.identity:
+        if openid_request.identity in (
+            IDENTIFIER_SELECT,
+            getOpenIdUser(request).get_profile().get_absolute_url(
+                request=request),
+            ):
 
             # see if we've previously trusted this root
             try:
@@ -378,6 +392,7 @@ def delete_trusted_party(request, id):
     return render_to_response('server/delete_trusted_party.html',
                               dict(trusted_party=trusted_party),
                               context_instance=RequestContext(request))
+
 def login_redirect(request, openid_request=None):
 
     if openid_request is None:
