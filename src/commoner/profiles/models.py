@@ -25,7 +25,8 @@ class CommonerProfileManager(models.Manager):
         subject = render_to_string('profiles/email/subject.txt',
                                    {'site':current_site}).strip()
         message = render_to_string('profiles/email/content.txt',
-                                   {'newaddr':newaddr})
+                                   {'site':current_site,
+                                    'newaddr':newaddr})
 
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, 
                   [newaddr, oldaddr])

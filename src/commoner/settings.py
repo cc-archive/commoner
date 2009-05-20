@@ -15,7 +15,7 @@ MANAGERS = ADMINS
 if not DEBUG:
     SEND_BROKEN_LINK_EMAILS = True
 
-DATABASE_ENGINE = 'mysql'
+DATABASE_ENGINE = 'sqlite3'
 
 DATABASE_NAME = 'commoner'
 DATABASE_USER = ''             # Not used with sqlite3.

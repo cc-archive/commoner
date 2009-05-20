@@ -1,1 +1,6 @@
-Hey, your address was updated to {{ newaddr }}.
+
+This is a notification message from {{site.name}}.
+
+Your email address has been changed to {{newaddr}}.
+
+-- Creative Commons
