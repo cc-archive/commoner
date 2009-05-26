@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block header %}
+<link about="" typeof="ccnet:Registration" />
+<link about="{{work.url}}" typeof="cc:Work" />
+{% endblock %}
+
+{% block head_title %}{% endblock %}
+
+{% block page_header %}
+  {% trans "Works Added From Feed" %}
+{% endblock %}
+{% block page_icon_class %}works{% endblock %}
+
+
+{% block body %}
+
+<h2>{{feed.url}}</h2>
+<h3>Last consumed {{feed.consumed|timesince}} ago.</h3>
+<br />
+
+<ul class="licensed-works">
+{% for work in works %}
+	{% include "works/list_item.html" %}
+{% endfor %}
+<ul>
+	
+{% endblock %}
