@@ -22,12 +22,14 @@ def consume_feed(feed):
                                     license_url=feed.license_url,
                                     registration=feed.registration)
     
-    return feed
         
 def update_feeds():
     
     """ Retrieve all feeds registered and add the new works """
     
-    for feed in Feed.objects.filter(is_defunct=False):
+    for feed in Feed.objects.filter(cron_enabled=True):
         
         consume_feed(feed)
+        
+        # update the consumed date
+        feed.save()

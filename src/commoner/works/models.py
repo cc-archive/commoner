@@ -242,9 +242,7 @@ class Feed(models.Model):
     license_url = models.URLField(max_length=255, blank=True)
     cron_enabled = models.BooleanField(default=True, 
                 help_text="Run a cron job to periodically consume the works in this feed.")
-                
-    is_defunct = models.BooleanField(default=False)
-    
+        
     consumed = models.DateTimeField()
 
     def __unicode__(self):
