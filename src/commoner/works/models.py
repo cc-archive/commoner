@@ -251,27 +251,22 @@ class Feed(models.Model):
     @property
     def owner_user(self):
         return self.registration.owner
-
-    def consume(self):
-
+        
+    def entries(self):
+        
         import feedparser
         feed = feedparser.parse(self.url)
-
-        for entry in feed.entries:
-            
-            # check if this is a dup.
-            
-            work = Work(registration=self.registration,
+        
+        # TODO: Remove entities in Atom entry titles
+        # title = remove_entities(entry.title)
+        
+        works = [Work(registration=self.registration,
                         license_url=self.license_url,
                         url=entry.link,
-                        title=entry.title)
+                        title=entry.title) for entry in feed.entries]
 
-            try:
-                work.save()
-            except:
-                # ignore it for right now
-                pass
-
+        return works
+    
     def save(self):
         # set the updated timestamp
         self.consumed = datetime.now()

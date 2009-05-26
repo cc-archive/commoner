@@ -3,7 +3,7 @@ from django.http import Http404, HttpResponseRedirect, HttpResponseForbidden, Ht
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template.loader import render_to_string
 from django.template import RequestContext
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, resolve
 
 from django.utils.translation import ugettext as _
 
@@ -57,12 +57,11 @@ def add_or_edit(request, id=None):
                               )
 
 @login_required
-def add_edit_feed(request, id=None):
+def feed_add_or_edit(request, id=None):
     
     if id is not None:
         
         instance = get_object_or_404(models.Feed, id=id)
-        
         if instance.owner_user != request.user:
             return HttpResponseForbidden("Forbidden.")
         
@@ -71,24 +70,42 @@ def add_edit_feed(request, id=None):
         
     if request.method == 'POST':
         
-        form = forms.FeedRegistrationForm(user=request.user, instance=instance, data=request.POST)
-        
+        form = forms.FeedRegistrationForm(user=request.user, 
+                                          instance=instance,
+                                          data=request.POST)
         if form.is_valid():
             
-            form.save()
+            feed = form.save()
+            
+            # register the works found in the feed
+            for work in feed.entries():
+                work.save()
             
             return HttpResponseRedirect(
-                reverse('profile_view', args=(request.user.username,)))
+                reverse('feed_works', args=(feed.pk,)))
                     
     else:
         
         form = forms.FeedRegistrationForm(user=request.user, instance=instance)
         
-    return render_to_response('works/add_feed.html',
-                              { 'form': form },
-                              context_instance=RequestContext(request)
-                              )
+    return render_to_response('works/feed_edit.html', { 'form': form },
+                              context_instance=RequestContext(request))
     
+@login_required
+def feed_works(request, id):
+    
+    """ Show the works that are associated with this feed"""
+    
+    feed = get_object_or_404(models.Feed, id=id)
+    
+    if feed.owner_user != request.user:
+        return HttpResponseForbidden("Forbidden.")
+        
+    return render_to_response('works/feed_works.html', { 
+                                'feed' : feed,
+                                'works' : feed.registration.works.all()
+                                },
+                              context_instance=RequestContext(request))
 
 @login_required
 def delete(request, id):

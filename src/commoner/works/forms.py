@@ -98,10 +98,9 @@ class FeedRegistrationForm(forms.Form):
         # we should verify whether or not this url is an actual feed or not
         import feedparser
         feed = feedparser.parse(url)
-        
         if feed.version == '':
-        
-            raise forms.ValidationError('The URL you have entered does not appear to be a valid RSS or Atom feed.')
+            raise forms.ValidationError('The URL you have entered does not \
+                                        appear to be a valid RSS or Atom feed.')
             
         return url
     
@@ -109,15 +108,10 @@ class FeedRegistrationForm(forms.Form):
         
         if self._instance:
             
-            # has the feed url changed?
-            if self._instance.url != self.cleaned_data['url']:
-                
-                self._instance.url = self.cleaned_data['url']
-                self._instance.consume()
-                
+            self._instance.url = self.cleaned_data['url']
             self._instance.license_url = self.cleaned_data['license_url']
             self._instance.save()
-                        
+            
             return self._instance
             
         else:
@@ -130,7 +124,6 @@ class FeedRegistrationForm(forms.Form):
                                cron_enabled=True,
                                registration=registration)
             feed.save()
-            feed.consume()
             
             return feed
         
