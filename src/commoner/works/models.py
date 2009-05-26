@@ -55,11 +55,11 @@ class Work(models.Model):
     def __unicode__(self):
         return self.title or self.url
 
-    def save(self):
+    def save(self, *args, **kwargs):
         # set the updated timestamp
         self.updated = datetime.now()
 
-        super(Work, self).save()
+        super(Work, self).save(*args, **kwargs)
 
     @property
     def owner_user(self):
@@ -232,17 +232,19 @@ class Constraint(models.Model):
 
 class Feed(models.Model):
 
-    registration = models.ForeignKey(Registration,
-                                     related_name='feeds')
-
     """ This model wasn't being used in the previous version, I imagine it was
     stubbed here for future development """
-
+    
+    registration = models.ForeignKey(Registration,
+                                     related_name='feeds')
+                                     
     url = models.URLField(max_length=255, blank=False, verify_exists=False)
     license_url = models.URLField(max_length=255, blank=True)
     cron_enabled = models.BooleanField(default=True, 
                 help_text="Run a cron job to periodically consume the works in this feed.")
-
+                
+    is_defunct = models.BooleanField(default=False)
+    
     consumed = models.DateTimeField()
 
     def __unicode__(self):
@@ -251,21 +253,6 @@ class Feed(models.Model):
     @property
     def owner_user(self):
         return self.registration.owner
-        
-    def entries(self):
-        
-        import feedparser
-        feed = feedparser.parse(self.url)
-        
-        # TODO: Remove entities in Atom entry titles
-        # title = remove_entities(entry.title)
-        
-        works = [Work(registration=self.registration,
-                        license_url=self.license_url,
-                        url=entry.link,
-                        title=entry.title) for entry in feed.entries]
-
-        return works
     
     def save(self):
         # set the updated timestamp

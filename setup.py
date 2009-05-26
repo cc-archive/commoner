@@ -18,6 +18,7 @@ setup(
         
         'console_scripts' : [
             'register = commoner.registration.scripts:register',
+            'consume_feeds = commoner.works.scripts:update_feeds',
             'welcome = commoner.registration.scripts:welcome',
             'django = commoner.scripts:manage',
             'noop = commoner.scripts:noop',

@@ -9,6 +9,7 @@ from django.utils.translation import ugettext as _
 
 import forms
 import models
+from scripts import consume_feed
 
 @login_required
 def add_or_edit(request, id=None):
@@ -77,9 +78,7 @@ def feed_add_or_edit(request, id=None):
             
             feed = form.save()
             
-            # register the works found in the feed
-            for work in feed.entries():
-                work.save()
+            consume_feed(feed)
             
             return HttpResponseRedirect(
                 reverse('feed_works', args=(feed.pk,)))

@@ -97,7 +97,7 @@ urlpatterns = patterns(
     url(r'^r/(?P<id>\d+)/delete/', 
         'commoner.works.views.delete',
         name='delete_content'),
-    url(r'^r/feed/add',
+    url(r'^r/feed/add/',
         'commoner.works.views.feed_add_or_edit',
         name='add_feed'),
     url(r'^r/feed/(?P<id>\d+)/edit/',
