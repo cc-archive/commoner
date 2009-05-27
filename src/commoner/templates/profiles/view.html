@@ -122,7 +122,9 @@
     {% endifequal %}{% endif %}
 	{% ifequal user.username profile_user.username %}
 	<a class="add_work" title="add a work" 
-	   href="{% url add_content %}">{% trans "Add" %}</a>
+	   href="{% url add_content %}">{% trans "Add Work" %}</a> 
+	<a class="add_work" title="add a feed" 
+	   href="{% url add_feed %}">{% trans "Add Feed" %}</a>
 	{% endifequal %}
     <h4>{% trans "Works I Have Licensed" %}</h4>
     {% if profile.works.all %}

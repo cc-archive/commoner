@@ -134,6 +134,11 @@ YAHOO.util.Event.onDOMReady(YAHOO.cc.load);
 
 {% block body %}
 
+<p>
+Alternatively, you can <a href="{% url add_feed %}">add a feed</a> 
+(RSS,Atom,XML) that will be monitored for new works and then will automatically 
+register the content as new works for you.
+</p>
 
 <div class="form">
   {% if form.non_field_errors %}
