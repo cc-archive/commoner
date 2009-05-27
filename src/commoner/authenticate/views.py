@@ -22,7 +22,8 @@ def login(request, template_name='registration/login.html',
     redirect_to = request.REQUEST.get(redirect_field_name, '')
     
     if request.user.is_authenticated():
-        return HttpResponseRedirect(redirect_to)
+        return HttpResponseRedirect(reverse(settings.LOGIN_REDIRECT_VIEW, 
+                                    args=[request.user.username]))
 
     if request.method == "POST":
         form = forms.LoginForm(data=request.POST)
