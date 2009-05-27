@@ -37,6 +37,7 @@ setup(
                         'rdfadict',
                         'simplejson',
                         'dmigrations',
+                        'feedparser',
                         # 'cc.license',
                         ],
 
