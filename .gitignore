@@ -8,4 +8,5 @@ downloads
 *.pyc
 *.pyo
 commoner.pid
+commoner_testing
 src/commoner.egg-info
