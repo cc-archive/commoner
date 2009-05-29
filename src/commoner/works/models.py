@@ -252,6 +252,10 @@ class Feed(models.Model):
     def owner_user(self):
         return self.registration.owner
     
+    @property
+    def works(self):
+        return self.registration.works.all()
+    
     def save(self):
         # set the updated timestamp
         self.consumed = datetime.now()

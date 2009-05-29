@@ -107,6 +107,41 @@ def feed_works(request, id):
                               context_instance=RequestContext(request))
 
 @login_required
+def feed_delete(request, id):
+    
+    """ 
+    Delete the feed and/or all of the works that were consumed 
+    from the feed.
+    """
+    
+    # TODO : wow, this initial code has been duplicated over 5 times now
+    
+    instance = get_object_or_404(models.Feed, id=id)
+    
+    if instance.owner_user != request.user:
+        return HttpResponseForbidden("Forbidden.")
+    
+    if request.method == 'POST':
+        
+        registration = instance.registration
+        instance.delete()
+        
+        if request.POST.get('feed_and_works', False):
+            
+            # delete all of the works related to this feed
+            registration.works.all().delete()
+            # delete the registration
+            registration.delete()
+        
+        return HttpResponseRedirect(reverse('profile_view', 
+                                    args=(request.user.username,)))
+    
+    return render_to_response('works/feed_delete.html',
+                              { 'content': instance },
+                              context_instance=RequestContext(request)
+                              )
+
+@login_required
 def delete(request, id):
 
     instance = get_object_or_404(models.Work, id=id)

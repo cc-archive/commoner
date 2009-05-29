@@ -26,10 +26,21 @@
 {% endif %}
 
 {% if feeds %}
-<h3>Registered Feeds</h3>
+<h4>Consuming the following feeds</h4>
+
+{% load license %}
 <ul class="licensed-works">
 	{% for feed in feeds %}
-         <li><a href="{{feed.url}}">{{feed.url}}</a> <a href="{% url edit_feed feed.id %}">[edit]</a></li>
+         <li><a href="{{feed.url}}">{{feed.url}}</a> ({{feed.works|length}} works)
+	
+		  <a about="{{feed.url}}" rel="license" href="{{feed.license_url}}" >
+		    <img src="{{feed.license_url|license_button}}" 
+			 alt="{{feed.license_url|license_code}}" 
+			 style="border:0;" /></a>
+		
+			<a href="{% url edit_feed feed.id %}">[edit]</a>
+			<a href="{% url delete_feed feed.id %}">[delete]</a>
+		</li>
       {% endfor %}
     </ul>
 <br />
