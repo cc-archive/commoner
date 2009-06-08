@@ -166,6 +166,7 @@ YAHOO.cc.license_jurisdiction_listener = function(){
 }
 
 YAHOO.cc.license_name_listener = function(){
+	
 	license_name = this.options[this.selectedIndex].text;
 	YAHOO.cc.populate('id_license_select_1', license_name);
 	YAHOO.util.Event.onAvailable("id_license_select_1", YAHOO.cc.license_jurisdiction_listener);
@@ -197,9 +198,10 @@ YAHOO.cc.load = function() {
 	YAHOO.util.Event.addListener("id_license_select_0", "change", YAHOO.cc.license_name_listener);
 	YAHOO.util.Event.addListener("id_license_select_1", "change", YAHOO.cc.license_jurisdiction_listener);
 	YAHOO.util.Event.addListener("id_license_select_2", "change", YAHOO.cc.license_version_listener);
+		
 	YAHOO.util.Event.addListener("id_url", "blur", YAHOO.cc.check);
 
-	YAHOO.util.Connect.asyncRequest('GET',"/l/license.json", YAHOO.cc.callbacks);
+	YAHOO.util.Connect.asyncRequest('GET',"/r/licenses.json", YAHOO.cc.callbacks);
 }
 
 YAHOO.util.Event.onDOMReady(YAHOO.cc.load);

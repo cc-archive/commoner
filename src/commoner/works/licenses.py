@@ -25,16 +25,14 @@ class LicenseCatalog:
         strings for translation with Django's i18n utilities.
         """
         
-        # allocate for this lang
-        self.catalogs[lang] = {}
-        self.catalogs[lang]['l'] = {}
-        self.catalogs[lang]['j'] = {}
+        # allocate for this lang, 'l' is for the license name's, 'j' for juris
+        self.catalogs[lang] = {'l':{},'j':{}}
         
         # convert the hyphens to underscores and get the path
-        lang_code = settings.I18N_CCORG_ROOT % lang.replace('-','_')
+        cc_pofile = settings.I18N_CCORG_ROOT % lang.replace('-','_')
 
         # get the po catalog for this language
-        catalog = pofile.read_po(open(lang_code))
+        catalog = pofile.read_po(open(cc_pofile))
 
         # flatten the dictionary and remove dup.s
         juris = list(set(itertools.chain(*self.licenses.itervalues())))
@@ -51,10 +49,12 @@ class LicenseCatalog:
                 if j not in self.catalogs[lang]['j']:
 
                     # Unported uses a different msgid
-                    msgid = "country.%s" % j
+                    if j == '-': 
+                        msgid = "util.Unported"
+                    else:
+                        msgid = "country.%s" % j
                     
-                    if j == '-': msgid = "util.Unported"
-
+                    # is the msgid in the po file?
                     if msgid not in catalog:
                         self.catalogs[lang]['j'][j] = j
                     else:
