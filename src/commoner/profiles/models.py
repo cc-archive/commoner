@@ -32,10 +32,15 @@ class CommonerProfileManager(models.Manager):
                   [newaddr, oldaddr])
     
 
+class OrgProfileManager(models.Manager):
+    """ Manager for the organization commoner profiles """
+    def get_query_set(self):
+        return super(OrgProfileManager, self).get_query_set().filter(
+            self.is_organization=True)
+
 class CommonerProfile(models.Model):
     """A User [Commoner] Profile; models additional user information 
     and provides convenience methods for accessing User properties."""
-
 
     user = models.ForeignKey(User, unique=True)
 
@@ -51,10 +56,18 @@ class CommonerProfile(models.Model):
     created = models.DateTimeField(default=datetime.now())
     updated = models.DateTimeField()
     expires = models.DateTimeField(blank=True, null=False)
-
+    
+    is_organization = models.BooleanField(_("organization profile"), 
+                                            default=False)
+    
     objects = CommonerProfileManager()
+    
+    organizations = OrgProfileManager()
         
     def __unicode__(self):
+        
+        
+        
         if self.nickname:
             return u"%s (%s)" % (self.user.username, self.nickname)
         return self.user.username
@@ -66,7 +79,10 @@ class CommonerProfile(models.Model):
         """Return the full name associated with this profile; this is 
         a convenience that concatenates the first and last name from the
         User model."""
-
+        
+        if self.is_organization and self.nickname:
+            return self.nickname
+        
         return u"%s %s" % (self.user.first_name, self.user.last_name)
 
     @property
