@@ -1,4 +1,3 @@
-
 import os
 try:
     from setuptools import setup
@@ -15,16 +14,18 @@ setup(
     package_dir = {'':'src'},
 
     entry_points = {
-        
+
         'console_scripts' : [
             'register = commoner.registration.scripts:register',
             'welcome = commoner.registration.scripts:welcome',
+            'django = commoner.scripts:manage',
             'noop = commoner.scripts:noop',
             'idjango = commoner_i.scripts:manage',
             ]
         },
-    
+
     install_requires = ['setuptools',
+                        'Django',
                         'python-openid',
                         'MySQL-python',
                         'PILwoTK',
@@ -33,9 +34,10 @@ setup(
                         'lxml',
                         'rdfadict',
                         'simplejson',
-                        'python-dateutil',
+                        'dmigrations',
+                        # 'cc.license',
                         ],
-                        
+
     dependency_links=['http://download.zope.org/distribution/',
                       'http://labs.creativecommons.org/~nathan/source/'],
 
