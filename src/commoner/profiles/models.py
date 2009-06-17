@@ -145,10 +145,18 @@ class CommonerProfile(models.Model):
         """Return the fully qualified URL for the slim member badge."""
 
         return "%s%s/80x15/" % (settings.BADGE_BASE_URL, self.user.username)
+    
+    @property
+    def is_organization(self):
+        """ Return True if the profiles is an organization """
         
+        return self.level == 'organization'
+    
     @property
     def free(self):
         """ Return True if this is a free account """
         
         # TODO : should inactive users be considered FREE ?
+        # TODO : is there such thing as a free org account, if so, code is fukd
+        
         return self.level == 'free'
