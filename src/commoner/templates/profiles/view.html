@@ -24,11 +24,19 @@
 {% block page_header %}
   <span rel="sioc:member_of" property="foaf:nick" resource="/">{{ profile.display_name }}</span>
 {% endblock %}
+
+{% block page_icon_class %}
+{% if profile.is_organization %}organization{% endif %}
+{% endblock %}
+
 {% block page_sub_header %}
   {% if profile.active %}
     {% trans "Active" %} 
   {% else %}
     {% trans "Inactive" %}
+  {% endif %}
+  {% if profile.free %}
+	{% trans "Free Account" %}
   {% endif %}
 {% endblock %}
 
@@ -120,6 +128,9 @@
 		</p>
 	  </div>
     {% endifequal %}{% endif %}
+
+	{% if not profile.free %}
+
 	{% ifequal user.username profile_user.username %}
 	<a class="add_work" title="add a work" 
 	   href="{% url add_content %}">{% trans "Add" %}</a>
@@ -158,6 +169,8 @@
 	{% endblocktrans %}</span>
       {% endifequal %}
     {% endif %}
+
+	{% endif %}
 </div>
 
 <br style="clear: both" />
