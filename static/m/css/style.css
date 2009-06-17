@@ -190,6 +190,11 @@ a:hover {
 	background-position: 100% 1px;
 }
 
+#main-body.organization {
+	background-image: url(/m/images/commoner-org.png);
+	background-position: 102% 1px;
+}
+
 .box {
 	text-align: left;
 	width: 800px;
