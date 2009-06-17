@@ -31,19 +31,23 @@ class CommonerProfileManager(models.Manager):
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, 
                   [newaddr, oldaddr])
     
-
-class OrgProfileManager(models.Manager):
-    """ Manager for the organization commoner profiles """
-    def get_query_set(self):
-        return super(OrgProfileManager, self).get_query_set().filter(
-            self.is_organization=True)
-
 class CommonerProfile(models.Model):
     """A User [Commoner] Profile; models additional user information 
     and provides convenience methods for accessing User properties."""
 
+    PROFILE_LEVELS = [
+        ('free', _('free')),
+        ('premium', _('premium')),
+        ('organization', _('organization'))
+    ]
+
     user = models.ForeignKey(User, unique=True)
 
+    # Select the level for this user, defaulted to 'premium' so that old code still works
+    # TODO: rework registration to explicitly set level, change default to 'free'
+    level = models.CharField(_("Level of profile"), choices=PROFILE_LEVELS,
+                    max_length=255, default='free')
+    
     nickname = models.CharField(_("Screen name"), max_length=255, blank=True)
     photo = models.ImageField(_("Photo"), storage=get_storage(), 
                               upload_to='p', blank=True, null=True)
@@ -56,18 +60,11 @@ class CommonerProfile(models.Model):
     created = models.DateTimeField(default=datetime.now())
     updated = models.DateTimeField()
     expires = models.DateTimeField(blank=True, null=False)
-    
-    is_organization = models.BooleanField(_("organization profile"), 
-                                            default=False)
-    
+        
     objects = CommonerProfileManager()
     
-    organizations = OrgProfileManager()
         
-    def __unicode__(self):
-        
-        
-        
+    def __unicode__(self):        
         if self.nickname:
             return u"%s (%s)" % (self.user.username, self.nickname)
         return self.user.username
@@ -148,4 +145,10 @@ class CommonerProfile(models.Model):
         """Return the fully qualified URL for the slim member badge."""
 
         return "%s%s/80x15/" % (settings.BADGE_BASE_URL, self.user.username)
-    
+        
+    @property
+    def free(self):
+        """ Return True if this is a free account """
+        
+        # TODO : should inactive users be considered FREE ?
+        return self.level == 'free'
