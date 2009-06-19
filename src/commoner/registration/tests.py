@@ -181,3 +181,33 @@ class TestRegistration(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertFormError(response, 'form', 'username',
                              ['Usernames can only contain letters, numbers and underscores.'])
+    
+    def test_free_registration(self):
+        """Creating a free profile"""
+        
+        # create a registration via the Register form
+        response = self.client.post('/a/register/', 
+                            dict(first_name='First',
+                                 last_name='Last',
+                                 email='test@example.com'))
+        
+        self.assertContains(response, "verification email has been sent to your inbox")
+        
+        # verify that an email was sent
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to, ['test@example.com'])
+        
+        # post the form to complete the registration
+        registration = list(models.PartialRegistration.objects.filter(
+                                    email='test@example.com'))[-1]
+        response = self.client.post(registration.get_absolute_url(),
+                                    dict(username='test_free',
+                                         password1='test',
+                                         password2='test',
+                                         agree_to_tos=True))
+        
+        self.assertRedirects(response, '/a/register/complete/')
+
+        # make sure we can log in
+        self.client.login(username='test_free', password='test')
+        

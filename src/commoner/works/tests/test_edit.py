@@ -2,7 +2,7 @@ import django.test
 from commoner.works import models
 
 class TestEditing(django.test.TestCase):
-    fixtures = ['test_users.json', ]
+    fixtures = ['test_users.json', 'test_profiles.json', ]
         
     def test_add_work(self):
 
