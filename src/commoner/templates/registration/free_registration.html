@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block head_title %}{% trans "Registration" %} -{% endblock %}
+{% block page_header %}{% trans "Start a new account" %}{% endblock %}
+{% block body %}
+
+{% if form.errors %}
+
+
+{% endif %}
+
+<div class="form">
+<form method="post" action=".">
+
+  <div class="field" id="first_name">
+    <span class="field_label">{{ form.first_name.label_tag }}: </span>
+    {{ form.first_name }}
+  </div>
+
+  <div class="field" id="last_name">
+    <span class="field_label">{{ form.last_name.label_tag }}: </span>
+    {{ form.last_name }}
+  </div>
+  
+  <div class="field" id="email_address">
+    <span class="field_label">{{ form.email.label_tag }}: </span>
+    {{ form.email }}
+  </div>
+
+  <p>
+    <input type="submit" value="Submit" />
+  </p>
+
+</form>
+</div>
+
+{% endblock %}

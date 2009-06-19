@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block head_title %}{% trans "Join CC Network" %} -{% endblock %}
+
+{% block page_header %}{% trans "Joining The Creative Commons Network" %}{% endblock %}
+{% block body %}
+
+<div id="about">
+<p>
+{% blocktrans %}When you support Creative Commons with an annual
+contribution of US$50 ($25 for students)  you receive a membership in
+the Creative Commons Network. The CC Network includes:{% endblocktrans %}
+</p>
+
+<table>
+<tr valign="top">
+<td width="50%">
+<div id="aboutcc" style="margin-right:5px;">
+<center>
+<h1>Premium Account</h1>
+<br>
+<img src="Join%20Page_files/openid.png" width="20%" border="0"></a>
+<a href="https://creativecommons.net/h/about/#identify"><img src="Join%20Page_files/identify.png" width="20%"  border="0"></a>
+<a href="https://creativecommons.net/h/about/#share"><img src="Join%20Page_files/share.png" width="20%" border="0"></a>
+<!-- <br>
+<a href="https://creativecommons.net/h/about/#share"><img src="http://krakli.files.wordpress.com/2008/05/donate.png" border="0"></a>
+<a href="https://creativecommons.net/h/about/#share"><img src="http://upload.wikimedia.org/wikipedia/commons/2/20/Wikipe-tan_requests_citation.png" width="20%" border="0"></a>
+-->
+
+</center>
+<p>
+Our premium accounts are available for members who have given $50 or more to our organization.
+
+Benefits include:
+
+<ul>
+<li>Register works and identify them using CC license deeds.</li>
+<!-- <li>Unlimited Web Citations</li> -->
+<li>OpenID Account</li>
+<li>Public Profile</li>
+</ul>
+
+If you do not renew your premium membership to the Creative Commons Network ever year, your account will revert to a free one.
+
+<div id="join_network">
+  <h2><a href="http://support.creativecommons.org/join/"  style="width:115px">
+
+      Donate<br><br>Now!
+  </a></h2>
+</div>
+
+</p>
+
+</div>
+</td>
+<td width="50%">
+	
+<div id="aboutcc" style="margin-left:5px;">
+
+<center>
+
+<h1>Free Account</h1>
+
+<br><img src="Join%20Page_files/openid.png" width="20%" border="0"></a>
+<a href="https://creativecommons.net/h/about/#share"><img src="Join%20Page_files/share.png" width="20%" border="0"></a>
+
+</center>
+<p>
+Creative Commons Network free accounts are available at no cost and offer the following benefits:
+
+<ul>
+<li>OpenID Account</li>
+<li>Public Profile</li>
+<!-- <li>10 Web Citations a month</li> -->
+
+</ul>
+Free accounts are always eligible for upgrade to premium accounts.
+</p>
+
+<div id="join_network">
+  <h2><a href="{% url register_free %}" style="width:115px">
+      Donate<br><br>Later
+  </a></h2>
+</div>
+
+</p>
+</div>
+</td>
+</tr>
+<tr>
+</table>
+
+<div id="aboutcc">
+<center>
+If your organization is interested in being a supporting member of the Creative Commons Network, <a href="#">please contact us here.</a> </center>
+
+</div>
+
+</div>
+
+{% endblock %}
