@@ -49,6 +49,8 @@ urlpatterns = patterns(
         name='contact_form'),
     (r'^h/contact/thanks/$', 'django.views.generic.simple.direct_to_template',
 	 {'template':'help/contact_thanks.html'}),
+     (r'^h/join/$', 'django.views.generic.simple.direct_to_template',
+	    {'template':'help/join.html'}),
 
     # Account management
     url(r'^a/login/$', 'commoner.authenticate.views.login',
@@ -80,7 +82,9 @@ urlpatterns = patterns(
      'django.views.generic.simple.direct_to_template',
      {'template':'registration/success.html'}),
     (r'^a/register/(?P<key>\w+)/', 'commoner.registration.views.complete'),
-
+    url(r'^a/register/$', 'commoner.registration.views.create',
+        name='register_free'),
+        
     # Profile management
     url(r'^p/edit/$', 'commoner.profiles.views.edit_or_create', 
         name='profile_edit'),

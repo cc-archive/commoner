@@ -3,8 +3,9 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.utils.translation import ugettext as _
 
-from forms import CompleteRegistrationForm
+from forms import CompleteRegistrationForm, FreeRegistrationForm
 
 from models import PartialRegistration
 
@@ -30,3 +31,30 @@ def complete(request, key):
     return render_to_response('registration/complete_registration.html',
                               { 'form': form },
                               context_instance=context)
+
+def create(request):
+    
+    """ Creation of free accounts """
+    
+    # check if the user is logged in
+    if request.user.is_authenticated():
+        request.user.message_set.create(
+            message=_(u"Please log out before creating a new account."))
+        return HttpResponseRedirect(
+            reverse('profile_view', args=(request.user.username,)))
+    
+    if request.method == 'POST':
+        
+        form = FreeRegistrationForm(data=request.POST)
+        if form.is_valid():
+            partial_reg = form.save()
+            
+            # need to change this behavior
+            return render_to_response('registration/check_inbox.html')
+    else:
+        
+        form = FreeRegistrationForm()
+    
+    return render_to_response('registration/free_registration.html',
+                                {'form':form}, 
+                                context_instance=RequestContext(request))

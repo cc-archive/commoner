@@ -5,8 +5,24 @@ from django.contrib.auth.models import User
 from django import forms
 
 from commoner.profiles.models import CommonerProfile
-from commoner.registration.models import RESERVED_NAMES
+from commoner.registration.models import RESERVED_NAMES, PartialRegistration
 
+class FreeRegistrationForm(forms.ModelForm):
+    
+    class Meta:
+        model = PartialRegistration
+        exclude = ('key', 'complete', 'transaction_id', 'user')
+        
+    def save(self):
+        
+        partial_reg = PartialRegistration.objects.create_registration(
+                        'free',
+                        self.cleaned_data['email'],
+                        self.cleaned_data['last_name'],
+                        self.cleaned_data['first_name'])
+        
+        return partial_reg
+        
 class CompleteRegistrationForm(forms.Form):
 
     username = forms.CharField(label=_(u"Username"), max_length=30,
