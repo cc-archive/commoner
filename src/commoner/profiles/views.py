@@ -46,7 +46,7 @@ def edit_or_create(request):
                                 'profile': profile },
                               context_instance=RequestContext(request)
                               )
-
+ 
 def delete(request):
     """View for deleting a user's account."""
 
@@ -186,11 +186,10 @@ def change_email(request):
         if form.is_valid():
             
             newaddr = form.cleaned_data['new_email']
-            user = profile.user
-            oldaddr = user.email
-            user.email = newaddr
-            user.save()
             
+            # gotta love python ;)
+            profile.user.email, oldaddr = newaddr, profile.user.email
+            profile.user.save()
             models.CommonerProfile.objects.send_email_changed(newaddr, oldaddr)
                         
             return HttpResponseRedirect(reverse('profile_view', 
