@@ -79,3 +79,8 @@ class PartialRegistration(models.Model):
 
     class Meta:
         verbose_name=_("User registration")
+    
+    def is_free(self):
+        """ Return True if the Partial Registration was created via the web form
+        and not as a result of a donation at support.cc.org """
+        return self.transaction_id == 'free'

@@ -102,6 +102,11 @@ class CompleteRegistrationForm(forms.Form):
         new_user.save()
 
         new_profile = CommonerProfile(user=new_user)
+        
+        # set the level of the profile
+        if not self.partial.is_free():
+            new_profile.level = 'premium'
+        
         new_profile.save()
 
         # update the partial registration
