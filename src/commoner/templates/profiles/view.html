@@ -30,14 +30,14 @@
 {% endblock %}
 
 {% block page_sub_header %}
-  {% if profile.active %}
-    {% trans "Active" %} 
-  {% else %}
-    {% trans "Inactive" %}
-  {% endif %}
   {% if profile.free %}
 	{% trans "Free Account" %}
-  {% endif %}
+  {% else %}
+  {% if profile.is_organization %}
+	{% trans "Organization Account" %}
+  {% else %}
+    {% trans "Premium Account" %}
+  {% endif %}{% endif %}
 {% endblock %}
 
 {% block extra_nav %}
