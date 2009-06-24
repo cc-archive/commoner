@@ -75,6 +75,7 @@ INSTALLED_APPS = (
     'commoner.authenticate',
     'commoner.help',
 	'commoner.broadcast',
+	'commoner.campaigns',
 )
 
 TEMPLATE_LOADERS = (
