@@ -531,9 +531,12 @@ div#thermometer {
     background:#f4f4f4 url(/m/images/thermometer.png) top left no-repeat;
     text-align:center;
     
-    -moz-border-radius:4px;
-    -moz-border-topleft:10px;
     border-left:1px #1ea324 solid;
     border-right:1px #ccc solid;
+    -webkit-border-radius: 4px;
+    -moz-border-radius:4px;
+    -moz-border-left-colors:#1ea324;
+    -moz-border-right-colors:#ccc;
+    
 }
 div#thermometer span { line-height:37px; font-size:18px; font-weight:bold;}
