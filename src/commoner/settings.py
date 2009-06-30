@@ -78,6 +78,10 @@ INSTALLED_APPS = (
 	'commoner.campaigns',
 )
 
+if DATABASE_ENGINE != 'mysql' and INSTALLED_APPS[0] == 'dmigrations':
+    # make sure dmigrations is first in the tuple
+    INSTALLED_APPS = INSTALLED_APPS[1:]
+
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.load_template_source',
     'django.template.loaders.app_directories.load_template_source',
