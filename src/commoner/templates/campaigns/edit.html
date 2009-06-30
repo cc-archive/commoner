@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block head_title %}{% trans "Campaign" %} -{% endblock %}
+
+{% block page_header %}
+{% if campaign %}
+  {% trans "Edit Campaign" %}
+{% else %}
+  {% trans "Create Campaign" %}
+{% endif %}
+{% endblock %}
+
+{% block extra_nav %}
+<li><a href="#">{% trans "View Campaign Status" %}</a></li>
+<li><a href="#">{% trans "Edit Campaign" %}</a></li>
+<li><a href="#">{% trans "Change Campaign Goal" %}</a></li>
+{% endblock %}
+
+{% block page_icon_class %}edit{% endblock %}
+
+{% block body %}
+
+<div class="form">
+  <form method="post" enctype="multipart/form-data" action=".">
+
+    <h3>{% trans "Campaign for CC" %}</h3>
+
+    <div class="field" id="pitch">
+      <span class="field_label">{{form.pitch.label}}: </span>
+      {{form.pitch}}
+      {% if form.pitch.errors %}
+      <div class="errors">
+	{{ form.pitch.errors }}
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="field" id="goal">
+      <span class="field_label">{{form.goal.label}}:
+		<br />{{form.goal.help_text}}</span>
+      {{form.goal}}
+      {% if form.goal.errors %}
+      <div class="errors">
+	{{ form.goal.errors }}
+      </div>
+      {% endif %}
+    </div>
+
+    <input type="submit" value='{% trans "Save Campaign" %}' />
+    {% if campaign %}
+    &nbsp;<a href="{% url profile_view user.username %}">
+      {% trans "cancel" %}</a>
+    {% endif %}
+  </form>
+</div>
+
+{% endblock %}

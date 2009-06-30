@@ -85,7 +85,9 @@ urlpatterns = patterns(
     url(r'^p/edit/$', 'commoner.profiles.views.edit_or_create', 
         name='profile_edit'),
     url(r'^p/email/$', 'commoner.profiles.views.change_email', 
-        name='change_email'),    
+        name='change_email'), 
+    url(r'^p/campaign/$', 'commoner.campaigns.views.edit_or_create',
+        name='campaign_edit'),   
 
     # Work Registration management
     url(r'^r/add/', 
@@ -140,7 +142,9 @@ urlpatterns = patterns(
         
     # Profile views
     url(r'^(?P<username>\w+)/works/$', 'commoner.profiles.views.works',
-        name='profile_works'),
+        name='profile_works'),        
+    url(r'^(?P<username>\w+)/campaign/$', 'commoner.campaigns.views.view',
+        name='profile_campaign'),
     url(r'^(?P<username>\w+)/works/rdf$', 'commoner.profiles.views.user_rdf',
         name='profile_rdf'),
     url(r'^(?P<username>\w+)/works/atom$', 'commoner.works.feeds.user_works_feed',

@@ -13,8 +13,21 @@ class Campaign(models.Model):
                                 decimal_places=2)
     
     created = models.DateTimeField(default=datetime.now())
-    starts = models.DateTimeField(_("start date for campaign"))
+    updated = models.DateTimeField()
+    
     expires = models.DateTimeField(_("end date for campaign"))
     
     def __unicode__(self):
         return "%s - $%s" % self.user, self.goal
+    
+    def save(self):
+        """ Ensure dates are added/updated """
+        
+        # set the campaign expiration to the end of the current year
+        # gives them a deadline for their fundraising
+        if not self.expires:
+            self.expires = datetime(datetime.now().year, 12, 31)
+        
+        self.updated = datetime.now()
+        
+        super(Campaign, self).save()
