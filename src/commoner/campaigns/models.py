@@ -6,6 +6,7 @@ from datetime import datetime
 
 class Campaign(models.Model):
     
+    # need to do unique=True for the year
     user = models.ForeignKey(User, related_name='campaign', unique=True)
     
     pitch = models.TextField(_("why one should give"), blank=True)
@@ -31,3 +32,11 @@ class Campaign(models.Model):
         self.updated = datetime.now()
         
         super(Campaign, self).save()
+        
+    @property
+    def progress(self):
+        """ Sum of the donations divided by the goal and rounded to the nearest
+        percent """
+        
+        # donations not yet implemented so return zero
+        return "0"

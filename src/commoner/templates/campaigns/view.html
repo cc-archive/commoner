@@ -8,11 +8,14 @@
 {% block page_header %}
 	{{ profile.display_name }}
 {% endblock %}
+{% block page_sub_header %}
+	{% trans "Campaign for CC" %}
+{% endblock %}
 
 {% block extra_nav %}
 {% if user.is_authenticated %}
   {% ifequal user.username campaign.user.username %}
-	<li><a href="#">{% trans "Edit Campaign" %}</a></li>
+	<li><a href="{% url campaign_edit %}">{% trans "Edit Campaign" %}</a></li>
 	<li><a href="#">{% trans "Campaign Log" %}</a></li>
   {% endifequal %}
 {% endif %}
@@ -33,7 +36,9 @@
 		   {% endif %}
 	</div>
 	<div style="width:225px;float:left;">
-		THERMOMETER
+		
+		{% include "campaigns/thermometer.html" %}
+		
 	</div>
 	<div style="width:400px;float:left;">
 		

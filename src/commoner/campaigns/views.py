@@ -34,8 +34,8 @@ def edit_or_create(request):
             campaign.user = request.user
             campaign.save()
             
-            return HttpResponseRedirect(reverse('profile_campaign'), 
-                                    args=request.user.username)
+            return HttpResponseRedirect(reverse('profile_campaign', 
+                                    args=(request.user.username,)))
             
     else:
         

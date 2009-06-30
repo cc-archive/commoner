@@ -524,3 +524,16 @@ ul#benefits li {
 	margin-bottom: 1.5em;
 }
 
+div#thermometer {
+    width:250px;
+    margin:10px 0;
+    height:35px;
+    background:#f4f4f4 url(/m/images/thermometer.png) top left no-repeat;
+    text-align:center;
+    
+    -moz-border-radius:4px;
+    -moz-border-topleft:10px;
+    border-left:1px #1ea324 solid;
+    border-right:1px #ccc solid;
+}
+div#thermometer span { line-height:37px; font-size:18px; font-weight:bold;}
