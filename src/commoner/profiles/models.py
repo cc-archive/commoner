@@ -159,4 +159,4 @@ class CommonerProfile(models.Model):
         # TODO : should inactive users be considered FREE ?
         # TODO : is there such thing as a free org account, if so, code is fukd
         
-        return self.level == 'free'
+        return self.level == 'free' or not self.active
