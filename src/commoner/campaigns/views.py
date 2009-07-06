@@ -34,7 +34,7 @@ def edit_or_create(request):
             campaign.user = request.user
             campaign.save()
             
-            return HttpResponseRedirect(reverse('profile_campaign', 
+            return HttpResponseRedirect(reverse('campaign_view', 
                                     args=(request.user.username,)))
             
     else:
@@ -63,7 +63,3 @@ def view(request, username):
                             'profile':profile_obj,
                             'profile_user':user},
                             context_instance=RequestContext(request))
-        
-        
-    
-    

@@ -144,7 +144,7 @@ urlpatterns = patterns(
     url(r'^(?P<username>\w+)/works/$', 'commoner.profiles.views.works',
         name='profile_works'),        
     url(r'^(?P<username>\w+)/campaign/$', 'commoner.campaigns.views.view',
-        name='profile_campaign'),
+        name='campaign_view'),
     url(r'^(?P<username>\w+)/works/rdf$', 'commoner.profiles.views.user_rdf',
         name='profile_rdf'),
     url(r'^(?P<username>\w+)/works/atom$', 'commoner.works.feeds.user_works_feed',

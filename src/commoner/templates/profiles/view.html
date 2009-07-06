@@ -37,7 +37,7 @@
   {% ifequal user.username profile_user.username %}
 <li><a href="{% url profile_edit %}">{% trans "Edit Profile" %}</a></li>
 <li><a href="{% url openid_settings %}">{% trans "OpenID Settings" %}</a></li>
-<li><a href="{% url profile_campaign profile.user %}">{% trans "Campaign for CC" %}</a></li>
+<li><a href="{% url campaign_view profile.user %}">{% trans "Campaign for CC" %}</a></li>
   {% endifequal %}{% endif %}
 {% endblock %}
 
