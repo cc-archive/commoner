@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?> 
 <opConfig version="1.0">
-  <configRevision>1.0.01</configRevision>
+  <configRevision>1.0.02</configRevision>
   <title>Creative Commons Network</title>
   <serverIdentifier>creativecommons.net</serverIdentifier>
   <description>CC Network OpenID provider</description>
