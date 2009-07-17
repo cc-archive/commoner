@@ -207,3 +207,18 @@ def change_email(request):
         { 'form': form },
           context_instance=RequestContext(request)
     )
+
+@login_required
+def account_overview(request):
+    """ Simple view that displays the account type and when their account 
+    expires. """
+    
+    try:
+        profile = request.user.get_profile()
+    except ObjectDoesNotExist:
+        profile = models.CommonerProfile(user=request.user)
+        
+    return render_to_response('profiles/account_overview.html',
+        { 'profile': profile },
+          context_instance=RequestContext(request)
+    )

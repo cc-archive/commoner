@@ -88,6 +88,8 @@ urlpatterns = patterns(
     # Profile management
     url(r'^p/edit/$', 'commoner.profiles.views.edit_or_create', 
         name='profile_edit'),
+    url(r'^p/account/$', 'commoner.profiles.views.account_overview', 
+        name='profile_account'),
     url(r'^p/email/$', 'commoner.profiles.views.change_email', 
         name='change_email'),    
 
