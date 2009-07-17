@@ -1,0 +1,6 @@
+[submodule "paypal"]
+	path = paypal
+	url = git://github.com/johnboxall/django-paypal.git
+[submodule "src/paypal"]
+	path = src/paypal
+	url = git://github.com/johnboxall/django-paypal.git
