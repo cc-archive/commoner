@@ -12,6 +12,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.conf import settings
 
+from paypal.standard.forms import PayPalPaymentsForm
+
 import forms
 import models
 
@@ -218,7 +220,26 @@ def account_overview(request):
     except ObjectDoesNotExist:
         profile = models.CommonerProfile(user=request.user)
         
-    return render_to_response('profiles/account_overview.html',
-        { 'profile': profile },
-          context_instance=RequestContext(request)
+    student_paypal_dict = {
+        "business": "johndo_1246911637_biz@gmail.com",
+        "amount": "25.00",
+        "item_name": "CC Network Account",
+        "invoice": "unique-invoice-id",
+        "notify_url": "http://www.example.com/your-ipn-location/",
+        "return_url": "http://www.example.com/your-return-location/",
+        "cancel_return": "http://www.example.com/your-cancel-location/",
+    }
+    
+    normal_paypal_dict = dict(**student_paypal_dict)
+    normal_paypal_dict['amount'] = "50.00"
+    
+    # Create the instance.
+    student_form = PayPalPaymentsForm(initial=student_paypal_dict)
+    normal_form = PayPalPaymentsForm(initial=normal_paypal_dict)
+
+    return render_to_response('profiles/account_overview.html', {   
+            'profile': profile, 
+            'student_form': student_form, 
+            'normal_form': normal_form 
+        }, context_instance=RequestContext(request)
     )

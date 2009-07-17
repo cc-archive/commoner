@@ -22,9 +22,9 @@
 		
 		<p>
 			Aren't you interested in registering and citing works?
-			<a href="#">Click here</a> if you are interested in upgrading your 
-			account	by making a contribution to Creative Commons!
 		</p>
+		
+		{% include "profiles/join_form.html" %}
 		
 	{% else %}
 		{# check to make sure they weren't premium before #}
@@ -38,8 +38,8 @@
 			provider, but you will no longer be able to register works and your 
 			public profile will reflect that you are no longer a CC donor. 
 			
-			<a href="#">Click here</a> if you are interested in renewing your 
-			account	by making a contribution to Creative Commons!
+			
+			{% include "profiles/join_form.html" %}
 		</p>
 		{% endif %}
 	{% endifequal %}
