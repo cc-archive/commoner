@@ -22,9 +22,11 @@
 		
 		<p>
 			Aren't you interested in registering and citing works?
+			<a href="{% url register_upgrade %}">Click here</a> 
+			to upgrade to a Premium Account now!
 		</p>
 		
-		{% include "profiles/join_form.html" %}
+		
 		
 	{% else %}
 		{# check to make sure they weren't premium before #}
@@ -38,8 +40,8 @@
 			provider, but you will no longer be able to register works and your 
 			public profile will reflect that you are no longer a CC donor. 
 			
-			
-			{% include "profiles/join_form.html" %}
+			<a href="{% url register_upgrade %}">Click here</a> 
+			to upgrade to a Premium Account now!
 		</p>
 		{% endif %}
 	{% endifequal %}
@@ -48,6 +50,13 @@
 	<h2>Premium Account</h2>		
 	<p>
 		Your account will expire in <strong>{{profile.expires|timeuntil}}</strong>.
+		
+		{# need to put some conditional logic here #}
+		
+		<a href="{% url register_upgrade %}">Click here</a> 
+		to renew your account for an additional year.
+		
+		
 	</p>
 	
 	<h2>Work Registrations</h2>

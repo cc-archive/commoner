@@ -47,13 +47,14 @@ class PartialRegistration(models.Model):
 
     key = models.CharField(max_length=40, primary_key=True,
                            editable=False)
-
+                                                                             
     last_name = models.CharField(max_length=30)
     first_name = models.CharField(max_length=30)
     email = models.EmailField()
     complete = models.BooleanField(default=False)
     transaction_id = models.CharField(max_length=255, blank=True, null=True)
-
+    
+    
     user = models.ForeignKey(User, blank=True, null=True)
 
     def __unicode__(self):

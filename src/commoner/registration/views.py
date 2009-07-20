@@ -1,12 +1,14 @@
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
 
-from forms import CompleteRegistrationForm, FreeRegistrationForm
+from paypal.standard.forms import PayPalPaymentsForm
 
+from forms import CompleteRegistrationForm, FreeRegistrationForm
 from models import PartialRegistration
 
 def complete(request, key):
@@ -58,3 +60,38 @@ def create(request):
     return render_to_response('registration/free_registration.html',
                                 {'form':form}, 
                                 context_instance=RequestContext(request))
+
+@login_required                                
+def upgrade(request):
+    
+    """ Upgrade account page. """
+    
+    try:
+        profile = request.user.get_profile()
+    except ObjectDoesNotExist:
+        profile = models.CommonerProfile(user=request.user)
+        
+    student_paypal_dict = {
+        "business": "johndo_1246911637_biz@gmail.com",
+        "amount": "25.00",
+        "item_name": "CC Network Account",
+        "invoice": "unique-invoice-id",
+        "notify_url": "http://www.example.com/your-ipn-location/",
+        "return_url": "http://www.example.com/your-return-location/",
+        "cancel_return": "http://www.example.com/your-cancel-location/",
+    }
+    
+    normal_paypal_dict = dict(**student_paypal_dict)
+    normal_paypal_dict['amount'] = "50.00"
+    
+    # Create the instance.
+    student_form = PayPalPaymentsForm(initial=student_paypal_dict)
+    normal_form = PayPalPaymentsForm(initial=normal_paypal_dict)
+
+    return render_to_response('registration/upgrade.html', {   
+            'profile': profile, 
+            'student_form': student_form, 
+            'normal_form': normal_form 
+        }, context_instance=RequestContext(request)
+    )
+    

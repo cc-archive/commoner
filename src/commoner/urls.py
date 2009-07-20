@@ -84,6 +84,8 @@ urlpatterns = patterns(
     (r'^a/register/(?P<key>\w+)/', 'commoner.registration.views.complete'),
     url(r'^a/register/$', 'commoner.registration.views.create',
         name='register_free'),
+    url(r'^a/upgrade/$', 'commoner.registration.views.upgrade', 
+        name='register_upgrade'),
         
     # Profile management
     url(r'^p/edit/$', 'commoner.profiles.views.edit_or_create', 
