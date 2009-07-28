@@ -81,9 +81,9 @@ urlpatterns = patterns(
     (r'^a/register/complete/$', 
      'django.views.generic.simple.direct_to_template',
      {'template':'registration/success.html'}),
-    (r'^a/register/(?P<key>\w+)/', 'commoner.registration.views.complete'),
+    (r'^a/register/(?P<key>\w+)/', 'commoner.registration.views.activate'),
     url(r'^a/register/$', 'commoner.registration.views.create',
-        name='register_free'),
+        name='register'),
     url(r'^a/upgrade/$', 'commoner.registration.views.upgrade', 
         name='register_upgrade'),
         

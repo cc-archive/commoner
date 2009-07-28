@@ -30,15 +30,28 @@ class CommonerProfileManager(models.Manager):
 
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, 
                   [newaddr, oldaddr])
+                  
+    def create_profile(self, user):
+        """ Creates a free profile for a registered user """
+
+        # check for promo code
+
+        profile = CommonerProfile(user=user, level=CommonerProfile.FREE)
+        profile.save()
+
+        return profile
     
 class CommonerProfile(models.Model):
     """A User [Commoner] Profile; models additional user information 
     and provides convenience methods for accessing User properties."""
-
+    
+    FREE = 'free'
+    PREMIUM = 'premium'
+    ORGANIZATION = 'organization'
     PROFILE_LEVELS = [
-        ('free', _('free')),
-        ('premium', _('premium')),
-        ('organization', _('organization'))
+        (FREE, _('Free')),
+        (PREMIUM, _('Premium')),
+        (ORGANIZATION, _('Organization'))
     ]
 
     user = models.ForeignKey(User, unique=True)
@@ -46,7 +59,7 @@ class CommonerProfile(models.Model):
     # Select the level for this user, defaulted to 'premium' so that old code still works
     # TODO: rework registration to explicitly set level, change default to 'free'
     level = models.CharField(_("Level of profile"), choices=PROFILE_LEVELS,
-                    max_length=255, default='free')
+                    max_length=255, default=FREE)
     
     nickname = models.CharField(_("Screen name"), max_length=255, blank=True)
     photo = models.ImageField(_("Photo"), storage=get_storage(), 
@@ -57,8 +70,8 @@ class CommonerProfile(models.Model):
 
     story = models.TextField(blank=True)
 
-    created = models.DateTimeField(default=datetime.now())
-    updated = models.DateTimeField()
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
     expires = models.DateTimeField(blank=True, null=False)
         
     objects = CommonerProfileManager()
@@ -105,9 +118,6 @@ class CommonerProfile(models.Model):
             # set the expiration to be now + 1 year
             today = datetime.now()
             self.expires = today.replace(today.year + 1)
-
-        # set the updated timestamp
-        self.updated = datetime.now()
             
         super(CommonerProfile, self).save()
 
@@ -150,7 +160,7 @@ class CommonerProfile(models.Model):
     def is_organization(self):
         """ Return True if the profiles is an organization """
         
-        return self.level == 'organization'
+        return self.level == self.ORGANIZATION
     
     @property
     def free(self):
@@ -159,4 +169,4 @@ class CommonerProfile(models.Model):
         # TODO : should inactive users be considered FREE ?
         # TODO : is there such thing as a free org account, if so, code is fukd
         
-        return self.level == 'free' or not self.active
+        return self.level == self.FREE or not self.active

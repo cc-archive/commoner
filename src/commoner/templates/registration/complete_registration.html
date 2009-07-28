@@ -1,18 +1,12 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% block head_title %}{% trans "Complete Registration" %} -{% endblock %}
-{% block page_header %}{% trans "Complete Registration" %}{% endblock %}
+{% block head_title %}{% trans "Registration" %} -{% endblock %}
+{% block page_header %}{% trans "Registration" %}{% endblock %}
 
 {% block nav_override %}{% endblock %}
 {% block page_icon_class %}register{% endblock %}
 {% block body %}
 
-{% if form.partial.complete %}
-<p class="error">
-{% trans "This registration code has already been used." %}
-</p>
-
-{% else %}
 <div class="form">
 
 <h2>{{form.partial.first_name}} {{form.partial.last_name}}</h2>
@@ -32,6 +26,22 @@
    </div>
   {% endif %}
   <form action="." method="POST">
+
+	<div class="field" id="first_name">
+	    <span class="field_label">{{ form.first_name.label_tag }}: </span>
+	    {{ form.first_name }}
+	  </div>
+
+	  <div class="field" id="last_name">
+	    <span class="field_label">{{ form.last_name.label_tag }}: </span>
+	    {{ form.last_name }}
+	  </div>
+
+	  <div class="field" id="email_address">
+	    <span class="field_label">{{ form.email.label_tag }}: </span>
+	    {{ form.email }}
+	  </div>
+	
 
     <div class="field" id="username">
       <span class="field_label">{{form.username.label}}</span>
@@ -64,6 +74,16 @@
       {% endif %}
     </div>
 
+	  <div class="field" id="promo_code">
+	    <span class="field_label">{{ form.promo_code.label_tag }}: </span>
+      {% if form.promo_code.errors %}
+      <div class="errors">
+        {{ form.promo_code.errors }}
+      </div>
+      {% endif %}
+	    {{ form.promo_code }}
+	  </div>
+
     <div class="field" id="agree_to_tos">
       <h3>{% trans "Terms of Use" %}</h3>
       <iframe src="/l/termsofuse.html" class="tos"> </iframe>
@@ -79,11 +99,9 @@
       </div>
     </div>
 
-    <input type="submit" value="complete registration" />
+    <input type="submit" value="submit registration" />
 
   </form>
 </div>
-
-{% endif %}
 
 {% endblock %}

@@ -76,6 +76,7 @@ INSTALLED_APPS = (
     'commoner.authenticate',
     'commoner.help',
 	'commoner.broadcast',
+    'commoner.premium',
 )
 
 TEMPLATE_LOADERS = (

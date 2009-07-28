@@ -8,35 +8,23 @@ from django.utils.translation import ugettext as _
 
 from paypal.standard.forms import PayPalPaymentsForm
 
-from forms import CompleteRegistrationForm, FreeRegistrationForm
-from models import PartialRegistration
+from commoner.premium.models import PromoCode
 
-def complete(request, key):
+from forms import RegistrationForm
+from models import Registration 
 
-    # make sure this is a valid registration key
-    try:
-        partial = PartialRegistration.objects.get(key__exact = key)
-    except PartialRegistration.DoesNotExist:
+def activate(request, key):
+
+    user = Registration.objects.activate_user(key)
+
+    if user is None:
         raise Http404
-
-    if request.method == 'POST':
-        # process an attempt to complete the registration
-        form = CompleteRegistrationForm(partial, data=request.POST)
-        if form.is_valid():
-            new_user = form.save()
-
-            return HttpResponseRedirect('/a/register/complete/')
-    else:
-        form = CompleteRegistrationForm(partial)
     
-    context = RequestContext(request)
-    return render_to_response('registration/complete_registration.html',
-                              { 'form': form },
-                              context_instance=context)
+    return HttpResponseRedirect('/a/register/complete/')
 
 def create(request):
     
-    """ Creation of free accounts """
+    """ Creating a free acount """
     
     # check if the user is logged in
     if request.user.is_authenticated():
@@ -47,17 +35,23 @@ def create(request):
     
     if request.method == 'POST':
         
-        form = FreeRegistrationForm(data=request.POST)
+        form = RegistrationForm(data=request.POST)
         if form.is_valid():
-            partial_reg = form.save()
             
-            # need to change this behavior
+            registration = form.save()
+
+            # record the usage of the promo code
+            if form.cleaned_data.get('promo_code', False):
+                promo = PromoCode(form.cleaned_data['promo_code'])
+                promo.used_by = registration.user
+                promo.save()
+            
             return render_to_response('registration/check_inbox.html')
     else:
         
-        form = FreeRegistrationForm()
+        form = RegistrationForm()
     
-    return render_to_response('registration/free_registration.html',
+    return render_to_response('registration/complete_registration.html',
                                 {'form':form}, 
                                 context_instance=RequestContext(request))
 

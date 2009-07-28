@@ -27,6 +27,26 @@
     {{ form.email }}
   </div>
 
+  <div class="field" id="username">
+    <span class="field_label">{{ form.username.label_tag }}: </span>
+    {{ form.username }}
+  </div>
+
+  <div class="field" id="password1">
+    <span class="field_label">{{ form.password1.label_tag }}: </span>
+    {{ form.password1 }}
+  </div>
+
+  <div class="field" id="password2">
+    <span class="field_label">{{ form.password2.label_tag }}: </span>
+    {{ form.password2 }}
+  </div>
+
+  <div class="field" id="promo">
+    <span class="field_label">{{ form.promo.label_tag }}: </span>
+    {{ form.promo }}
+  </div>
+
   <p>
     <input type="submit" value="Submit" />
   </p>
