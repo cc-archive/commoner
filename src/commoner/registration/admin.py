@@ -1,16 +1,11 @@
 from django.contrib import admin
-from commoner.registration.models import Registration
-from django.utils.translation import ugettext_lazy as _
+
+from registration.models import RegistrationProfile
+
 
 class RegistrationAdmin(admin.ModelAdmin):
+    list_display = ('__unicode__', 'activation_key_expired')
+    search_fields = ('user__username', 'user__first_name')
 
-    list_display = ('user', 'key')
-    
-    def save_model(self, request, obj, form, change):
-        obj.save()
 
-        if not change:
-	    # creating a new instance
-	    Registration.objects.send_activation(obj)
-
-admin.site.register(Registration, RegistrationAdmin)
+admin.site.register(RegistrationProfile, RegistrationAdmin)
