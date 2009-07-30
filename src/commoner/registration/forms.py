@@ -10,13 +10,13 @@ from django.utils.translation import ugettext_lazy as _
 
 from registration.models import RegistrationProfile
 
+from commoner.premium.forms import PromoCodeField
 
 # I put this on all required fields, because it's easier to pick up
 # on them with CSS or JavaScript if they have a class of "required"
 # in the HTML. Your mileage may vary. If/when Django ticket #3515
 # lands in trunk, this will no longer be necessary.
 attrs_dict = { 'class': 'required' }
-
 
 class RegistrationForm(forms.Form):
     """
@@ -80,55 +80,42 @@ class RegistrationForm(forms.Form):
         return new_user
 
 
-class RegistrationFormTermsOfService(RegistrationForm):
+class CommonerRegistrationForm(RegistrationForm):
     """
     Subclass of ``RegistrationForm`` which adds a required checkbox
-    for agreeing to a site's Terms of Service.
-    
+    for agreeing to CC.net's  Terms of Service.
+
+    This form also requires users to enter their First and Last names
+
+    The promo code field is optional, if the user enters a code, the code will
+    be checked to determine that a record for it exists in the database.  If
+    so, the code is marked as used and the user is added to the premium group.
+        
     """
     tos = forms.BooleanField(widget=forms.CheckboxInput(attrs=attrs_dict),
-                             label=_(u'I have read and agree to the Terms of Service'),
+                             label=_(u'By agreeing to the Terms of Use you affirm you are at least 13 years of age.  If you are between 13 years old and the age of majority in your jurisdiction, you affirm that you have obtained your parent's or legal guardian's express permission to create an account as required by CC.'),
                              error_messages={ 'required': u"You must agree to the terms to register" })
 
+    first_name = forms.CharField(label=_('first name'), max_length=40)
+    last_name = forms.CharFielf(label=_('last name'), max_length=40)
 
-class RegistrationFormUniqueEmail(RegistrationForm):
-    """
-    Subclass of ``RegistrationForm`` which enforces uniqueness of
-    email addresses.
-    
-    """
-    def clean_email(self):
+    promo = PromoCodeField()
+
+    def save(self):
         """
-        Validate that the supplied email address is unique for the
-        site.
+        Create the new ``User`` and ``RegistrationProfile``, and
+        returns the ``User`` (by calling
+        ``RegistrationProfile.objects.create_inactive_user()``).
+
+        Overload the parent's save() to handle first & last names
         
         """
-        if User.objects.filter(email__iexact=self.cleaned_data['email']):
-            raise forms.ValidationError(_(u'This email address is already in use. Please supply a different email address.'))
-        return self.cleaned_data['email']
-
-
-class RegistrationFormNoFreeEmail(RegistrationForm):
-    """
-    Subclass of ``RegistrationForm`` which disallows registration with
-    email addresses from popular free webmail services; moderately
-    useful for preventing automated spam registrations.
+        new_user = RegistrationProfile.objects.create_inactive_user(username=self.cleaned_data['username'],
+                                                                    password=self.cleaned_data['password1'],
+                                                                    first_name=self.cleaned_data['first_name'],
+                                                                    last_name=self.cleaned_data['last_name'],
+                                                                    email=self.cleaned_data['email'])
+                
+        return new_user
     
-    To change the list of banned domains, subclass this form and
-    override the attribute ``bad_domains``.
     
-    """
-    bad_domains = ['aim.com', 'aol.com', 'email.com', 'gmail.com',
-                   'googlemail.com', 'hotmail.com', 'hushmail.com',
-                   'msn.com', 'mail.ru', 'mailinator.com', 'live.com']
-    
-    def clean_email(self):
-        """
-        Check the supplied email address against a list of known free
-        webmail domains.
-        
-        """
-        email_domain = self.cleaned_data['email'].split('@')[1]
-        if email_domain in self.bad_domains:
-            raise forms.ValidationError(_(u'Registration using free email addresses is prohibited. Please supply a different email address.'))
-        return self.cleaned_data['email']

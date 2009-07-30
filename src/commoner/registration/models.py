@@ -14,6 +14,7 @@ from django.utils.translation import ugettext_lazy as _
 
 SHA1_RE = re.compile('^[a-f0-9]{40}$')
 
+RESERVED_NAMES = ('admin','pony',)
 
 class RegistrationManager(models.Manager):
     """
@@ -70,6 +71,7 @@ class RegistrationManager(models.Manager):
         return False
     
     def create_inactive_user(self, username, password, email,
+                             first_name, last_name
                              send_email=True):
         """
         Create a new, inactive ``User``, generate a
@@ -106,11 +108,15 @@ class RegistrationManager(models.Manager):
         argument ``user``) after the ``User`` and
         ``RegistrationProfile`` have been created, and the email (if
         any) has been sent..
+
+        JED3: Added first and last name params
         
         """
         from registration.signals import user_registered
 
         new_user = User.objects.create_user(username, email, password)
+        new_user.first_name = first_name 
+        new_user.last_name = last_name
         new_user.is_active = False
         new_user.save()
         
@@ -201,7 +207,7 @@ class RegistrationProfile(models.Model):
     """
     A simple profile which stores an activation key for use during
     user account registration.
-    
+
     Generally, you will not want to interact directly with instances
     of this model; the provided manager includes methods
     for creating and activating new accounts, as well as for cleaning
@@ -211,13 +217,23 @@ class RegistrationProfile(models.Model):
     ``AUTH_PROFILE_MODULE`` setting, it's not recommended that you do
     so. This model's sole purpose is to store data temporarily during
     account registration and activation.
+
+    This model deviates from the released version with the addition of
+    the promo code field.  This field is used for the distinction between
+    'FREE' and 'PREMIUM' registrations on the CC Network site.  The promo
+    code is entered at the user registration form and once the registration
+    is activated, this code will determine what level CommonerProfile should
+    be created.
     
     """
     ACTIVATED = u"ALREADY_ACTIVATED"
     
     user = models.ForeignKey(User, unique=True, verbose_name=_('user'))
     activation_key = models.CharField(_('activation key'), max_length=40)
-    
+
+    # For a more verbose explanation for this field, look above
+    promo = models.CharField(_('promo code'), max_length=40)
+        
     objects = RegistrationManager()
     
     class Meta:
