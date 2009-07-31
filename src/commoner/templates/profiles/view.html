@@ -49,22 +49,6 @@
 {% block body %}
 <div class="column-wide column profile-info">
 
-{% ifequal user.username profile_user.username %}
-  {% if from_http %}
-	
-	<div class="messages">
-		<ul>
-		{%  if profile.is_legacy %}
-			<li>You should really be using HTTPS o.k.?</li>
-		{% else %}
-			<li>You must use {{base_url}}/{{user.username}} as your OpenID.</li>
-		{% endif %}
-		</ul>
-	</div>
-  {% endif %}
-{% endifequal %}
-
-
   {% if profile %}
    {% if profile.photo %}
   <div rel="foaf:depiction">
@@ -140,7 +124,14 @@
 	  <div class="profile-box">
 	    <input type="text" onclick="this.select()" readonly="readonly" value='{{base_url}}/{{user.username}}/' />
 		<p>
-			<small>&nbsp;{% trans "Use this URL to log into OpenID enabled sites." %}</small>
+		  <small>&nbsp;
+		    {% trans "Use this URL to log into OpenID enabled sites." %}
+		    {% if profile.is_legacy %}
+		    <strong>
+		      {% trans "To reduce risk of attack we  recommend using HTTPS for your OpenID URL." %}
+		    </strong>
+		    {% endif %}
+		  </small>
 		</p>
 	  </div>
     {% endifequal %}{% endif %}
