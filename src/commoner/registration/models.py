@@ -6,6 +6,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.db import models
+from django.db.models import permalink
 from django.db import transaction
 from django.template.loader import render_to_string
 from django.utils.hashcompat import sha_constructor
@@ -50,7 +51,7 @@ class RegistrationManager(models.Manager):
         ``user``) after a successful activation.
         
         """
-        from registration.signals import user_activated
+        from signals import user_activated
         
         # Make sure the key we're trying conforms to the pattern of a
         # SHA1 hash; if it doesn't, no point trying to look it up in
@@ -71,7 +72,7 @@ class RegistrationManager(models.Manager):
         return False
     
     def create_inactive_user(self, username, password, email,
-                             first_name, last_name
+                             first_name, last_name,
                              send_email=True):
         """
         Create a new, inactive ``User``, generate a
@@ -112,7 +113,7 @@ class RegistrationManager(models.Manager):
         JED3: Added first and last name params
         
         """
-        from registration.signals import user_registered
+        from signals import user_registered
 
         new_user = User.objects.create_user(username, email, password)
         new_user.first_name = first_name 
@@ -126,12 +127,12 @@ class RegistrationManager(models.Manager):
             from django.core.mail import send_mail
             current_site = Site.objects.get_current()
             
-            subject = render_to_string('registration/activation_email_subject.txt',
+            subject = render_to_string('registration/email/subject.txt',
                                        { 'site': current_site })
             # Email subject *must not* contain newlines
             subject = ''.join(subject.splitlines())
             
-            message = render_to_string('registration/activation_email.txt',
+            message = render_to_string('registration/email/welcome.txt',
                                        { 'activation_key': registration_profile.activation_key,
                                          'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS,
                                          'site': current_site })
@@ -242,6 +243,10 @@ class RegistrationProfile(models.Model):
     
     def __unicode__(self):
         return u"Registration information for %s" % self.user
+
+    @permalink
+    def get_absolute_url(self):
+        return ('commoner.registration.views.activate', (self.activation_key,))
     
     def activation_key_expired(self):
         """

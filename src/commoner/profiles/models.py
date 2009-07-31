@@ -13,6 +13,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.template.loader import render_to_string
 
 from commoner.util import getBaseURL, get_storage
+from commoner.registration.signals import user_activated
 
 class CommonerProfileManager(models.Manager):
 
@@ -30,16 +31,6 @@ class CommonerProfileManager(models.Manager):
 
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, 
                   [newaddr, oldaddr])
-                  
-    def create_profile(self, user):
-        """ Creates a free profile for a registered user """
-
-        # check for promo code
-
-        profile = CommonerProfile(user=user, level=CommonerProfile.FREE)
-        profile.save()
-
-        return profile
     
 class CommonerProfile(models.Model):
     """A User [Commoner] Profile; models additional user information 
@@ -170,3 +161,26 @@ class CommonerProfile(models.Model):
         # TODO : is there such thing as a free org account, if so, code is fukd
         
         return self.level == self.FREE or not self.active
+
+
+# callback function for commoner.registrations.signals.user_activated
+def create_profile(sender, user, **kwargs):
+    """ Creates a profile when a registration is activated. """
+
+    from commoner.registration.models import RegistrationProfile 
+    
+    reg = RegistrationProfile.objects.get(user=user)
+    
+    # for this field to be validated it must have been validated
+    # during the registration form submission
+    if reg.promo:
+        level = CommonerProfile.PREMIUM
+    else:
+        level = CommonerProfile.FREE
+        
+    profile = CommonerProfile(user=user, level=level)
+    profile.save()
+    
+    return profile
+    
+user_activated.connect(create_profile)

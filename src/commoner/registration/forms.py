@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from registration.models import RegistrationProfile
+from models import RegistrationProfile
 
 from commoner.premium.forms import PromoCodeField
 
@@ -18,7 +18,7 @@ from commoner.premium.forms import PromoCodeField
 # lands in trunk, this will no longer be necessary.
 attrs_dict = { 'class': 'required' }
 
-class RegistrationForm(forms.Form):
+class BaseRegistrationForm(forms.Form):
     """
     Form for registering a new user account.
     
@@ -80,9 +80,9 @@ class RegistrationForm(forms.Form):
         return new_user
 
 
-class CommonerRegistrationForm(RegistrationForm):
+class RegistrationForm(BaseRegistrationForm):
     """
-    Subclass of ``RegistrationForm`` which adds a required checkbox
+    Subclass of ``BaseRegistrationForm`` which adds a required checkbox
     for agreeing to CC.net's  Terms of Service.
 
     This form also requires users to enter their First and Last names
@@ -92,14 +92,14 @@ class CommonerRegistrationForm(RegistrationForm):
     so, the code is marked as used and the user is added to the premium group.
         
     """
-    tos = forms.BooleanField(widget=forms.CheckboxInput(attrs=attrs_dict),
-                             label=_(u'By agreeing to the Terms of Use you affirm you are at least 13 years of age.  If you are between 13 years old and the age of majority in your jurisdiction, you affirm that you have obtained your parent's or legal guardian's express permission to create an account as required by CC.'),
+    agree_to_tos = forms.BooleanField(widget=forms.CheckboxInput(attrs=attrs_dict),
+                             label=_(u"By agreeing to the Terms of Use you affirm you are at least 13 years of age.  If you are between 13 years old and the age of majority in your jurisdiction, you affirm that you have obtained your parent's or legal guardian's express permission to create an account as required by CC."),
                              error_messages={ 'required': u"You must agree to the terms to register" })
 
     first_name = forms.CharField(label=_('first name'), max_length=40)
-    last_name = forms.CharFielf(label=_('last name'), max_length=40)
+    last_name = forms.CharField(label=_('last name'), max_length=40)
 
-    promo = PromoCodeField()
+    promo_code = PromoCodeField(required=False)
 
     def save(self):
         """

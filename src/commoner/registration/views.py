@@ -6,12 +6,12 @@ Views which allow users to create and activate accounts.
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
-from registration.forms import RegistrationForm
-from registration.models import RegistrationProfile
+from forms import RegistrationForm
+from models import RegistrationProfile
 
 
 def activate(request, activation_key,
@@ -62,6 +62,10 @@ def activate(request, activation_key,
     """
     activation_key = activation_key.lower() # Normalize before trying anything with it.
     account = RegistrationProfile.objects.activate_user(activation_key)
+
+    if not account:
+        raise Http404
+
     if extra_context is None:
         extra_context = {}
     context = RequestContext(request)
@@ -139,7 +143,8 @@ def register(request, success_url=None,
             # a default value using reverse() will cause circular-import
             # problems with the default URLConf for this application, which
             # imports this file.
-            return HttpResponseRedirect(success_url or reverse('registration_complete'))
+            # return HttpResponseRedirect("/a/register/complete/")
+            return render_to_response('registration/check_inbox.html')
     else:
         form = form_class()
     

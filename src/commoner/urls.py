@@ -77,15 +77,16 @@ urlpatterns = patterns(
     url(r'^a/ack/(?P<message_id>\d+)', 
         'commoner.broadcast.views.ack',
         name='ack_message'),
+
         
     (r'^a/register/complete/$', 
      'django.views.generic.simple.direct_to_template',
      {'template':'registration/success.html'}),
-    (r'^a/register/(?P<key>\w+)/', 'commoner.registration.views.activate'),
-    url(r'^a/register/$', 'commoner.registration.views.create',
+    (r'^a/register/(?P<activation_key>\w+)/', 'commoner.registration.views.activate'),
+    url(r'^a/register/$', 'commoner.registration.views.register',
         name='register'),
-    url(r'^a/upgrade/$', 'commoner.registration.views.upgrade', 
-        name='register_upgrade'),
+
+    # url(r'^a/upgrade/$', 'commoner.registration.views.upgrade', name='register_upgrade'),
         
     # Profile management
     url(r'^p/edit/$', 'commoner.profiles.views.edit_or_create', 
