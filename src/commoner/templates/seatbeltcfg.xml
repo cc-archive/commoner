@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?> 
 <opConfig version="1.0">
-  <configRevision>1.0.01</configRevision>
+  <configRevision>1.0.02</configRevision>
   <title>Creative Commons Network</title>
   <serverIdentifier>creativecommons.net</serverIdentifier>
   <description>CC Network OpenID provider</description>
@@ -8,7 +8,7 @@
   <welcomeUrl>{{base_url}}/h/openid/</welcomeUrl>  
   <loginStateUrl>{{base_url}}{% url openid_state %}</loginStateUrl>
   <opDomain>creativecommons.net</opDomain>
-  <opCertSHA1Hash>72:59:74:D2:3A:C1:A1:23:0A:D7:F7:53:48:35:87:76:A3:D3:24:CC</opCertSHA1Hash>  
+  <opCertSHA1Hash>F5:C8:1A:54:3F:5B:FD:8B:48:4B:3D:17:09:3E:0A:47:63:E0:08:3C</opCertSHA1Hash>  
   <opCertCommonName>creativecommons.net</opCertCommonName>
 
   <settingsIconUrl>http://i.creativecommons.net/i/32.png</settingsIconUrl>

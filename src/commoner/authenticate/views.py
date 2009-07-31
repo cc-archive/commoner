@@ -17,10 +17,14 @@ import forms
 def login(request, template_name='registration/login.html', 
           redirect_field_name=auth.REDIRECT_FIELD_NAME):
     "Displays the login form and handles the login action."
-
+    
     # get the page to redirect to after login;
     redirect_to = request.REQUEST.get(redirect_field_name, '')
     
+    if request.user.is_authenticated():
+        return HttpResponseRedirect(reverse(settings.LOGIN_REDIRECT_VIEW, 
+                                    args=[request.user.username]))
+
     if request.method == "POST":
         form = forms.LoginForm(data=request.POST)
         if form.is_valid():
