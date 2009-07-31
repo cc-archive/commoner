@@ -1,6 +1,9 @@
 import os
+import sys
 
 DEBUG = TEMPLATE_DEBUG = True
+
+TESTING = len(filter(lambda x: x.find('test') != -1, sys.argv)) > 0
 
 ADMINS = (
     ('Nathan R. Yergler', 'nathan@creativecommons.org'),
@@ -21,7 +24,7 @@ DATABASE_HOST = ''             # Set to empty string for localhost. Not used wit
 DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
 
 if DEBUG:
-    DATABASE_NAME='commoner_testing'
+    DATABASE_NAME=os.path.join(os.path.dirname(__file__), '..', '..', 'commoner_testing')
 
 TIME_ZONE = 'America/Chicago'
 
@@ -54,6 +57,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.doc.XViewMiddleware',
+    'commoner.middleware.HttpsRedirectMiddleware'
 )
 
 ROOT_URLCONF = 'commoner.urls'

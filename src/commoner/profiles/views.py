@@ -124,9 +124,12 @@ def view(request, username, public_profile_field=None,
     if public_profile_field is not None and \
        not getattr(profile_obj, public_profile_field, False):
         profile_obj = None
-
+    
+    from_http = request.session.get('from_http', False)
+        
     return render_to_response(template_name,
                               { 'profile'  : profile_obj,
+                                'from_http' : from_http,
                                 'profile_user' : user,
                                 'username' : username},
                               context_instance=RequestContext(request))
