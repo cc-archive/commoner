@@ -38,9 +38,13 @@ today!</a>{% endblocktrans %}
 </p>
 
 <div id="join_network">
+{% if user.is_authenticated %}
+    <h2><a href="{% url profile_view user.username %}">{% trans "My Profile" %}</a></h2>
+{% else %}
   <h2><a href="http://support.creativecommons.org/join/">
       {% trans "Join" %}
   </a></h2>
+{% endif %}
 </div>
 
 <div id="aboutcc">
