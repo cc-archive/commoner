@@ -29,24 +29,27 @@ from django.core import management
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
-from registration import forms
-from registration.models import RegistrationProfile
-from registration import signals
+from commoner.registration import forms
+from commoner.registration.models import RegistrationProfile
+from commoner.registration import signals
 
 
 class RegistrationTestCase(TestCase):
     """
     Base class for the test cases; this sets up two users -- one
-    expired, one not -- which are used to exercise various parts of
-    the application.
-    
+    expired, one not -- which are used to exercise various parts 
+    of the application.
     """
     def setUp(self):
         self.sample_user = RegistrationProfile.objects.create_inactive_user(username='alice',
                                                                             password='secret',
+                                                                            first_name='Alice',
+                                                                            last_name='Cooper',
                                                                             email='alice@example.com')
         self.expired_user = RegistrationProfile.objects.create_inactive_user(username='bob',
                                                                              password='swordfish',
+                                                                             first_name='Bob',
+                                                                             last_name='Barker',
                                                                              email='bob@example.com')
         self.expired_user.date_joined -= datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS + 1)
         self.expired_user.save()
@@ -82,11 +85,13 @@ class RegistrationModelTests(RegistrationTestCase):
     def test_activation_email_disable(self):
         """
         Test that activation email can be disabled.
-        
+
         """
         RegistrationProfile.objects.create_inactive_user(username='noemail',
                                                          password='foo',
                                                          email='nobody@example.com',
+                                                         first_name='no',
+                                                         last_name='email',
                                                          send_email=False)
         self.assertEqual(len(mail.outbox), 2)
 
@@ -172,6 +177,8 @@ class RegistrationModelTests(RegistrationTestCase):
 
         RegistrationProfile.objects.create_inactive_user(username='signal_test',
                                                          password='foo',
+                                                         first_name='Foo',
+                                                         last_name='Bar',
                                                          email='nobody@example.com',
                                                          send_email=False)
         RegistrationProfile.objects.activate_user(RegistrationProfile.objects.get(user__username='signal_test').activation_key)
@@ -198,7 +205,10 @@ class RegistrationFormTests(RegistrationTestCase):
             { 'username': 'foo/bar',
               'email': 'foo@example.com',
               'password1': 'foo',
-              'password2': 'foo' },
+              'password2': 'foo',
+              'agree_to_tos': 'on',
+              'first_name':'foo',
+              'last_name':'last'},
             'error':
             ('username', [u"Enter a valid value."])
             },
@@ -208,7 +218,10 @@ class RegistrationFormTests(RegistrationTestCase):
             { 'username': 'alice',
               'email': 'alice@example.com',
               'password1': 'secret',
-              'password2': 'secret' },
+              'password2': 'secret',
+              'agree_to_tos': 'on',
+              'first_name':'foo',
+              'last_name':'last' },
             'error':
             ('username', [u"This username is already taken. Please choose another."])
             },
@@ -218,9 +231,51 @@ class RegistrationFormTests(RegistrationTestCase):
             { 'username': 'foo',
               'email': 'foo@example.com',
               'password1': 'foo',
-              'password2': 'bar' },
+              'password2': 'bar',
+              'agree_to_tos': 'on',
+              'first_name':'foo',
+              'last_name':'last' },
             'error':
             ('__all__', [u"You must type the same password each time"])
+            },
+            # Must agree to TOS
+            {
+            'data':
+            { 'username': 'foo',
+              'email': 'foo@example.com',
+              'password1': 'foo',
+              'password2': 'foo',
+              'agree_to_tos': False,
+              'first_name':'foo',
+              'last_name':'last' },
+            'error':
+            ('agree_to_tos', [u"You must agree to the terms to register"])
+            },
+            # Must enter your first name.
+            {
+            'data':
+            { 'username': 'foo',
+              'email': 'foo@example.com',
+              'password1': 'foo',
+              'password2': 'foo',
+              'agree_to_tos': 'on',
+              'first_name':'',
+              'last_name':'last' },
+            'error':
+            ('first_name', [u"This field is required."])
+            },
+            # Must enter your last name.
+            {
+            'data':
+            { 'username': 'foo',
+              'email': 'foo@example.com',
+              'password1': 'foo',
+              'password2': 'foo',
+              'agree_to_tos': 'on',
+              'first_name':'foo',
+              'last_name':'' },
+            'error':
+            ('last_name', [u"This field is required."])
             },
             ]
 
@@ -232,71 +287,13 @@ class RegistrationFormTests(RegistrationTestCase):
         form = forms.RegistrationForm(data={ 'username': 'foo',
                                              'email': 'foo@example.com',
                                              'password1': 'foo',
-                                             'password2': 'foo' })
+                                             'password2': 'foo',
+                                             'first_name':'foo',
+                                             'last_name':'bar',
+                                             'agree_to_tos':'on'})
         self.failUnless(form.is_valid())
 
-    def test_registration_form_tos(self):
-        """
-        Test that ``RegistrationFormTermsOfService`` requires
-        agreement to the terms of service.
-        
-        """
-        form = forms.RegistrationFormTermsOfService(data={ 'username': 'foo',
-                                                           'email': 'foo@example.com',
-                                                           'password1': 'foo',
-                                                           'password2': 'foo' })
-        self.failIf(form.is_valid())
-        self.assertEqual(form.errors['tos'], [u"You must agree to the terms to register"])
-        
-        form = forms.RegistrationFormTermsOfService(data={ 'username': 'foo',
-                                                           'email': 'foo@example.com',
-                                                           'password1': 'foo',
-                                                           'password2': 'foo',
-                                                           'tos': 'on' })
-        self.failUnless(form.is_valid())
-
-    def test_registration_form_unique_email(self):
-        """
-        Test that ``RegistrationFormUniqueEmail`` validates uniqueness
-        of email addresses.
-        
-        """
-        form = forms.RegistrationFormUniqueEmail(data={ 'username': 'foo',
-                                                        'email': 'alice@example.com',
-                                                        'password1': 'foo',
-                                                        'password2': 'foo' })
-        self.failIf(form.is_valid())
-        self.assertEqual(form.errors['email'], [u"This email address is already in use. Please supply a different email address."])
-
-        form = forms.RegistrationFormUniqueEmail(data={ 'username': 'foo',
-                                                        'email': 'foo@example.com',
-                                                        'password1': 'foo',
-                                                        'password2': 'foo' })
-        self.failUnless(form.is_valid())
-
-    def test_registration_form_no_free_email(self):
-        """
-        Test that ``RegistrationFormNoFreeEmail`` disallows
-        registration with free email addresses.
-        
-        """
-        base_data = { 'username': 'foo',
-                      'password1': 'foo',
-                      'password2': 'foo' }
-        for domain in ('aim.com', 'aol.com', 'email.com', 'gmail.com',
-                       'googlemail.com', 'hotmail.com', 'hushmail.com',
-                       'msn.com', 'mail.ru', 'mailinator.com', 'live.com'):
-            invalid_data = base_data.copy()
-            invalid_data['email'] = u"foo@%s" % domain
-            form = forms.RegistrationFormNoFreeEmail(data=invalid_data)
-            self.failIf(form.is_valid())
-            self.assertEqual(form.errors['email'], [u"Registration using free email addresses is prohibited. Please supply a different email address."])
-
-        base_data['email'] = 'foo@example.com'
-        form = forms.RegistrationFormNoFreeEmail(data=base_data)
-        self.failUnless(form.is_valid())
-
-
+    
 class RegistrationViewTests(RegistrationTestCase):
     """
     Tests for the views included in django-registration.
@@ -315,16 +312,21 @@ class RegistrationViewTests(RegistrationTestCase):
                                            'password1': 'foo',
                                            'password2': 'foo' })
         self.assertEqual(response.status_code, 200)
-        self.failUnless(response.context['form'])
-        self.failUnless(response.context['form'].errors)
+        self.failUnless(response.context[0]['form'])
+        self.failUnless(response.context[0]['form'].errors)
 
         response = self.client.post(reverse('registration_register'),
                                     data={ 'username': 'foo',
                                            'email': 'foo@example.com',
+                                           'first_name':'foo',
+                                           'last_name': 'bar',
                                            'password1': 'foo',
-                                           'password2': 'foo' })
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['Location'], 'http://testserver%s' % reverse('registration_complete'))
+                                           'password2': 'foo',
+                                           'agree_to_tos':'on'})
+        self.assertEqual(response.status_code, 200)
+
+        self.assertTemplateUsed(response, 'registration/check_inbox.html')
+                
         self.assertEqual(RegistrationProfile.objects.count(), 3)
     
     def test_activation_view(self):
@@ -337,19 +339,20 @@ class RegistrationViewTests(RegistrationTestCase):
         response = self.client.get(reverse('registration_activate',
                                            kwargs={ 'activation_key': RegistrationProfile.objects.get(user=self.sample_user).activation_key }))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['account'].pk, self.sample_user.pk)
+        
+        self.assertEqual(response.context[0]['account'].pk, self.sample_user.pk)
 
         # Expired user sets the account to False.
         response = self.client.get(reverse('registration_activate',
                                            kwargs={ 'activation_key': RegistrationProfile.objects.get(user=self.expired_user).activation_key }))
-        self.failIf(response.context['account'])
+        self.assertEqual(response.status_code, 404)
 
         # Invalid key gets to the view, but sets account to False.
         response = self.client.get(reverse('registration_activate',
                                            kwargs={ 'activation_key': 'foo' }))
-        self.failIf(response.context['account'])
+        # hmmm, need an assertion here
 
         # Nonexistent key sets the account to False.
         response = self.client.get(reverse('registration_activate',
                                            kwargs={ 'activation_key': sha.new('foo').hexdigest() }))
-        self.failIf(response.context['account'])
+        self.assertEqual(response.status_code, 404)

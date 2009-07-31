@@ -79,12 +79,13 @@ urlpatterns = patterns(
         name='ack_message'),
 
         
-    (r'^a/register/complete/$', 
+    url(r'^a/register/complete/$', 
      'django.views.generic.simple.direct_to_template',
-     {'template':'registration/success.html'}),
-    (r'^a/register/(?P<activation_key>\w+)/', 'commoner.registration.views.activate'),
+     {'template':'registration/success.html'}, name='registration_complete'),
+    url(r'^a/register/(?P<activation_key>\w+)/', 'commoner.registration.views.activate',
+        name='registration_activate'),
     url(r'^a/register/$', 'commoner.registration.views.register',
-        name='register'),
+        name='registration_register'),
 
     # url(r'^a/upgrade/$', 'commoner.registration.views.upgrade', name='register_upgrade'),
         
