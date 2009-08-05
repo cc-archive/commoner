@@ -72,7 +72,7 @@ class RegistrationManager(models.Manager):
         return False
     
     def create_inactive_user(self, username, password, email,
-                             first_name, last_name,
+                             first_name, last_name, promo=None,
                              send_email=True):
         """
         Create a new, inactive ``User``, generate a
@@ -122,7 +122,15 @@ class RegistrationManager(models.Manager):
         new_user.save()
         
         registration_profile = self.create_profile(new_user)
-        
+
+        if promo:
+
+            registration_profile.premium = True 
+            registration_profile.save()
+
+            from commoner.premium.models import PromoCode
+            PromoCode.objects.mark_as_used(promo, new_user)
+            
         if send_email:
             from django.core.mail import send_mail
             current_site = Site.objects.get_current()
@@ -138,8 +146,10 @@ class RegistrationManager(models.Manager):
                                          'site': current_site })
             
             send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [new_user.email])
-        user_registered.send(sender=self.model, user=new_user)
+
+        user_registered.send(sender=self.model, user=new_user, promo=promo)
         return new_user
+
     create_inactive_user = transaction.commit_on_success(create_inactive_user)
     
     def create_profile(self, user):
@@ -220,11 +230,13 @@ class RegistrationProfile(models.Model):
     account registration and activation.
 
     This model deviates from the released version with the addition of
-    the promo code field.  This field is used for the distinction between
+    the premium field.  This field is used for the distinction between
     'FREE' and 'PREMIUM' registrations on the CC Network site.  The promo
-    code is entered at the user registration form and once the registration
-    is activated, this code will determine what level CommonerProfile should
-    be created.
+    code is entered at the user registration form and if the code is valid
+    then the registration will retain the distinction that it is a paid
+    account while the new user's email is sent the activation message.
+    The value of the premium field will determine what level the new
+    CommonerProfile should be created as.
     
     """
     ACTIVATED = u"ALREADY_ACTIVATED"
@@ -233,7 +245,7 @@ class RegistrationProfile(models.Model):
     activation_key = models.CharField(_('activation key'), max_length=40)
 
     # For a more verbose explanation for this field, look above
-    promo = models.CharField(_('promo code'), max_length=40)
+    premium = models.BooleanField(_('premium account registration'), default=False)
         
     objects = RegistrationManager()
     
@@ -253,7 +265,6 @@ class RegistrationProfile(models.Model):
         Determine whether this ``RegistrationProfile``'s activation
         key has expired, returning a boolean -- ``True`` if the key
         has expired.
-        
         Key expiration is determined by a two-step process:
         
         1. If the user has already activated, the key will have been

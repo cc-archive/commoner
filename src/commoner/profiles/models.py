@@ -171,9 +171,7 @@ def create_profile(sender, user, **kwargs):
     
     reg = RegistrationProfile.objects.get(user=user)
     
-    # for this field to be validated it must have been validated
-    # during the registration form submission
-    if reg.promo:
+    if reg.premium:
         level = CommonerProfile.PREMIUM
     else:
         level = CommonerProfile.FREE

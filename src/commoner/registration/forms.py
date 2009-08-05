@@ -114,8 +114,10 @@ class RegistrationForm(BaseRegistrationForm):
                                                                     password=self.cleaned_data['password1'],
                                                                     first_name=self.cleaned_data['first_name'],
                                                                     last_name=self.cleaned_data['last_name'],
-                                                                    email=self.cleaned_data['email'])
-                
+                                                                    email=self.cleaned_data['email'],
+                                                                    promo=self.cleaned_data['promo_code'])
+
+        
         return new_user
     
     
