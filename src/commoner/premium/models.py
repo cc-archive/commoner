@@ -53,6 +53,11 @@ class PromoCode(models.Model):
         """ Generates a random 8 char string from the base62 set. """
         return ''.join([random.choice(BASE62) for i in range(0,8)])
 
+    @property
+    def used(self):
+        """ Returns True if the code has been used """
+        return self.used_by is not None
+        
     def save(self):
 
         # if we're creating and the expiration date hasn't been set...

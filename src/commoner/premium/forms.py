@@ -4,6 +4,12 @@ from django.utils.translation import ugettext as _
 import models
 
 class PromoCodeField(forms.CharField):
+
+    errors = {
+        'already_used' : _("This promo code has already been used."),
+        'invalid_code' : _("The promo code entered is invalid."),
+        'required' : _("The promo code is a required field."),
+    }
     
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('max_length', 40)
@@ -17,7 +23,7 @@ class PromoCodeField(forms.CharField):
         """ Check to see if this Promo Code is valid & hasn't been used """
 
         if not value and self.required:
-            raise forms.ValidationError(_("The promo code is a required field."))
+            raise forms.ValidationError(self.errors['required'])
         
         if value:
 
@@ -25,9 +31,9 @@ class PromoCodeField(forms.CharField):
                 promocode = models.PromoCode.objects.get(code__exact=value)
                 
                 if promocode.used_by:
-                    raise forms.ValidationError(_("This promo code has already been used."))
+                    raise forms.ValidationError(self.errors['already_used'])
 
             except models.PromoCode.DoesNotExist:
-                raise forms.ValidationError(_("The promo code entered is invalid."))
+                raise forms.ValidationError(self.errors['invalid_code'])
 
         return value
