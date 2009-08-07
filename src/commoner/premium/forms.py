@@ -12,7 +12,7 @@ class PromoCodeField(forms.CharField):
     }
     
     def __init__(self, *args, **kwargs):
-        kwargs.setdefault('max_length', 40)
+        kwargs.setdefault('max_length', 8)
         kwargs.setdefault('label', _("Promo code"))
         kwargs.setdefault('required', True)
 
@@ -37,3 +37,23 @@ class PromoCodeField(forms.CharField):
                 raise forms.ValidationError(self.errors['invalid_code'])
 
         return value
+
+class PremiumUpgradeForm(forms.Form):
+
+    promo = PromoCodeField()
+
+    def save(self):
+        """
+        When the form is save the promo code object is returned
+        Arguments:
+        - `self`:
+        """
+
+        promo_code = models.PromoCode.objects.get(
+            code__exact=self.cleaned_data['promo'])
+
+        return promo_code
+        
+        
+
+        

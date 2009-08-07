@@ -208,15 +208,3 @@ def change_email(request):
           context_instance=RequestContext(request)
     )
     
-@login_required
-def account_overview(request):
-    
-    try:
-        profile = request.user.get_profile()
-    except ObjectDoesNotExist:
-        profile = models.CommonerProfile(user=request.user)
-    
-    return render_to_response('profiles/account_overview.html', {   
-            'profile': profile, 
-        }, context_instance=RequestContext(request)
-    )

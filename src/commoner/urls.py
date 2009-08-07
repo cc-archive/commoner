@@ -74,6 +74,14 @@ urlpatterns = patterns(
         'django.contrib.auth.views.password_reset_complete',),
     url(r'^a/delete/$', 'commoner.profiles.views.delete',
         name='delete_account'),
+    url(r'^a/overview/$', 'commoner.premium.views.account_overview', 
+        name='account_overview'),
+    url(r'^a/upgrade/$', 'commoner.premium.views.account_upgrade', 
+        name='account_upgrade'),
+    url(r'^a/renew/$', 'commoner.premium.views.account_upgrade', 
+        name='account_renew'),
+
+    # Message ack view
     url(r'^a/ack/(?P<message_id>\d+)', 
         'commoner.broadcast.views.ack',
         name='ack_message'),
@@ -92,8 +100,6 @@ urlpatterns = patterns(
     # Profile management
     url(r'^p/edit/$', 'commoner.profiles.views.edit_or_create', 
         name='profile_edit'),
-    url(r'^p/account/$', 'commoner.profiles.views.account_overview', 
-        name='profile_account'),
     url(r'^p/email/$', 'commoner.profiles.views.change_email', 
         name='change_email'),    
 

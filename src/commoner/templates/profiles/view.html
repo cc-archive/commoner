@@ -44,7 +44,7 @@
 {% if user.is_authenticated %}
   {% ifequal user.username profile_user.username %}
 <li><a href="{% url profile_edit %}">{% trans "Edit Profile" %}</a></li>
-<li><a href="{% url profile_account %}">{% trans "Account Overview" %}</a></li>
+<li><a href="{% url account_overview %}">{% trans "Account Overview" %}</a></li>
 <li><a href="{% url openid_settings %}">{% trans "OpenID Settings" %}</a></li>
   {% endifequal %}{% endif %}
 {% endblock %}

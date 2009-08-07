@@ -33,14 +33,14 @@ class BaseRegistrationForm(forms.Form):
     username = forms.RegexField(regex=r'^\w+$',
                                 max_length=30,
                                 widget=forms.TextInput(attrs=attrs_dict),
-                                label=_(u'username'))
+                                label=_(u'Username'))
     email = forms.EmailField(widget=forms.TextInput(attrs=dict(attrs_dict,
                                                                maxlength=75)),
-                             label=_(u'email address'))
+                             label=_(u'Email address'))
     password1 = forms.CharField(widget=forms.PasswordInput(attrs=attrs_dict, render_value=False),
-                                label=_(u'password'))
+                                label=_(u'Password'))
     password2 = forms.CharField(widget=forms.PasswordInput(attrs=attrs_dict, render_value=False),
-                                label=_(u'password (again)'))
+                                label=_(u'Password (again)'))
     
     def clean_username(self):
         """
@@ -96,8 +96,8 @@ class RegistrationForm(BaseRegistrationForm):
                              label=_(u"By agreeing to the Terms of Use you affirm you are at least 13 years of age.  If you are between 13 years old and the age of majority in your jurisdiction, you affirm that you have obtained your parent's or legal guardian's express permission to create an account as required by CC."),
                              error_messages={ 'required': u"You must agree to the terms to register" })
 
-    first_name = forms.CharField(label=_('first name'), max_length=40)
-    last_name = forms.CharField(label=_('last name'), max_length=40)
+    first_name = forms.CharField(label=_('First name'), max_length=40)
+    last_name = forms.CharField(label=_('Last name'), max_length=40)
 
     promo_code = PromoCodeField(required=False)
 
