@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load getattribute %}
+
+{% block head_title %}{% trans "Account" %} -{% endblock %}
+
+{% block page_header %}
+	{% if profile.free %}
+		{% trans "Account Upgrade" %}
+	{% else %}
+		{% trans "Account Renewal" %}
+	{% endif %}
+{% endblock %}
+
+{% block page_icon_class %}edit{% endblock %}
+
+{% block extra_nav %}
+{% endblock %}
+
+{% block body %}
+
+{% if profile.free %}
+	
+	<p>Upgrade today!</p>
+
+{% else %}
+	
+	<p>Renew your account today!</p>
+
+{% endif %}
+
+<h1>Enter your promo code</h1>
+
+<div class="form">
+
+    <form action="." method="POST">
+
+    <div class="field" id="nickname">
+      <span class="field_label">{{form.promo.label}}: </span>
+      {{form.promo}}
+      {% if form.promo.errors %}
+      <div class="errors">
+	{{ form.promo.errors }}
+      </div>
+      {% endif %}
+    </div>
+
+    </form>
+    
+</div>
+
+<h1>Don't have a code? Purchase one now!</h1>
+	
+{% include "premium/upgrade_form.html" %}
+
+{% endblock %}
