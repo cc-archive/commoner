@@ -10,12 +10,12 @@ from django.utils.translation import ugettext_lazy as _
 BASE62 = string.letters + string.digits
 
 class PromoCodeManager(models.Manager):
-    
-    def mark_as_used(self, promo_code, user):
+
+    def mark_as_used(self, code, user):
         """ Wrapping repeatedly used lines into a single function,
         employed by user registrations and profile upgrades """
         
-        promo = self.get(code__exact=promo_code)
+        promo = self.get(code__exact=code)
         promo.used_by = user
         promo.used_on = datetime.now()
         promo.save()

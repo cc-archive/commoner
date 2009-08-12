@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load getattribute %}
 
-{% block head_title %}{% trans "Account" %} -{% endblock %}
+{% block head_title %}{% trans "Account " %} -{% endblock %}
 
 {% block page_header %}
 	{% if profile.free %}
@@ -45,6 +45,8 @@
       {% endif %}
     </div>
 
+    <input type="submit" value='{% trans "Submit code" %}' />
+    
     </form>
     
 </div>

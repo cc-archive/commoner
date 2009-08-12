@@ -147,25 +147,59 @@ class CommonerProfile(models.Model):
 
         return "%s%s/80x15/" % (settings.BADGE_BASE_URL, self.user.username)
     
+    def renew(self, expires_on=None):
+        """ Update the profile by extending the expires date
+        If the `expires_on` paramaeter is specifed, the expires date will be
+        set to that datetime. """
+        
+        if expires_on is not None:
+            self.expires = expires_on
+        else:
+            today = datetime.now()
+
+            if self.active:
+                self.expires = self.expires.replace(self.expires.year + 1)
+            else:
+                self.expires = today.replace(today.year + 1)
+            
+        return True
+
+    def upgrade(self):
+        """ Set the level to PREMIUM and set the expires date to +1 yr """
+
+        self.level = self.PREMIUM
+        self.expires = datetime.now().replace(datetime.now().year + 1)
+
+        return True
+
     @property
     def is_organization(self):
         """ Return True if the profiles is an organization """
         
         return self.level == self.ORGANIZATION
+ 
+    @property
+    def premium(self):
+        """ Returns True if the user was EVER ONCE a premium user.  Used for
+        OpenID access control and also as a deterministic factor for the
+        renewal/upgrade behavior. """
+
+        return self.level == self.PREMIUM
     
     @property
     def free(self):
-        """ Return True if this is a free account """
+        """ Return True if this is a free account, meaning that the user has
+        was a free registration or that their premium membership has expired.
+        This property should be used in controlling the add works, citations, etc.
+        """
         
-        # TODO : should inactive users be considered FREE ?
-        # TODO : is there such thing as a free org account, if so, code is fukd
-        
-        return self.level == self.FREE or not self.active
+        return self.level == self.FREE
 
 
-# callback function for commoner.registrations.signals.user_activated
+# Callback function for commoner.registrations.signals.user_activated
 def create_profile(sender, user, **kwargs):
-    """ Creates a profile when a registration is activated. """
+    
+    """ Creates a profile when a registration object is activated. """
 
     from commoner.registration.models import RegistrationProfile 
     
