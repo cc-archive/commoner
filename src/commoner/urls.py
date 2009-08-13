@@ -49,8 +49,9 @@ urlpatterns = patterns(
         name='contact_form'),
     (r'^h/contact/thanks/$', 'django.views.generic.simple.direct_to_template',
 	 {'template':'help/contact_thanks.html'}),
-     (r'^h/join/$', 'django.views.generic.simple.direct_to_template',
-	    {'template':'help/join.html'}),
+
+    (r'^h/join/$', 'django.views.generic.simple.redirect_to',
+     {'url':'https://support.creativecommons.org/join/'}),
 
     # Account management
     url(r'^a/login/$', 'commoner.authenticate.views.login',
