@@ -29,7 +29,7 @@ def premium_required(func):
         
             profile = models.CommonerProfile(user=request.user)
        
-        if profile.free:
+        if profile.free or not profile.active:
         
             return HttpResponseForbidden(_("You do not have access to this page."))
     
