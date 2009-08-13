@@ -298,6 +298,15 @@ div.form form .field {
 	padding-bottom: 1.5em;
 	border-bottom: 1px solid #EEDFCC;
 }
+div.form form .promo-field { text-align:center }
+div.form form .promo-field input[type="text"] {
+    line-height:2em;
+    border: 1px solid #999;
+    padding:5px;
+    width:5em;
+    font-family:monospace;
+    font-size:24px;
+}
 
 div.form form .field .help {
 	font-style: oblique;
@@ -528,4 +537,5 @@ iframe.tos {
 ul#benefits li {
 	margin-bottom: 1.5em;
 }
+
 
