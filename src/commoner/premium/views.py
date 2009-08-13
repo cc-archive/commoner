@@ -56,9 +56,13 @@ def account_upgrade(request):
             return HttpResponseRedirect(reverse('account_upgrade'))
         elif not profile.free and request.path == reverse('account_upgrade'):
             return HttpResponseRedirect(reverse('account_renew'))
-        
+
         form = PremiumUpgradeForm()
-        
+
+        # autofill the promo code it the url contains one
+        if 'c' in request.GET:  
+            form.fields['promo'].initial = request.GET['c']
+            
     return render_to_response("premium/account_upgrade.html", {'form':form},
                               context_instance=RequestContext(request))
         

@@ -138,15 +138,16 @@ def register(request, success_url=None,
     if request.method == 'POST':
         form = form_class(data=request.POST, files=request.FILES)
         if form.is_valid():
+
             new_user = form.save()
-            # success_url needs to be dynamically generated here; setting a
-            # a default value using reverse() will cause circular-import
-            # problems with the default URLConf for this application, which
-            # imports this file.
-            # return HttpResponseRedirect("/a/register/complete/")
+            
             return render_to_response('registration/check_inbox.html')
     else:
         form = form_class()
+
+    # crappy approach, /a/register/?c=promocode
+    if 'c' in request.GET:
+        form.fields['promo_code'].initial = request.GET['c']
     
     if extra_context is None:
         extra_context = {}
