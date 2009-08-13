@@ -95,11 +95,11 @@ class RegistrationForm(BaseRegistrationForm):
     agree_to_tos = forms.BooleanField(widget=forms.CheckboxInput(attrs=attrs_dict),
                              label=_(u"By agreeing to the Terms of Use you affirm you are at least 13 years of age.  If you are between 13 years old and the age of majority in your jurisdiction, you affirm that you have obtained your parent's or legal guardian's express permission to create an account as required by CC."),
                              error_messages={ 'required': u"You must agree to the terms to register" })
-
+    
     first_name = forms.CharField(label=_('First name'), max_length=40)
     last_name = forms.CharField(label=_('Last name'), max_length=40)
 
-    promo_code = PromoCodeField(required=False)
+    promo_code = PromoCodeField()
 
     def save(self):
         """

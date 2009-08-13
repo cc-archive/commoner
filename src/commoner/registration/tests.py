@@ -192,6 +192,9 @@ class RegistrationFormTests(RegistrationTestCase):
     django-registration.
     
     """
+
+    fixtures = ['test_codes.json',]
+    
     def test_registration_form(self):
         """
         Test that ``RegistrationForm`` enforces username constraints
@@ -208,7 +211,7 @@ class RegistrationFormTests(RegistrationTestCase):
               'password2': 'foo',
               'agree_to_tos': 'on',
               'first_name':'foo',
-              'last_name':'last'},
+              'last_name':'last',},
             'error':
             ('username', [u"Enter a valid value."])
             },
@@ -221,7 +224,7 @@ class RegistrationFormTests(RegistrationTestCase):
               'password2': 'secret',
               'agree_to_tos': 'on',
               'first_name':'foo',
-              'last_name':'last' },
+              'last_name':'last', },
             'error':
             ('username', [u"This username is already taken. Please choose another."])
             },
@@ -234,7 +237,7 @@ class RegistrationFormTests(RegistrationTestCase):
               'password2': 'bar',
               'agree_to_tos': 'on',
               'first_name':'foo',
-              'last_name':'last' },
+              'last_name':'last', },
             'error':
             ('__all__', [u"You must type the same password each time"])
             },
@@ -247,7 +250,7 @@ class RegistrationFormTests(RegistrationTestCase):
               'password2': 'foo',
               'agree_to_tos': False,
               'first_name':'foo',
-              'last_name':'last' },
+              'last_name':'last', },
             'error':
             ('agree_to_tos', [u"You must agree to the terms to register"])
             },
@@ -260,7 +263,7 @@ class RegistrationFormTests(RegistrationTestCase):
               'password2': 'foo',
               'agree_to_tos': 'on',
               'first_name':'',
-              'last_name':'last' },
+              'last_name':'last', },
             'error':
             ('first_name', [u"This field is required."])
             },
@@ -290,7 +293,8 @@ class RegistrationFormTests(RegistrationTestCase):
                                              'password2': 'foo',
                                              'first_name':'foo',
                                              'last_name':'bar',
-                                             'agree_to_tos':'on'})
+                                             'agree_to_tos':'on',
+                                             'promo_code':'12345678'})
         self.failUnless(form.is_valid())
 
     
@@ -299,8 +303,10 @@ class RegistrationViewTests(RegistrationTestCase):
     Tests for the views included in django-registration.
     
     """
-    def test_registration_view(self):
+    def _test_registration_view(self):
         """
+        Underscored to prevent running while free accounts are prohibited 
+        
         Test that the registration view rejects invalid submissions,
         and creates a new user and redirects after a valid submission.
         
