@@ -80,18 +80,9 @@ def login(request):
     else:
         id_url = request.GET.get('id', '')
 
-        if id_url and \
-                id_url[-1] != '/' and \
-                id_url not in (IDENTIFIER_SELECT,):
-
-            # hrm, this doesn't look like one of our OpenID URLs
-            return render_to_response("server/invalid_id.html",
-                                      {'identity':id_url},
-                                      context_instance=RequestContext(request))
-
         initial = dict(secret = forms.make_secret(id_url))
         if id_url and id_url not in (IDENTIFIER_SELECT,):
-            initial.update(dict(username = urlparse.urlsplit(id_url)[2][1:-1]))
+            initial.update(dict(username = urlparse.urlsplit(id_url)[2][1:]))
 
         form = forms.OpenIdLoginForm(id_url,
                                      initial=initial)
