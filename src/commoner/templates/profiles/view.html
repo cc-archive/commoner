@@ -122,7 +122,8 @@
 
 	  <h4>{% trans "Your OpenID URL" %}</h4>
 	  <div class="profile-box">
-	    <input type="text" onclick="this.select()" readonly="readonly" value='{{base_url}}/{{user.username}}/' />
+	    <input type="text" onclick="this.select()" readonly="readonly" 
+		   value='{{base_url}}{{profile.get_absolute_url}}' />
 		<p>
 		  <small>&nbsp;
 		    {% trans "Use this URL to log into OpenID enabled sites." %}

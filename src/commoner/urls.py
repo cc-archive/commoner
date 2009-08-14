@@ -147,9 +147,11 @@ urlpatterns = patterns(
         name='profile_rdf'),
     url(r'^(?P<username>\w+)/works/atom$', 'commoner.works.feeds.user_works_feed',
         name='profile_works_feed'),
-    url(r'^(?P<username>\w+)/$', 'commoner.profiles.views.view'),    
+ 
+    (r'^(?P<username>\w+)/$', 'django.views.generic.simple.redirect_to',
+        {'url':'/%(username)s'}),
     url(r'^(?P<username>\w+)$', 'commoner.profiles.views.view',
-            name='profile_view'),
+        name='profile_view'),
     
     
 
