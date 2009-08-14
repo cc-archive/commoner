@@ -13,7 +13,6 @@ register = template.Library()
 @stringfilter
 def license_button(license_url):
     """Return the license button URL for a given license."""
-    
     # strip trailing slash
     base_url = license_url.rsplit('/',1)[0]
     
@@ -26,7 +25,6 @@ def license_button(license_url):
     
     pattern = re.compile('|'.join(map(re.escape, base_urls)))
     img_url = pattern.sub(lambda m: base_urls[m.group(0)], base_url)
-    
     return "%s/80x15.png" % img_url
 
 

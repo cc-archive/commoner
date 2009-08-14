@@ -7,8 +7,12 @@
 	type="text/javascript">
 </script>
 <meta http-equiv="x-xrds-location" content="{{base_url}}{% url server_xrds %}" />
+
+{% if not from_http or profile.is_legacy %}
 <link rel="openid.server" href="{{base_url}}{% url commoner.server.views.endpoint %}" />
 <link rel="openid2.provider" href="{{base_url}}{% url commoner.server.views.endpoint %}" />
+{% endif %}
+
 <link rel="meta" type="application/rdf+xml" 
       href="{{base_url}}{% url profile_rdf username=profile_user.username %}" />
 
@@ -19,11 +23,13 @@
 <link about="" typeof="sioc:User" />
 {% endblock %}
 
+
 {% block head_title %}{{ profile.display_name }} -{% endblock %}
 
 {% block page_header %}
   <span rel="sioc:member_of" property="foaf:nick" resource="/">{{ profile.display_name }}</span>
 {% endblock %}
+
 {% block page_sub_header %}
   {% if profile.active %}
     {% trans "Active" %} 
@@ -54,6 +60,8 @@
     <img src="/m/images/blank-avatar.jpg" alt="[ {{ profile_user.first_name }} ]" />
    {% endif %}
 
+
+	
    <ul>
      <li property="sioc:name cc:attributionName">{{ profile.full_name }}</li>
      <li><a rel="foaf:homepage" href="{{profile.homepage}}">{{ profile.homepage }}</a></li>
@@ -116,7 +124,14 @@
 	  <div class="profile-box">
 	    <input type="text" onclick="this.select()" readonly="readonly" value='{{base_url}}/{{user.username}}/' />
 		<p>
-			<small>&nbsp;{% trans "Use this URL to log into OpenID enabled sites." %}</small>
+		  <small>&nbsp;
+		    {% trans "Use this URL to log into OpenID enabled sites." %}
+		    {% if profile.is_legacy %}
+		    <strong>
+		      {% trans "To reduce risk of attack we  recommend using HTTPS for your OpenID URL." %}
+		    </strong>
+		    {% endif %}
+		  </small>
 		</p>
 	  </div>
     {% endifequal %}{% endif %}

@@ -49,6 +49,8 @@ urlpatterns = patterns(
         name='contact_form'),
     (r'^h/contact/thanks/$', 'django.views.generic.simple.direct_to_template',
 	 {'template':'help/contact_thanks.html'}),
+    url(r'^h/metrics/$', 'commoner.metrics.views.stats', name='metrics'),    
+
 
     # Account management
     url(r'^a/login/$', 'commoner.authenticate.views.login',
@@ -145,10 +147,11 @@ urlpatterns = patterns(
         name='profile_rdf'),
     url(r'^(?P<username>\w+)/works/atom$', 'commoner.works.feeds.user_works_feed',
         name='profile_works_feed'),
-    url(r'^(?P<username>\w+)/$', 'commoner.profiles.views.view',
-        name='profile_view'),
-    (r'^(?P<username>\w+)$', 'django.views.generic.simple.redirect_to',
-        {'url':'/%(username)s/'}),
+    url(r'^(?P<username>\w+)/$', 'commoner.profiles.views.view'),    
+    url(r'^(?P<username>\w+)$', 'commoner.profiles.views.view',
+            name='profile_view'),
+    
+    
 
 )
 

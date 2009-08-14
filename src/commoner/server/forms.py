@@ -26,15 +26,15 @@ class OpenIdLoginForm(forms.Form):
         super(OpenIdLoginForm, self).__init__(**kwargs)
 
     def clean(self):
-        """Verify the secret matches."""
+        """Authenticate the user and verify the secret matches."""
 
-        user = auth.authenticate(username=self.cleaned_data['username'], 
-                                 password=self.cleaned_data['password'])
+        user = auth.authenticate(username=self.cleaned_data.get('username', ''), 
+                                 password=self.cleaned_data.get('password', ''))
         if not user:
             raise forms.ValidationError(_(u"Incorrect password."))
 
         
-        if self.cleaned_data['secret'] != make_secret(self.id):
+        if self.cleaned_data.get('secret', None) != make_secret(self.id):
             raise AssertionError()
 
         return self.cleaned_data

@@ -1,6 +1,9 @@
 import os
+import sys
 
 DEBUG = TEMPLATE_DEBUG = False
+
+TESTING = len(filter(lambda x: x.find('test') != -1, sys.argv)) > 0
 
 ADMINS = (
     ('Nathan R. Yergler', 'nathan@creativecommons.org'),
@@ -12,16 +15,16 @@ MANAGERS = ADMINS
 if not DEBUG:
     SEND_BROKEN_LINK_EMAILS = True
 
-DATABASE_ENGINE = 'mysql'
+DATABASE_ENGINE = 'sqlite3'
 
 DATABASE_NAME = 'commoner'
-DATABASE_USER = 'root'             # Not used with sqlite3.
-DATABASE_PASSWORD = 'doigoid'         # Not used with sqlite3.
+DATABASE_USER = ''             # Not used with sqlite3.
+DATABASE_PASSWORD = ''         # Not used with sqlite3.
 DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
 DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
 
 if DEBUG:
-    DATABASE_NAME='commoner_testing'
+    DATABASE_NAME=os.path.join(os.path.dirname(__file__), '..', '..', 'commoner_testing')
 
 TIME_ZONE = 'America/Chicago'
 
@@ -54,6 +57,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.doc.XViewMiddleware',
+    'commoner.middleware.HttpsRedirectMiddleware'
 )
 
 ROOT_URLCONF = 'commoner.urls'
@@ -75,6 +79,7 @@ INSTALLED_APPS = (
     'commoner.authenticate',
     'commoner.help',
 	'commoner.broadcast',
+    'commoner.metrics',
 )
 
 TEMPLATE_LOADERS = (

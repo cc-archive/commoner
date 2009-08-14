@@ -504,6 +504,11 @@ a.add_work {
     margin-left: 1.5em;
 }
 
+.site_messages p {
+    margin:0;
+    padding:5px;
+}
+
 /*** Registration ***/
 
 iframe.tos {
