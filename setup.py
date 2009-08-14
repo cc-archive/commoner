@@ -25,6 +25,7 @@ setup(
         },
     
     install_requires = ['setuptools',
+                        'Django',
                         'python-openid',
                         'MySQL-python',
                         'PILwoTK',
