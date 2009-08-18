@@ -96,9 +96,6 @@ class RegistrationForm(BaseRegistrationForm):
                              label=_(u"By agreeing to the Terms of Use you affirm you are at least 13 years of age.  If you are between 13 years old and the age of majority in your jurisdiction, you affirm that you have obtained your parent's or legal guardian's express permission to create an account as required by CC."),
                              error_messages={ 'required': u"You must agree to the terms to register" })
     
-    first_name = forms.CharField(label=_('First name'), max_length=40)
-    last_name = forms.CharField(label=_('Last name'), max_length=40)
-
     promo_code = PromoCodeField()
 
     def save(self):
@@ -112,8 +109,6 @@ class RegistrationForm(BaseRegistrationForm):
         """
         new_user = RegistrationProfile.objects.create_inactive_user(username=self.cleaned_data['username'],
                                                                     password=self.cleaned_data['password1'],
-                                                                    first_name=self.cleaned_data['first_name'],
-                                                                    last_name=self.cleaned_data['last_name'],
                                                                     email=self.cleaned_data['email'],
                                                                     promo=self.cleaned_data['promo_code'])
 

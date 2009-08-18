@@ -26,8 +26,6 @@ class TestPromoCodeRegistration(TestCase):
             'password1':'test',
             'password2':'test',
             'agree_to_tos':'on',
-            'first_name':'test',
-            'last_name':'test',
             'promo_code':'12345678'
         }
         defaults.update(kwargs)
@@ -91,8 +89,6 @@ class TestPromoCodeRegistration(TestCase):
             'username':'test',
             'email':'test@example.com',
             'password':'test',
-            'first_name':'test',
-            'last_name':'test',
             'promo':'abcdefgh'
         }
         
@@ -129,8 +125,6 @@ class TestPromoCodeRenewals(TestCase):
             'username':'test',
             'email':'test@example.com',
             'password':'test',
-            'first_name':'test',
-            'last_name':'test',
             'promo':'abcdefgh',
         }
 

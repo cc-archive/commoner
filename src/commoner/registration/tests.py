@@ -43,13 +43,9 @@ class RegistrationTestCase(TestCase):
     def setUp(self):
         self.sample_user = RegistrationProfile.objects.create_inactive_user(username='alice',
                                                                             password='secret',
-                                                                            first_name='Alice',
-                                                                            last_name='Cooper',
                                                                             email='alice@example.com')
         self.expired_user = RegistrationProfile.objects.create_inactive_user(username='bob',
                                                                              password='swordfish',
-                                                                             first_name='Bob',
-                                                                             last_name='Barker',
                                                                              email='bob@example.com')
         self.expired_user.date_joined -= datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS + 1)
         self.expired_user.save()
@@ -90,8 +86,6 @@ class RegistrationModelTests(RegistrationTestCase):
         RegistrationProfile.objects.create_inactive_user(username='noemail',
                                                          password='foo',
                                                          email='nobody@example.com',
-                                                         first_name='no',
-                                                         last_name='email',
                                                          send_email=False)
         self.assertEqual(len(mail.outbox), 2)
 
@@ -177,8 +171,6 @@ class RegistrationModelTests(RegistrationTestCase):
 
         RegistrationProfile.objects.create_inactive_user(username='signal_test',
                                                          password='foo',
-                                                         first_name='Foo',
-                                                         last_name='Bar',
                                                          email='nobody@example.com',
                                                          send_email=False)
         RegistrationProfile.objects.activate_user(RegistrationProfile.objects.get(user__username='signal_test').activation_key)
@@ -209,9 +201,7 @@ class RegistrationFormTests(RegistrationTestCase):
               'email': 'foo@example.com',
               'password1': 'foo',
               'password2': 'foo',
-              'agree_to_tos': 'on',
-              'first_name':'foo',
-              'last_name':'last',},
+              'agree_to_tos': 'on',},             
             'error':
             ('username', [u"Enter a valid value."])
             },
@@ -222,9 +212,7 @@ class RegistrationFormTests(RegistrationTestCase):
               'email': 'alice@example.com',
               'password1': 'secret',
               'password2': 'secret',
-              'agree_to_tos': 'on',
-              'first_name':'foo',
-              'last_name':'last', },
+              'agree_to_tos': 'on', },
             'error':
             ('username', [u"This username is already taken. Please choose another."])
             },
@@ -235,9 +223,7 @@ class RegistrationFormTests(RegistrationTestCase):
               'email': 'foo@example.com',
               'password1': 'foo',
               'password2': 'bar',
-              'agree_to_tos': 'on',
-              'first_name':'foo',
-              'last_name':'last', },
+              'agree_to_tos': 'on', },
             'error':
             ('__all__', [u"You must type the same password each time"])
             },
@@ -248,38 +234,11 @@ class RegistrationFormTests(RegistrationTestCase):
               'email': 'foo@example.com',
               'password1': 'foo',
               'password2': 'foo',
-              'agree_to_tos': False,
-              'first_name':'foo',
-              'last_name':'last', },
+              'agree_to_tos': False, },
             'error':
             ('agree_to_tos', [u"You must agree to the terms to register"])
             },
-            # Must enter your first name.
-            {
-            'data':
-            { 'username': 'foo',
-              'email': 'foo@example.com',
-              'password1': 'foo',
-              'password2': 'foo',
-              'agree_to_tos': 'on',
-              'first_name':'',
-              'last_name':'last', },
-            'error':
-            ('first_name', [u"This field is required."])
-            },
-            # Must enter your last name.
-            {
-            'data':
-            { 'username': 'foo',
-              'email': 'foo@example.com',
-              'password1': 'foo',
-              'password2': 'foo',
-              'agree_to_tos': 'on',
-              'first_name':'foo',
-              'last_name':'' },
-            'error':
-            ('last_name', [u"This field is required."])
-            },
+            
             ]
 
         for invalid_dict in invalid_data_dicts:
@@ -291,8 +250,6 @@ class RegistrationFormTests(RegistrationTestCase):
                                              'email': 'foo@example.com',
                                              'password1': 'foo',
                                              'password2': 'foo',
-                                             'first_name':'foo',
-                                             'last_name':'bar',
                                              'agree_to_tos':'on',
                                              'promo_code':'12345678'})
         self.failUnless(form.is_valid())
@@ -324,8 +281,6 @@ class RegistrationViewTests(RegistrationTestCase):
         response = self.client.post(reverse('registration_register'),
                                     data={ 'username': 'foo',
                                            'email': 'foo@example.com',
-                                           'first_name':'foo',
-                                           'last_name': 'bar',
                                            'password1': 'foo',
                                            'password2': 'foo',
                                            'agree_to_tos':'on'})
