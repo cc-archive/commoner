@@ -81,7 +81,9 @@ urlpatterns = patterns(
         name='account_upgrade'),
     url(r'^a/renew/$', 'commoner.premium.views.account_upgrade', 
         name='account_renew'),
-
+    url(r'^a/redeem/(?P<code>[\w\d]{8})/$', 'commoner.premium.views.redeem_code',
+        name='redeem_code'),
+    
     # Message ack view
     url(r'^a/ack/(?P<message_id>\d+)', 
         'commoner.broadcast.views.ack',

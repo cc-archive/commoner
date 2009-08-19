@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load getattribute %}
+
+{% block head_title %}{% trans "Account" %} -{% endblock %}
+
+{% block page_header %}
+  {% trans "Redeem Your Promo Code" %}
+{% endblock %}
+
+{% block page_icon_class %}edit{% endblock %}
+
+{% block extra_nav %}
+{% endblock %}
+
+{% block body %}
+
+<h1>Promo code entered: <span>{{ code }}</span></h1>
+
+<h2>Create a new account</h2>
+<p><a href="{% url registration_register %}?c={{code}}">Click here</a> to create a new account using this promo code.</p>
+
+<h2>Renew an exisiting account</h2>
+<p>If you already have an account on CC Network, <a href="{% url account_renew %}?c={{code}}">click here</a> to renew your membership using this promo code.</p>
+
+
+
+{% endblock %}

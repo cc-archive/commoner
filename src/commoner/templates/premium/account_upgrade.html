@@ -19,22 +19,20 @@
 
 {% block body %}
 
-{% if profile.free %}
-	
-	<h1>Premium Level Upgrade</h1>
-
-{% else %}
-	
-	
-
-{% endif %}
-
 <div style="float:left;width:400px;margin:0;padding:0">
   
 <div class="form" style="margin:0;padding:10px;">
 
+  {% if profile.free %}
+
+  <h1>Upgrade to Premium Membership</h1>
+
+  {% else %}
+
   <h1>Renew Premium Memebership</h1>
   
+  {% endif %}
+
   <h3 style="text-align:center;margin:10px;">
     Enter your promo code to {% if profile.free %}upgrade{% else %}renew{% endif %} today.
   </h3>
