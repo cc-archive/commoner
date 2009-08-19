@@ -53,8 +53,9 @@ def account_upgrade(request):
         # it may be worthwhile to check the profile type of the user and
         # redirect free profiles from /a/renew -> /a/upgrade and vice versa.
 
+        param_string = ""
         if 'c' in request.GET:
-            param_string = "?c=%s" % request.GET['c']
+            param_string = "?c=%s" % request.GET['c']        
         
         if profile.free and request.path == reverse('account_renew'):
             return HttpResponseRedirect(reverse('account_upgrade') + param_string)
