@@ -34,7 +34,7 @@ setup(
                         'lxml',
                         'rdfadict',
                         'simplejson',
-                        'dmigrations',
+                        'South',
                         # 'cc.license',
                         ],
 
