@@ -60,8 +60,6 @@ ROOT_URLCONF = 'commoner.urls'
 
 
 INSTALLED_APPS = (
-    'dmigrations',
-    'paypal.standard.ipn',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -110,7 +108,6 @@ ACCOUNT_ACTIVATION_DAYS = 14
 
 AUTH_PROFILE_MODULE = "profiles.CommonerProfile"
 DEFAULT_FROM_EMAIL = "noreply@creativecommons.net"
-PAYPAL_RECEIVER_EMAIL = "john@creativecommons.org"
 
 LOGIN_REDIRECT_VIEW = 'profile_view'
 
