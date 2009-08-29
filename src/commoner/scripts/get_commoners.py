@@ -111,23 +111,27 @@ for contrib in contribs:
         paypal = tbl_paypal.select(tbl_paypal.c.entity_id == contrib['contact_id']).execute().fetchone()
         email = tbl_email.select(email_id == contrib['contact_id']).execute().fetchone()
 
+        """
+        dont care about this no-mo
+        
         if paypal:
             pp_fname = paypal['first_name']
             pp_lname = paypal['last_name']
         else:
             pp_fname = contact['first_name']
             pp_lname = contact['last_name']
+        """
+        
+        # see if this has been processed
+        if PromoCode.objects.filter(contribution_id = contrib['id']).count() > 0:
+            continue
 
-    # see if this has been processed
-	if PromoCode.objects.filter(transaction_id = transaction_id).count() > 0 ||
-       PromoCode.objects.filter(contribution_id = contrib['id']).count() > 0:
-	    continue
-
-    # send the welcome
-	PromoCode.objects.create_registration(
-	    unicode(transaction_id),
-	    unicode(email['email']), unicode(pp_lname), unicode(pp_fname))
-
+        # send the welcome
+        PromoCode.objects.create_promo_code(
+            unicode(email['email']), # email addr
+            unicode(transaction_id), # paypal transaction id
+            unicode(contrib['id']))  # civicrm contribution id
+    
         member = []
         member.append(pp_fname)
         member.append(pp_lname)
