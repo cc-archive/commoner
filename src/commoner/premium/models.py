@@ -2,8 +2,11 @@ from datetime import datetime
 import string
 import random
 
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
+from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
 # promo codes are case sensitive alpha-numeric strings
@@ -22,6 +25,50 @@ class PromoCodeManager(models.Manager):
 
         return promo
 
+    def gencode(self):
+        """ Generates a random 8 char string from the base62 set. """
+        return ''.join([random.choice(BASE62) for i in range(0,8)])
+
+    def create_promo_code(self, email=None, trxn_id=None, contrib_id=None,
+                          send_email=True):
+
+        """ Manager method that will handle promo code creation triggered
+        by the script running on the CiviCRM databse. """
+
+        # need to generate a random code and verify that it is unique
+        # rarely will this loop get executed
+        promo_code = self.gencode()
+        
+        # catching an IntegrityError would save a db hit, but importing
+        # the exception is db_engine specific and complicates testing env
+        while self.filter(code = promo_code).count() > 0: # db hit
+            # code has already been used, create another
+            promo_code = self.gencode()
+
+        code = self.create(code=promo_code,
+                           recipient=email,
+                           transaction_id=trxn_id,
+                           contribution_id=contrib_id)
+
+        if send_email and email:
+
+            from django.core.mail import send_mail
+            current_site = Site.objects.get_current()
+            
+            subject = render_to_string('premium/email/subject.txt',
+                                       { 'site': current_site })
+            # Email subject *must not* contain newlines
+            subject = ''.join(subject.splitlines())
+            
+            message = render_to_string('premium/email/welcome.txt',
+                                       { 'code':code, 'site': current_site })
+            
+            send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email])
+
+        return code
+                    
+        
+
 class PromoCode(models.Model):
     
     """ 
@@ -37,10 +84,15 @@ class PromoCode(models.Model):
     
     created = models.DateTimeField(_("date created"), default=datetime.now())
     expires = models.DateTimeField(_("date expires"), blank=True, null=False)
+
+    # promo codes are created with 2 methods:
+    # a contribution at civicrm or by a generic paypal transaction
     
     transaction_id = models.CharField(_("paypal transaction id"),
                                       max_length=255, blank=True, null=True)
-    
+    contribution_id = models.IntegerField(_("CiviCRM contribution id"),
+                                          blank=True, null=True)
+                                          
     used_by = models.ForeignKey(User, blank=True, null=True)
     used_on = models.DateTimeField(_("date used"), blank=True, null=True)
 
@@ -49,16 +101,12 @@ class PromoCode(models.Model):
     def __unicode__(self):
         return self.code
 
-    def gencode(self):
-        """ Generates a random 8 char string from the base62 set. """
-        return ''.join([random.choice(BASE62) for i in range(0,8)])
-
     @property
     def used(self):
         """ Returns True if the code has been used """
         return self.used_by is not None
         
-    def save(self):
+    def save(self, *args, **kwargs):
 
         # if we're creating and the expiration date hasn't been set...
         if not(self.expires):
@@ -67,9 +115,4 @@ class PromoCode(models.Model):
             today = datetime.now()
             self.expires = today.replace(today.year + 1)
 
-        if not(self.code):
-
-            # create a unique code
-            self.code = self.gencode()
-        
-        super(PromoCode, self).save()
+        super(PromoCode, self).save(*args, **kwargs)

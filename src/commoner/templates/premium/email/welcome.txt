@@ -1,0 +1,10 @@
+Thank you for your generous donation to Creative Commons.  
+The ammount you have donated grants you a 1 year membership 
+at {{ site.name }}.  To redeem your {{ site.name }} membership, 
+visit the url below and you will be given further instructions 
+on how you may create a new account or renew an existing one.
+
+http://creativecommons.net/a/redeem/{{ code.code }}
+
+Thanks!
+Creative Commons
