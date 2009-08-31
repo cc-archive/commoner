@@ -20,10 +20,17 @@ from commoner.premium.models import PromoCode
 
 PRODUCTION = True
 
+# python get_commoners.py start_date end_date
 if len(sys.argv) > 1:
-    date = sys.argv[-1]
+    start_date = sys.argv[1]
+
+    if len(sys.argv) > 2:
+        end_date = sys.argv[2]
+    else:
+        end_date = str(datetime.date.today()) #sys.argv[1]
 else:
-    date = str(datetime.date.today()) #sys.argv[1]
+    start_date = "2009-09-15"
+    end_date = str(datetime.date.today())
 
 # setup database connectivity
 db = sqlalchemy.create_engine('mysql://root@localhost/civicrm_staging', convert_unicode=True, encoding='latin1')
@@ -36,7 +43,7 @@ tbl_contact = sqlalchemy.Table('civicrm_contact', metadata, autoload=True)
 if PRODUCTION:
     tbl_paypal = sqlalchemy.Table('civicrm_value_1_paypal_data_7', metadata, autoload=True)
 else:
-    tbl_paypal = sqlalchemy.Table('civicrm_value_1_paypal_data_8', metadata, autoload=True)
+    tbl_paypal = sqlalchemy.Table('civicrm_value_1_paypal_data_7', metadata, autoload=True)
 
 tbl_email = sqlalchemy.Table('civicrm_email', metadata, autoload=True)
 
@@ -54,8 +61,8 @@ contrib_type_id = tbl_contrib.c.contribution_type_id
 # campaign launch date, and which were completed on the date provided.
 contribs = tbl_contrib.select(
     sqlalchemy.and_(
-        receive_date >= '2009-09-15', 
-	receipt_date.like(date + '%'), 
+        receive_date >= start_date, 
+	receipt_date.like(end_date + '%'), 
 	status_id == 1)
     ).execute().fetchall()
 
@@ -108,20 +115,11 @@ for contrib in contribs:
 
     if is_member:
         contact = tbl_contact.select(contact_id == contrib['contact_id']).execute().fetchone()
-        paypal = tbl_paypal.select(tbl_paypal.c.entity_id == contrib['contact_id']).execute().fetchone()
         email = tbl_email.select(email_id == contrib['contact_id']).execute().fetchone()
 
-        """
-        dont care about this no-mo
-        
-        if paypal:
-            pp_fname = paypal['first_name']
-            pp_lname = paypal['last_name']
-        else:
-            pp_fname = contact['first_name']
-            pp_lname = contact['last_name']
-        """
-        
+        # We may utilize this again in the future...
+        # paypal = tbl_paypal.select(tbl_paypal.c.entity_id == contrib['contact_id']).execute().fetchone()
+
         # see if this has been processed
         if PromoCode.objects.filter(contribution_id = contrib['id']).count() > 0:
             continue
@@ -130,12 +128,8 @@ for contrib in contribs:
         PromoCode.objects.create_promo_code(
             unicode(email['email']), # email addr
             unicode(transaction_id), # paypal transaction id
-            unicode(contrib['id']))  # civicrm contribution id
+            unicode(contrib['id']),
+            PRODUCTION)  # civicrm contribution id
     
-        member = []
-        member.append(pp_fname)
-        member.append(pp_lname)
-        member.append(transaction_id)
-        member.append(email['email'])
-
-        print ','.join([field for field in member])
+        
+        print "%s, %s" % (p.code, p.recipient)
