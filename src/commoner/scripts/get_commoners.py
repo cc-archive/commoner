@@ -18,24 +18,19 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'commoner.settings'
 
 from commoner.premium.models import PromoCode
 
-PRODUCTION = True
+PRODUCTION = False
 
-# python get_commoners.py start_date end_date
 if len(sys.argv) > 1:
     start_date = sys.argv[1]
-
-    if len(sys.argv) > 2:
-        end_date = sys.argv[2]
-    else:
-        end_date = str(datetime.date.today()) #sys.argv[1]
 else:
     start_date = "2009-09-15"
-    end_date = str(datetime.date.today())
 
 # setup database connectivity
-db = sqlalchemy.create_engine('mysql://civicrm:Civicrm.@localhost/civicrm_staging', convert_unicode=True, encoding='latin1')
 if PRODUCTION:
     db = sqlalchemy.create_engine('mysql://civicrm:Civicrm.@localhost/civicrm', convert_unicode=True, encoding='latin1') 
+else:
+    db = sqlalchemy.create_engine('mysql://civicrm:Civicrm.@localhost/civicrm_staging', convert_unicode=True, encoding='latin1')
+
 metadata = sqlalchemy.MetaData(db)
 tbl_contrib = sqlalchemy.Table('civicrm_contribution', metadata, autoload=True)
 tbl_recur = sqlalchemy.Table('civicrm_contribution_recur', metadata, autoload=True)
@@ -62,7 +57,7 @@ contrib_type_id = tbl_contrib.c.contribution_type_id
 contribs = tbl_contrib.select(
     sqlalchemy.and_(
         receive_date >= start_date, 
-	receipt_date.like(end_date + '%'), 
+	receipt_date.like(str(datetime.date.today()) + '%'), 
 	status_id == 1)
     ).execute().fetchall()
 
@@ -125,11 +120,11 @@ for contrib in contribs:
             continue
 
         # send the welcome
-        PromoCode.objects.create_promo_code(
-            unicode(email['email']), # email addr
-            unicode(transaction_id), # paypal transaction id
-            unicode(contrib['id']),
-            PRODUCTION)  # civicrm contribution id
-    
+	if email:
+       	    p = PromoCode.objects.create_promo_code(
+                    unicode(email['email']), # email addr
+            	    unicode(transaction_id or 0), # paypal transaction id
+            	    unicode(contrib['id']),
+            	    PRODUCTION)  # civicrm contribution id
         
-        print "%s, %s" % (p.code, p.recipient)
+            print "%s, %s" % (p.code, p.recipient)
