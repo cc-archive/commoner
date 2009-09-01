@@ -33,7 +33,7 @@ else:
     end_date = str(datetime.date.today())
 
 # setup database connectivity
-db = sqlalchemy.create_engine('mysql://root@localhost/civicrm_staging', convert_unicode=True, encoding='latin1')
+db = sqlalchemy.create_engine('mysql://civicrm:Civicrm./civicrm_staging', convert_unicode=True, encoding='latin1')
 if PRODUCTION:
     db = sqlalchemy.create_engine('mysql://civicrm:Civicrm.@localhost/civicrm', convert_unicode=True, encoding='latin1') 
 metadata = sqlalchemy.MetaData(db)
