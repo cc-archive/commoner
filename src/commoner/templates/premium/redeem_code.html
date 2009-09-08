@@ -17,11 +17,21 @@
 
 <h1>Promo code entered: <span>{{ code }}</span></h1>
 
-<h2>Create a new account</h2>
-<p><a href="{% url registration_register %}?c={{code}}">Click here</a> to create a new account using this promo code.</p>
+<div style="float:left;width:400px;padding:0px;margin:25px 0">
+  <div style="padding:5px">
+    <a href="{% url registration_register %}?c={{code}}" style="font-size:2em;padding:5px;background:#ddd;border:1px #ccc solid;">Create a new account.</a>
+    <p><a href="{% url registration_register %}?c={{code}}">Click here</a> to create a new account using this promo code.</p>
+  </div>
+</div>
+<div style="float:left;width:400px;padding:0px;margin:25px 0">
+  <div style="padding:5px">
+    <a href="{% url account_renew %}?c={{code}}" style="font-size:2em;padding:5px;background:#ddd;border:1px #ccc solid;">Renew an existing account..</a>
+    <p>If you already have an account on CC Network, <a href="{% url account_renew %}?c={{code}}">click here</a> to renew your membership using this promo code.</p>  
+  </div>
+</div>
 
-<h2>Renew an exisiting account</h2>
-<p>If you already have an account on CC Network, <a href="{% url account_renew %}?c={{code}}">click here</a> to renew your membership using this promo code.</p>
+<div class="clear"></div>
+
 
 
 
