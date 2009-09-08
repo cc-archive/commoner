@@ -52,7 +52,7 @@ class CommonerProfile(models.Model):
     level = models.CharField(_("Level of profile"), choices=PROFILE_LEVELS,
                     max_length=255, default=FREE)
     
-    nickname = models.CharField(_("Screen name"), max_length=255, blank=True)
+    nickname = models.CharField(_("Your name"), max_length=255, blank=True)
     photo = models.ImageField(_("Photo"), storage=get_storage(), 
                               upload_to='p', blank=True, null=True)
 
@@ -114,9 +114,10 @@ class CommonerProfile(models.Model):
 
     @property
     def active(self):
-        """Return True if the profile is not expired."""
+        """Return True if the profile is not expired. Ignore the time of the
+        expiration date. """
 
-        return (datetime.now() < self.expires)
+        return (datetime.now().date() < self.expires.date())
 
     @property
     def works(self):
