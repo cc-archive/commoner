@@ -1,7 +1,7 @@
 from django.core.files.storage import default_storage
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 
 def badge(request, username, size=''):
 
@@ -12,9 +12,13 @@ def badge(request, username, size=''):
     profile = get_object_or_404(User, username=username)
     profile = profile.get_profile()
 
+    if profile.free:
+        # return a 404 for FREE profiles
+        raise Http404
+    
     if profile.active:
-       # serve the active badge
-       filename = 'images/badge%s/active.png' % size
+        # serve the active badge
+        filename = 'images/badge%s/active.png' % size
 
     # set the content type appropriately
     return HttpResponse(default_storage.open(filename).read(),
