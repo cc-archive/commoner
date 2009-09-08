@@ -75,13 +75,13 @@ urlpatterns = patterns(
         'django.contrib.auth.views.password_reset_complete',),
     url(r'^a/delete/$', 'commoner.profiles.views.delete',
         name='delete_account'),
-    url(r'^a/overview/$', 'commoner.premium.views.account_overview', 
+    url(r'^a/overview/$', 'commoner.promocodes.views.account_overview', 
         name='account_overview'),
-    url(r'^a/upgrade/$', 'commoner.premium.views.account_upgrade', 
+    url(r'^a/upgrade/$', 'commoner.promocodes.views.account_upgrade', 
         name='account_upgrade'),
-    url(r'^a/renew/$', 'commoner.premium.views.account_upgrade', 
+    url(r'^a/renew/$', 'commoner.promocodes.views.account_upgrade', 
         name='account_renew'),
-    url(r'^a/redeem/(?P<code>[\w\d]{8})/$', 'commoner.premium.views.redeem_code',
+    url(r'^a/redeem/(?P<code>[\w\d]{8})/$', 'commoner.promocodes.views.redeem_code',
         name='redeem_code'),
     
     # Message ack view

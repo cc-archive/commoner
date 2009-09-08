@@ -16,7 +16,7 @@ import datetime
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'commoner.settings'
 
-from commoner.premium.models import PromoCode
+from commoner.promocodes.models import PromoCode
 
 PRODUCTION = False
 
@@ -57,8 +57,8 @@ contrib_type_id = tbl_contrib.c.contribution_type_id
 contribs = tbl_contrib.select(
     sqlalchemy.and_(
         receive_date >= start_date, 
-	receipt_date.like(str(datetime.date.today()) + '%'), 
-	status_id == 1)
+        receipt_date.like(str(datetime.date.today()) + '%'), 
+        status_id == 1)
     ).execute().fetchall()
 
 for contrib in contribs:
@@ -74,7 +74,7 @@ for contrib in contribs:
     # greater than 50 then they qualify to be a member
     if contrib['contribution_page_id'] == 16:
         # This is a student
-	is_student = True
+        is_student = True
 
     if contrib['contribution_recur_id']:
         is_recurring = True
@@ -120,7 +120,7 @@ for contrib in contribs:
             continue
 
         # send the welcome
-	if email:
+        if email:
        	    p = PromoCode.objects.create_promo_code(
                     unicode(email['email']), # email addr
             	    unicode(transaction_id or 0), # paypal transaction id

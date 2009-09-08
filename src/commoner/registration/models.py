@@ -125,7 +125,7 @@ class RegistrationManager(models.Manager):
             registration_profile.premium = True 
             registration_profile.save()
 
-            from commoner.premium.models import PromoCode
+            from commoner.promocodes.models import PromoCode
             PromoCode.objects.mark_as_used(promo, new_user)
             
         if send_email:

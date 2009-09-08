@@ -10,7 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from models import RegistrationProfile
 
-from commoner.premium.forms import PromoCodeField
+from commoner.promocodes.forms import PromoCodeField
 
 # I put this on all required fields, because it's easier to pick up
 # on them with CSS or JavaScript if they have a class of "required"

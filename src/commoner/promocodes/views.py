@@ -9,7 +9,7 @@ from django.core.urlresolvers import reverse
 from django.views.generic.simple import direct_to_template
 
 from commoner.profiles.models import CommonerProfile
-from commoner.premium.forms import PremiumUpgradeForm 
+from commoner.promocodes.forms import PremiumUpgradeForm 
 
 import models
 
@@ -43,7 +43,7 @@ def account_upgrade(request):
             # render to a page detailing what just happened and how long their
             # premium membership will last.
                         
-            return render_to_response("premium/upgrade_success.html",
+            return render_to_response("promocodes/upgrade_success.html",
                                       {'profile':profile, 'upgraded':upgrading},
                                       context_instance=RequestContext(request))
             
@@ -68,7 +68,7 @@ def account_upgrade(request):
         if 'c' in request.GET:  
             form.fields['promo'].initial = request.GET['c']
             
-    return render_to_response("premium/account_upgrade.html",
+    return render_to_response("promocodes/account_upgrade.html",
                               {'form':form, 'profile':profile, },
                               context_instance=RequestContext(request))
         
@@ -76,7 +76,7 @@ def account_upgrade(request):
 @login_required
 def account_overview(request):
 
-    return render_to_response('premium/account_overview.html',
+    return render_to_response('promocodes/account_overview.html',
                               {'profile':request.user.get_profile()},
                               context_instance=RequestContext(request))
 
@@ -90,13 +90,6 @@ def redeem_code(request, code=None):
         else:
             return HttpResponseRedirect('/a/renew/?c=%s' % code)
     
-    return render_to_response("premium/redeem_code.html", {'code':code},
+    return render_to_response("promocodes/redeem_code.html", {'code':code},
                               context_instance=RequestContext(request))
 
-@login_required
-def purchase_upgrade(request):
-
-    """ Paypal form for the purchasing of a promo code. """
-
-    pass
-    

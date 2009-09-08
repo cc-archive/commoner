@@ -1,4 +1,4 @@
-# tests for commoner.premium
+# tests for commoner.promocodes
 from datetime import date, datetime
 
 from django.test import TestCase
@@ -6,8 +6,8 @@ from django.core.urlresolvers import reverse
 
 from commoner.profiles.models import CommonerProfile
 from commoner.registration.models import RegistrationProfile
-from commoner.premium.models import PromoCode
-from commoner.premium.forms import PromoCodeField
+from commoner.promocodes.models import PromoCode
+from commoner.promocodes.forms import PromoCodeField
 
 
 class TestPromoCodeRegistration(TestCase):
