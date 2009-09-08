@@ -36,6 +36,9 @@
   {% if profile.is_organization %}
 	{% trans "Organization Account" %}
   {% else %}
+    {% if not profile.active %}
+      <a href="{% url account_overview %}">{% trans "Inactive" %}</a> 
+    {% endif %}
     {% trans "Premium Account" %}
   {% endif %}{% endif %}
 {% endblock %}
@@ -91,7 +94,11 @@
 
 <div class="column-narrow column">
   {% if user.is_authenticated %}
+    
     {% ifequal user.username profile_user.username %}
+
+    {% if profile.premium %}
+    
       <h4>{% trans "Place this badge on your website" %}</h4>
       <div class="profile-box">
 	<table style="margin: 0 auto;">
@@ -121,6 +128,8 @@
 		</p>
       </div>
 
+      {% endif %}
+
 	  <h4>{% trans "Your OpenID URL" %}</h4>
 	  <div class="profile-box">
 	    <input type="text" onclick="this.select()" readonly="readonly" value='{{base_url}}/{{user.username}}/' />
@@ -130,7 +139,7 @@
 	  </div>
     {% endifequal %}{% endif %}
 
-	{% if not profile.free %}
+	{% if not profile.free and profile.active %}
 
 	{% ifequal user.username profile_user.username %}
 	<a class="add_work" title="add a work" 
