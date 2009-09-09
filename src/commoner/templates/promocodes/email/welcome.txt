@@ -1,10 +1,14 @@
-Thank you for your generous donation to Creative Commons.  
-The ammount you have donated grants you a 1 year membership 
-at {{ site.name }}.  To redeem your {{ site.name }} membership, 
-visit the url below and you will be given further instructions 
-on how you may create a new account or renew an existing one.
+Thank you for your generous donation to Creative Commons.
 
-http://creativecommons.net/a/redeem/{{ code.code }}
+As a token of our appreciation we'd like to invite you to 1-year membership on the Creative Commons Network. We're really excited about some new features we're working on for the CC Network, so sign up now and we'll be able to keep you in the loop for future announcements.
+
+To redeem your CC Network membership, visit this link:
+
+https://creativecommons.net/a/redeem/{{ code.code }}/
+
+You can then create an account or renew the membership of an existing one.  To learn more about the Creative Commons Network, visit this link:
+
+https://creativecommons.net/h/about/
 
 Thanks!
 Creative Commons

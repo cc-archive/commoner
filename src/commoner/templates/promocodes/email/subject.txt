@@ -1,1 +1,1 @@
-{{ site.name }} registration code
+Registration Link for the Creative Commons Network
