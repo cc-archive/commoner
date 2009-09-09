@@ -166,7 +166,7 @@ class CommonerProfile(models.Model):
                                    {'site':current_site,
                                     'active':self.active, 'days':days})
 
-        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [self.email])
+        return send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [self.email])
     
     def renew(self, expires_on=None):
         """ Update the profile by extending the expires date

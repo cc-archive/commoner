@@ -28,11 +28,5 @@ last_reminders = CommonerProfile.objects.filter(
                       expires__month = fifteen_days.month,
                       expires__year = fifteen_days.year)
 
-print "First Reminders sent to:"
-for p in first_reminders:
-    print "%s - %s" % (p.user.username, p.expires,)
-
-print "Last Reminders sent to:"
-for p in last_reminders:
-    print "%s - %s" % (p.user.username, p.expires,)
-
+# send the emails with an elegant one liner :)
+map(lambda p: p.send_reminder_email(), first_reminders|last_reminders)
