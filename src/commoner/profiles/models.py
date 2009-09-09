@@ -1,7 +1,7 @@
 import os.path
 import urlparse
 
-from datetime import datetime
+from datetime import datetime, date
 
 from django.db import models
 from django.db.models import permalink
@@ -23,14 +23,14 @@ class CommonerProfileManager(models.Manager):
         from django.core.mail import send_mail
 
         current_site = Site.objects.get_current()
-        subject = render_to_string('profiles/email/subject.txt',
+        subject = render_to_string('profiles/email/email_changed_subject.txt',
                                    {'site':current_site}).strip()
-        message = render_to_string('profiles/email/content.txt',
+        message = render_to_string('profiles/email/email_changed_content.txt',
                                    {'site':current_site,
                                     'newaddr':newaddr})
 
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, 
-                  [newaddr, oldaddr])
+                  [newaddr, oldaddr])        
     
 class CommonerProfile(models.Model):
     """A User [Commoner] Profile; models additional user information 
@@ -147,6 +147,26 @@ class CommonerProfile(models.Model):
         """Return the fully qualified URL for the slim member badge."""
 
         return "%s%s/80x15/" % (settings.BADGE_BASE_URL, self.user.username)
+
+    def send_reminder_email(self):
+        """ Send a reminder email to a user notifying that their account will
+        soon be expired. Method accepts a `profile` parameter, of whom the email
+        will be sent to based on profile.user.email and the profile.expires date.
+        """
+        from django.core.mail import send_mail
+
+        # determine days before or past expiration on profile
+        days = abs((self.expires.date() - date.today()).days)
+        
+        current_site = Site.objects.get_current()
+        subject = render_to_string('profiles/email/reminder_subject.txt',
+                                   {'site':current_site,
+                                    'active':self.active}).strip()
+        message = render_to_string('profiles/email/reminder_content.txt',
+                                   {'site':current_site,
+                                    'active':self.active, 'days':days})
+
+        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [self.email])
     
     def renew(self, expires_on=None):
         """ Update the profile by extending the expires date
