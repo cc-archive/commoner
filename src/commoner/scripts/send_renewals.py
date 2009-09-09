@@ -6,8 +6,7 @@ in 1 month and those that will be expiring in 15 days.  For the
 script to effectively reminder all of our account holders, it
 will need to be schedule to run ONCE per day, every day.
 """
-
-import sqlalchemy
+import os
 from datetime import datetime, timedelta
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'commoner.settings'
