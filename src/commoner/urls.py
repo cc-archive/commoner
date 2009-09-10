@@ -39,18 +39,7 @@ urlpatterns = patterns(
      {'template':'robots.txt', 'mimetype':'text/plain'}),
     
     # Help pages
-    (r'^h/about/$', 'django.views.generic.simple.direct_to_template',
-	 {'template':'help/about.html'}),
-    (r'^h/openid/$', 'django.views.generic.simple.direct_to_template',
-	 {'template':'help/openid.html'}),
-    (r'^h/privacy/$', 'django.views.generic.simple.direct_to_template',
-	 {'template':'help/privacy.html'}),
-    url(r'^h/contact/$', 'commoner.help.views.contact',
-        name='contact_form'),
-    (r'^h/contact/thanks/$', 'django.views.generic.simple.direct_to_template',
-	 {'template':'help/contact_thanks.html'}),
-    url(r'^h/metrics/$', 'commoner.metrics.views.stats', name='metrics'),    
-
+    (r'^h/', include('commoner.help.urls')),
 
     (r'^h/join/$', 'django.views.generic.simple.redirect_to',
      {'url':'https://support.creativecommons.org/join/'}),
