@@ -33,10 +33,12 @@ class BaseRegistrationForm(forms.Form):
     username = forms.RegexField(regex=r'^\w+$',
                                 max_length=30,
                                 widget=forms.TextInput(attrs=attrs_dict),
-                                label=_(u'Username'))
+                                label=_(u'Username'),
+                                help_text=_('This will be used to create your OpenID URL'))
     email = forms.EmailField(widget=forms.TextInput(attrs=dict(attrs_dict,
                                                                maxlength=75)),
-                             label=_(u'Email address'))
+                             label=_(u'Email address'),
+                             help_text=_(u'You will be sent a confirmation email shortly.'))
     password1 = forms.CharField(widget=forms.PasswordInput(attrs=attrs_dict, render_value=False),
                                 label=_(u'Password'))
     password2 = forms.CharField(widget=forms.PasswordInput(attrs=attrs_dict, render_value=False),

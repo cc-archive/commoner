@@ -527,11 +527,26 @@ a.add_work {
 
 iframe.tos {
 	background-color: #fff;
-	width:500px;
-	height: 400px;
+	width:750px;
+	height: 150px;
 	border:1px solid #ccc;
 	padding: 10px;
 }
+
+.id_agree_to_tos{ padding: 20px; }
+
+div#register-form .field_label {
+    font-weight: bold; 
+	width: 120px;
+	padding-right: 5px;
+	text-align: right;
+}
+
+div#register-form input[type="text"], div#register-form .field #id_photo {
+	width: 150px;
+	font-size: 102%;
+}
+span#openidurl { padding-right:5px; }
 
 /*** About ***/
 ul#benefits li {

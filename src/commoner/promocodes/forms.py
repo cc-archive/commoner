@@ -15,6 +15,7 @@ class PromoCodeField(forms.CharField):
         kwargs.setdefault('max_length', 8)
         kwargs.setdefault('label', _("Promo code"))
         kwargs.setdefault('required', True)
+        kwargs.setdefault('help_text', _('Your promo code is in your receipt of payment to Creative Commons.'))
 
         super(PromoCodeField, self).__init__(*args, **kwargs)
 
