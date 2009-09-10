@@ -538,4 +538,51 @@ ul#benefits li {
 	margin-bottom: 1.5em;
 }
 
+.promo_code_box {
+    background-color: #B7FB8C;
+    border-style: dashed;
+    border-width: 2px;
+    border-color: #989C8C;
+    margin-top:-10px;
+    margin-bottom:10px;
+    margin-left: auto;
+    margin-right: auto;
+    padding:20px;
+    width:30em;
+    text-align:center;
+}
 
+.account_box {
+    background-color: #EEEEEE;
+    font-size:2em;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #989C8C;
+    margin-top:10px;
+    margin-right: 10px;
+    margin-bottom:10px;
+    margin-left: auto;
+    margin-right: auto;
+    padding:15px;
+    text-align:center; 
+}
+
+.account_box h2 a{
+	color:#5E3B20;
+	line-height: 1.1em;
+	margin-top: -55px;
+	display:block;
+}
+
+.account_box_container {
+	display: table-cell;
+    margin-left: auto;
+    margin-right: auto;
+	vertical-align:middle;
+	float: center;
+	width: 350px;
+	padding: 10px;
+    height: 10em;
+}
+
+.account_box p { font-size:10px; }

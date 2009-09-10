@@ -15,24 +15,23 @@
 
 {% block body %}
 
-<h1>Promo code entered: <span>{{ code }}</span></h1>
+<div> 
+  <div class="promo_code_box">
+    <h1>{% trans "Promo Code Entered:" %} <span>{{ code }}</span></h1>
+  </div>
 
-<div style="float:left;width:400px;padding:0px;margin:25px 0">
-  <div style="padding:5px">
-    <a href="{% url registration_register %}?c={{code}}" style="font-size:2em;padding:5px;background:#ddd;border:1px #ccc solid;">Create a new account.</a>
-    <p><a href="{% url registration_register %}?c={{code}}">Click here</a> to create a new account using this promo code.</p>
+  <div class="account_box_container">
+    <div class="account_box">
+      <h2><a href="{% url registration_register %}?c={{ code }}">{% trans "Create a New Account" %}</a></h2>
+    </div>
+  </div>
+
+  <div class="account_box_container">
+	<div class="account_box join_network">
+      <h2><a href="{% url account_renew %}?c={{ code }}">{% trans "Renew an Account" %}</a></h2>
+    </div>
   </div>
 </div>
-<div style="float:left;width:400px;padding:0px;margin:25px 0">
-  <div style="padding:5px">
-    <a href="{% url account_renew %}?c={{code}}" style="font-size:2em;padding:5px;background:#ddd;border:1px #ccc solid;">Renew an existing account..</a>
-    <p>If you already have an account on CC Network, <a href="{% url account_renew %}?c={{code}}">click here</a> to renew your membership using this promo code.</p>  
-  </div>
-</div>
-
 <div class="clear"></div>
-
-
-
 
 {% endblock %}
