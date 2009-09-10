@@ -2,6 +2,7 @@
 from datetime import date, datetime
 
 from django.test import TestCase
+from django.core import mail
 from django.core.urlresolvers import reverse
 
 from commoner.profiles.models import CommonerProfile
@@ -134,7 +135,67 @@ class TestPromoCodeRenewals(TestCase):
         user = RegistrationProfile.objects.activate_user(
             user.registrationprofile_set.all()[0].activation_key)
         return user
-    
+
+    def test_redeem_redirects_to_renew(self):
+        """ Verify that the /a/redeem/codecode view redirects appropriately for
+        the different user levels """
+        
+        user = self._create_and_activate_user()
+
+        # user is not logged in, so both options should be presented
+        response = self.client.get("/a/redeem/abcdefgh/")
+        self.assertTemplateUsed(response, "promocodes/redeem_code.html")
+
+        # ensure that if the user is authenticated that a 302 occurs
+        self.client.login(username='test', password='test')
+        response = self.client.get("/a/redeem/abcdefgh/")
+        self.assertRedirects(response, "/a/renew/?c=abcdefgh")
+
+        # ensure if the user is free, then it should 302 to upgrade
+        user = self._create_and_activate_user(username='testee', promo=None)
+        self.assert_(user.get_profile().free)
+        self.client.login(username='testee', password='test')
+        response = self.client.get("/a/redeem/abcdefgh/")
+        self.assertRedirects(response, "/a/upgrade/?c=abcdefgh")
+
+    def test_promocode_GET_var_populates_textfields(self):
+        """ renew/?c=codecode and upgrade/?c=codecode should default the
+        promo code textfield to that value. """
+
+        user = self._create_and_activate_user()
+        self.client.login(username='test', password='test')
+        
+        response = self.client.get("/a/renew/?c=abcdefgh")
+        self.assert_(response.context[0]['form'].fields['promo'].initial == 'abcdefgh')
+
+        user = self._create_and_activate_user(username='testee', promo=None)
+        self.client.login(username='testee', password='test')
+
+        response = self.client.get("/a/upgrade/?c=abcdefgh")
+        self.assert_(response.context[0]['form'].fields['promo'].initial == 'abcdefgh')
+
+    def test_promo_code_creation(self):
+        """ Ensure that the manager method produces valid promo codes and
+        properly delivers email messages. """
+
+        # using just an email
+        promocode = PromoCode.objects.create_promo_code('test@example.com')
+        self.assert_(not promocode.used)
+        self.assertEquals(len(mail.outbox), 1)
+        self.assert_('test@example.com' in mail.outbox[0].to)
+        self.assertEquals(mail.outbox[0].subject, 'Registration Link for the Creative Commons Network')
+        self.assert_(('redeem/%s' % promocode) in mail.outbox[0].body)
+
+        # assert paypal and civi information is store when supplied
+        promocode = PromoCode.objects.create_promo_code('test@example.com', 'paypal_id', '123')
+        self.assertEquals(promocode.transaction_id, 'paypal_id')
+        self.assertEquals(promocode.contribution_id, '123') #civi contrib row id
+
+        # should support no email at all for batch creationm
+        promocode = PromoCode.objects.create_promo_code()
+        self.assert_(not promocode.used)
+        
+        
     def test_account_renewal(self):
         """
         Submit a promo code to renew an account.
@@ -202,7 +263,7 @@ class TestPromoCodeRenewals(TestCase):
         response = self.client.post('/a/renew/', dict(promo='12345678'))
         
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'premium/upgrade_success.html')
+        self.assertTemplateUsed(response, 'promocodes/upgrade_success.html')
         self.assertFalse(response.context[0]['upgraded'])
 
         self.assert_(response.context[0]['profile'])
@@ -232,7 +293,7 @@ class TestPromoCodeRenewals(TestCase):
         response = self.client.post('/a/renew/', dict(promo='12345678'))
         
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'premium/upgrade_success.html')
+        self.assertTemplateUsed(response, 'promocodes/upgrade_success.html')
         self.assert_(response.context[0]['upgraded'])
 
         self.assert_(response.context[0]['profile'])

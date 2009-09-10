@@ -46,7 +46,7 @@ class PromoCodeManager(models.Manager):
             promo_code = self.gencode()
 
         code = self.create(code=promo_code,
-                           recipient=email,
+                           recipient=(email or ''),
                            transaction_id=trxn_id,
                            contribution_id=contrib_id)
 
@@ -55,12 +55,12 @@ class PromoCodeManager(models.Manager):
             from django.core.mail import send_mail
             current_site = Site.objects.get_current()
             
-            subject = render_to_string('premium/email/subject.txt',
+            subject = render_to_string('promocodes/email/subject.txt',
                                        { 'site': current_site })
             # Email subject *must not* contain newlines
             subject = ''.join(subject.splitlines())
             
-            message = render_to_string('premium/email/welcome.txt',
+            message = render_to_string('promocodes/email/welcome.txt',
                                        { 'code':code, 'site': current_site })
             
             send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email])
