@@ -161,7 +161,9 @@ urlpatterns = patterns(
     url(r'^(?P<username>\w+)$', 'commoner.profiles.views.view',
         name='profile_view'),
     
-    
+    # Legacy redirects
+    url(r'^l/termsofuse.html$', 'django.views.generic.simple.redirect_to',
+        {'url':'/h/policies/tou/', 'permanent':True}),
 
 )
 
