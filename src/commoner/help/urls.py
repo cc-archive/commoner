@@ -15,6 +15,8 @@ urlpatterns = patterns(
     (r'^policies/privacy/20081001/', 
      'django.views.generic.simple.direct_to_template',
      {'template':'help/privacy-20081001.html'}),
+    (r'^policies/tou/((?P<effective>[0-9]{8})/)?', 
+     'commoner.help.views.tou'),
     url(r'^contact/$', 'commoner.help.views.contact',
         name='contact_form'),
     (r'^contact/thanks/$', 'django.views.generic.simple.direct_to_template',
