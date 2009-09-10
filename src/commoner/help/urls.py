@@ -12,6 +12,8 @@ urlpatterns = patterns(
     (r'^privacy/$', 'django.views.generic.simple.redirect_to',
      {'url':'http://creativecommons.org/privacy', 
       'permanent':True}),
+    (r'^policies/$', 'django.views.generic.simple.direct_to_template',
+     {'template':'help/policies.html'}),
     (r'^policies/privacy/20081001/', 
      'django.views.generic.simple.direct_to_template',
      {'template':'help/privacy-20081001.html'}),

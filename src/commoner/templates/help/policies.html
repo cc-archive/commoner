@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block head_title %}{% trans "Policies" %} -{% endblock %}
+
+{% block page_header %}{% trans "Creative Commons Network Policies" %}{% endblock %}
+{% block body %}
+
+<h2>Terms of Use</h2>
+
+<ul>
+  <li><a href="/h/policies/tou/">Effective August 14, 2009</a> (current)</li>
+  <li><a href="/h/policies/tou/20090330/">Effective March 30, 2009</a></li>
+  <li><a href="/h/policies/tou/20081015/">Effective October 15, 2008</a></li>
+</ul>
+
+<h2>Privacy Policy</h2>
+
+<ul>
+  <li><a href="http://creativecommons.org/privacy">
+      Creative Commons Privacy Policy</a>, 
+    effective July 23, 2009 (current)</li>
+  <li><a href="/h/policies/privacy/20081001/">Effective October 1, 2008</a></li>
+</ul>
+
+{% endblock %}
