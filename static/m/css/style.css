@@ -601,3 +601,17 @@ ul#benefits li {
 }
 
 .account_box p { font-size:10px; }
+
+.container {
+	margin-right:auto;
+	margin-left:auto;
+	text-align:center;
+}
+
+.form {	
+    /* margin-top:-40px; */
+}
+
+input#id_promo{
+	margin-bottom:10px;
+}
