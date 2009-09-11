@@ -53,7 +53,6 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.doc.XViewMiddleware',
-    'commoner.middleware.HttpsRedirectMiddleware'
 )
 
 ROOT_URLCONF = 'commoner.urls'
