@@ -37,7 +37,7 @@
       <ul class="box">
         {% if user.is_anonymous %}
 	{% url login as login_url %}
-	<li><a href="http://support.creativecommons.org/join">
+	<li><a href="/h/join/">
 	    {% trans "Join" %}
 	</a></li>
         <li><a href="{{ login_url }}">

@@ -2,7 +2,7 @@ import django.test
 from commoner.works import models
 
 class TestLookup(django.test.TestCase):
-    fixtures = ['test_users.json', ]
+    fixtures = ['test_users.json', 'test_profiles.json', ]
 
     def setUp(self):
         """Set up the test database for the lookup tests."""

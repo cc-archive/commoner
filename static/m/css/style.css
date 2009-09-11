@@ -190,6 +190,11 @@ a:hover {
 	background-position: 100% 1px;
 }
 
+#main-body.organization {
+	background-image: url(/m/images/commoner-org.png);
+	background-position: 102% 1px;
+}
+
 .box {
 	text-align: left;
 	width: 800px;
@@ -292,6 +297,15 @@ div.form form .field {
 	margin: 1em 0 1.5em 0;
 	padding-bottom: 1.5em;
 	border-bottom: 1px solid #EEDFCC;
+}
+div.form form .promo-field { text-align:center }
+div.form form .promo-field input[type="text"] {
+    line-height:2em;
+    border: 1px solid #999;
+    padding:5px;
+    width:5em;
+    font-family:monospace;
+    font-size:24px;
 }
 
 div.form form .field .help {
@@ -513,14 +527,91 @@ a.add_work {
 
 iframe.tos {
 	background-color: #fff;
-	width:500px;
-	height: 400px;
+	width:750px;
+	height: 150px;
 	border:1px solid #ccc;
 	padding: 10px;
 }
+
+.id_agree_to_tos{ padding: 20px; }
+
+div#register-form .field_label {
+    font-weight: bold; 
+	width: 120px;
+	padding-right: 5px;
+	text-align: right;
+}
+
+div#register-form input[type="text"], div#register-form .field #id_photo {
+	width: 150px;
+	font-size: 102%;
+}
+span#openidurl { padding-right:5px; }
 
 /*** About ***/
 ul#benefits li {
 	margin-bottom: 1.5em;
 }
 
+.promo_code_box {
+    background-color: #B7FB8C;
+    border-style: dashed;
+    border-width: 2px;
+    border-color: #989C8C;
+    margin-top:-10px;
+    margin-bottom:10px;
+    margin-left: auto;
+    margin-right: auto;
+    padding:20px;
+    width:30em;
+    text-align:center;
+}
+
+.account_box {
+    background-color: #EEEEEE;
+    font-size:2em;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #989C8C;
+    margin-top:10px;
+    margin-right: 10px;
+    margin-bottom:10px;
+    margin-left: auto;
+    margin-right: auto;
+    padding:15px;
+    text-align:center; 
+}
+
+.account_box h2 a{
+	color:#5E3B20;
+	line-height: 1.1em;
+	margin-top: -55px;
+	display:block;
+}
+
+.account_box_container {
+	display: table-cell;
+    margin-left: auto;
+    margin-right: auto;
+	vertical-align:middle;
+	float: center;
+	width: 350px;
+	padding: 10px;
+    height: 10em;
+}
+
+.account_box p { font-size:10px; }
+
+.container {
+	margin-right:auto;
+	margin-left:auto;
+	text-align:center;
+}
+
+.form {	
+    /* margin-top:-40px; */
+}
+
+input#id_promo{
+	margin-bottom:10px;
+}

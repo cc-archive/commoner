@@ -2,6 +2,6 @@ from django.contrib import admin
 from commoner.profiles.models import CommonerProfile
 
 class CommonerProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'expires')
+    list_display = ('user', 'level', 'nickname', 'expires')
 
 admin.site.register(CommonerProfile, CommonerProfileAdmin)

@@ -1,4 +1,3 @@
-
 import os
 try:
     from setuptools import setup
@@ -15,7 +14,7 @@ setup(
     package_dir = {'':'src'},
 
     entry_points = {
-        
+
         'console_scripts' : [
             'register = commoner.registration.scripts:register',
             'welcome = commoner.registration.scripts:welcome',
@@ -23,7 +22,7 @@ setup(
             'idjango = commoner_i.scripts:manage',
             ]
         },
-    
+
     install_requires = ['setuptools',
                         'Django',
                         'python-openid',
@@ -35,6 +34,7 @@ setup(
                         'rdfadict',
                         'simplejson',
                         'python-dateutil',
+                        'South',
                         ],
                         
     dependency_links=['http://download.zope.org/distribution/',

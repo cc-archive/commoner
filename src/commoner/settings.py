@@ -64,7 +64,7 @@ ROOT_URLCONF = 'commoner.urls'
 
 
 INSTALLED_APPS = (
-    'dmigrations',
+    'south',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -78,8 +78,9 @@ INSTALLED_APPS = (
     'commoner.server',
     'commoner.authenticate',
     'commoner.help',
-	'commoner.broadcast',
+    'commoner.broadcast',
     'commoner.metrics',
+    'commoner.promocodes',
 )
 
 TEMPLATE_LOADERS = (

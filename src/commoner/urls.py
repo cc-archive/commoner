@@ -52,6 +52,9 @@ urlpatterns = patterns(
     url(r'^h/metrics/$', 'commoner.metrics.views.stats', name='metrics'),    
 
 
+    (r'^h/join/$', 'django.views.generic.simple.redirect_to',
+     {'url':'https://support.creativecommons.org/join/'}),
+
     # Account management
     url(r'^a/login/$', 'commoner.authenticate.views.login',
         name='login'),
@@ -74,15 +77,31 @@ urlpatterns = patterns(
         'django.contrib.auth.views.password_reset_complete',),
     url(r'^a/delete/$', 'commoner.profiles.views.delete',
         name='delete_account'),
+    url(r'^a/overview/$', 'commoner.promocodes.views.account_overview', 
+        name='account_overview'),
+    url(r'^a/upgrade/$', 'commoner.promocodes.views.account_upgrade', 
+        name='account_upgrade'),
+    url(r'^a/renew/$', 'commoner.promocodes.views.account_upgrade', 
+        name='account_renew'),
+    url(r'^a/redeem/(?P<code>[\w\d]{8})/$', 'commoner.promocodes.views.redeem_code',
+        name='redeem_code'),
+    
+    # Message ack view
     url(r'^a/ack/(?P<message_id>\d+)', 
         'commoner.broadcast.views.ack',
         name='ack_message'),
-        
-    (r'^a/register/complete/$', 
-     'django.views.generic.simple.direct_to_template',
-     {'template':'registration/success.html'}),
-    (r'^a/register/(?P<key>\w+)/', 'commoner.registration.views.complete'),
 
+        
+    url(r'^a/register/complete/$', 
+     'django.views.generic.simple.direct_to_template',
+     {'template':'registration/success.html'}, name='registration_complete'),
+    url(r'^a/register/(?P<activation_key>\w+)/', 'commoner.registration.views.activate',
+        name='registration_activate'),
+    url(r'^a/register/$', 'commoner.registration.views.register',
+        name='registration_register'),
+
+    # url(r'^a/upgrade/$', 'commoner.registration.views.upgrade', name='register_upgrade'),
+        
     # Profile management
     url(r'^p/edit/$', 'commoner.profiles.views.edit_or_create', 
         name='profile_edit'),

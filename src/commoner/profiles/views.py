@@ -23,20 +23,21 @@ def edit_or_create(request):
         profile = request.user.get_profile()
     except ObjectDoesNotExist:
         profile=None
-
+    
     if request.method == 'POST':
         # process the form
         form = forms.CommonerProfileForm(request.user,
             data=request.POST, files=request.FILES, instance=profile)
-
+        
         if form.is_valid():
+            
             profile = form.save(commit=False)
             profile.user = request.user
             profile.save()
 
             return HttpResponseRedirect(
                 reverse('profile_view', args=(request.user.username,)))
-
+        
     else:
         # just display the form
         form = forms.CommonerProfileForm(request.user, instance=profile)
@@ -46,7 +47,7 @@ def edit_or_create(request):
                                 'profile': profile },
                               context_instance=RequestContext(request)
                               )
-
+ 
 def delete(request):
     """View for deleting a user's account."""
 
@@ -178,6 +179,9 @@ def user_rdf(request, username):
 @login_required
 def change_email(request):
     """Edit or create the profile for the given username."""
+    
+    # TESTCASE : if user changes email before making profile, what happens?
+    
     try:
         profile = request.user.get_profile()
     except ObjectDoesNotExist:
@@ -189,11 +193,10 @@ def change_email(request):
         if form.is_valid():
             
             newaddr = form.cleaned_data['new_email']
-            user = profile.user
-            oldaddr = user.email
-            user.email = newaddr
-            user.save()
             
+            # assign newaddr to profile but keep oldaddr to send email to
+            profile.user.email, oldaddr = newaddr, profile.user.email
+            profile.user.save()
             models.CommonerProfile.objects.send_email_changed(newaddr, oldaddr)
                         
             return HttpResponseRedirect(reverse('profile_view', 
@@ -207,3 +210,4 @@ def change_email(request):
         { 'form': form },
           context_instance=RequestContext(request)
     )
+    

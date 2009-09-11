@@ -7,10 +7,13 @@ from django.core.urlresolvers import reverse
 
 from django.utils.translation import ugettext as _
 
+from commoner.profiles.decorators import premium_required
+
 import forms
 import models
 
 @login_required
+@premium_required
 def add_or_edit(request, id=None):
 
     if id is not None:

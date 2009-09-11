@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block head_title %}{% trans "Verification Email" %} -{% endblock %}
+
+{% block page_header %}{% trans "Verification Email" %}{% endblock %}
+
+{% block body %}
+{% blocktrans %}
+A verification email has been sent to your inbox that contains instructions on 
+completing your registration.
+{% endblocktrans %}
+
+{% endblock %}

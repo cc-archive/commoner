@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block header %}
+<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/yahoo-dom-event/yahoo-dom-event.js"></script> 
+<script>
+
+YAHOO.namespace("cc");
+
+YAHOO.cc.username = function() {
+    if (this.value != '') {
+        YAHOO.util.Dom.get('openidurl').innerHTML = this.value + '/';
+    } else {
+       YAHOO.util.Dom.get('openidurl').innerHTML = '';
+    }
+}
+
+YAHOO.cc.init = function() {
+
+    YAHOO.util.Event.addListener("id_username", "keyup", YAHOO.cc.username);
+    
+    username = YAHOO.util.Dom.get('id_username');
+
+    if(username.value != '') {
+        YAHOO.util.Dom.get('openidurl').innerHTML = username.value + '/';
+    }
+    
+}
+
+YAHOO.util.Event.onDOMReady(YAHOO.cc.init);
+
+</script>
+{% endblock %}
+
+{% block head_title %}{% trans "Registration" %} -{% endblock %}
+{% block page_header %}{% trans "Create a New Account" %}{% endblock %}
+
+{% block nav_override %}{% endblock %}
+{% block page_icon_class %}register{% endblock %}
+{% block body %}
+
+<div class="form" id="register-form">
+
+<p class="help">
+<strong>Welcome to the CC Network</strong>. We provide a set of services, including a 
+  light-weight copyright registry. After you complete this registration, you'll be taken 
+  to your public profile page where you'll be able to register your CC works.  
+</p>
+
+  {% if form.non_field_errors %}
+   <div class="errors">
+     {{ form.non_field_errors }}
+   </div>
+  {% endif %}
+  <form action="." method="POST">
+
+	  <div class="field" id="email_address">
+	    <span class="field_label">{{ form.email.label_tag }}: </span>
+	    {{ form.email }}
+        <div class="help">{{form.email.help_text}}</div>
+      {% if form.email.errors %}
+      <div class="errors">
+	{{ form.email.errors }}
+      </div>
+      {% endif %}
+	  </div>
+
+    <div class="field" id="username">
+      <span class="field_label">{{form.username.label}}</span>
+      {{form.username}}
+      <div class="help">{{form.username.help_text}}:
+          <i>https://creativecommons.net/<span id="openidurl"></span></i></div>
+      {% if form.username.errors %}
+      <div class="errors">
+	{{ form.username.errors }}
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="field noborder" id="password1">
+      <span class="field_label">{{form.password1.label}}</span>
+      {{form.password1}}
+      {% if form.password1.errors %}
+      <div class="errors">
+	{{ form.password1.errors }}
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="field" id="password2">
+      <span class="field_label">{{form.password2.label}}</span>
+      {{form.password2}}
+      {% if form.password2.errors %}
+      <div class="errors">
+	{{ form.password2.errors }}
+      </div>
+      {% endif %}
+    </div>
+
+	  <div class="field" id="promo_code">
+	    <span class="field_label">{{ form.promo_code.label_tag }}: </span>
+      {{ form.promo_code }}
+      <div class="help">{{form.promo_code.help_text}}</div>
+	  {% if form.promo_code.errors %}
+      <div class="errors">
+        {{ form.promo_code.errors }}
+      </div>
+      {% endif %}
+	    </div>
+
+    <div class="field" id="agree_to_tos">
+      <h3>{% trans "Terms of Use" %}</h3>
+      <iframe src="/l/termsofuse.html" class="tos"> </iframe>
+      <div>
+        {{form.agree_to_tos}}
+        <span >{{form.agree_to_tos.label}}</span>
+        {% if form.agree_to_tos.errors %}
+        <div class="errors">
+          {{ form.agree_to_tos.errors }}
+        </div>
+        {% endif %}
+	<div class="help" style="margin-left:0;">{{form.agree_to_tos.help_text}}</div>
+      </div>
+    </div>
+
+    <input type="submit" value="submit registration" />
+
+  </form>
+</div>
+
+{% endblock %}

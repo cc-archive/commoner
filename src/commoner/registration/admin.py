@@ -1,25 +1,11 @@
 from django.contrib import admin
-from commoner.registration.models import PartialRegistration
-from django.utils.translation import ugettext_lazy as _
 
-class PartialRegistrationAdmin(admin.ModelAdmin):
+from models import RegistrationProfile
 
-    list_display = ('email', 'last_name', 'first_name', 'transaction_id')
-    search_fields = ('email', 'last_name', 'first_name', 'transaction_id')
-    list_filter = ('complete',)
 
-    fieldsets = (
-        (None, {
-	    'fields':('last_name', 'first_name', 'email', 'complete', 'transaction_id', 'user'),
-	    'description':_('Adding a new registration will send a welcome email.')},
-	),
-	)
+class RegistrationAdmin(admin.ModelAdmin):
+    list_display = ('__unicode__', 'activation_key_expired')
+    search_fields = ('user__username', 'user__first_name')
 
-    def save_model(self, request, obj, form, change):
-        obj.save()
 
-        if not change:
-	    # creating a new instance
-	    PartialRegistration.objects.send_welcome(obj)
-
-admin.site.register(PartialRegistration, PartialRegistrationAdmin)
+admin.site.register(RegistrationProfile, RegistrationAdmin)

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load getattribute %}
+
+{% block head_title %}{% trans "Account " %} -{% endblock %}
+
+{% block page_header %}
+	{% if profile.free %}
+		{% trans "Account Upgrade" %}
+	{% else %}
+		{% trans "Account Renewal" %}
+	{% endif %}
+{% endblock %}
+
+{% block page_icon_class %}edit{% endblock %}
+
+{% block extra_nav %}
+{% endblock %}
+
+{% block body %}
+
+<div class="container">        
+
+<div class="container" style="padding: 5pt; width: 400px;">
+  
+<div class="form" style="margin: 0pt; margin-top:-20px; padding: 10px;"> 
+
+  <h3 style="text-align:center;margin:10px;">
+    Enter your promo code to<br/>
+    {% if profile.free %}upgrade{% else %}renew{% endif %} your account right now.
+  </h3>
+
+    <form action="." method="POST">
+
+      <div class="promo-field" id="nickname">
+      {{form.promo}}
+      {% if form.promo.errors %}
+      <div class="errors">
+	{{ form.promo.errors }}
+      </div>
+      {% endif %}
+
+      <div><input style="margin-top:5px; text-align: center;" type="submit" value='{% trans "Submit code" %}' /></div>
+    
+    </div>
+ </form>
+    
+</div>
+</div>
+<br />
+<div class="container" style="padding: 10px; width: 380px;">
+  <h1>Don't have a code?</h1>
+  <p>Please visit our <a href="/h/join/">Join Now</a> page to <br> support CC and renew your account.</p>
+</div>
+
+
+<div class="clear"></div>
+
+
+{% endblock %}

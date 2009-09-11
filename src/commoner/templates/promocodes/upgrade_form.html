@@ -1,0 +1,27 @@
+<div class="form">
+	
+	<style>
+	div.price {
+		font-size:6em;
+		font-weight:bold;
+		color:#333;
+		line-height:2em;
+		width:200px;
+		margin:0 auto;
+	}
+	</style>
+	
+	<div style="width:380px;float:left;text-align:center">
+		<h1>Student</h1>
+		<div class="price">25$</div>
+		{{ student_form.render }}
+	</div>
+	
+	<div style="width:380px;float:left;text-align:center">
+		<h1>Join Now</h1>
+		<div class="price">50$</div>
+		{{ normal_form.render }}
+	</div>
+	
+	<div class="clear"></div>
+</div>

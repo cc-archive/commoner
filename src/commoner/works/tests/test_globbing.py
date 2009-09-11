@@ -3,7 +3,7 @@ from commoner.works import models
 import django.test 
 
 class WorkFormTestCase(django.test.TestCase):
-    fixtures = ['test_users.json', ]
+    fixtures = ['test_users.json', 'test_profiles.json', ]
 
         
     def test_add_globbing_work(self):

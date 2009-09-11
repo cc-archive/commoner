@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load getattribute %}
+
+{% block head_title %}{% trans "Account " %} -{% endblock %}
+
+{% block page_header %}
+    {% if upgraded %}
+		{% trans "Account Upgraded!" %}
+	{% else %}
+		{% trans "Account Renewed!" %}
+	{% endif %}
+{% endblock %}
+
+{% block page_icon_class %}edit{% endblock %}
+
+{% block extra_nav %}
+{% endblock %}
+
+{% block body %}
+
+{% if upgraded %}
+
+{% url add_content as add_work %}
+{% blocktrans with add_work as add_work_url  %}
+You have successfully applied a promo code to your account.  As a premium member you can register work s, start by <a href="{{ add_work_url }}">adding a work</a> now.
+{% endblocktrans %}
+
+{% else %}
+
+{% blocktrans with profile.expires|date:"M d, Y" as expires_date %}
+You have successfully renewed your premium account.  You may continue to use your premium account until <em>{{ expires_date }}</em> at which you will need to renew your membership once again.
+{% endblocktrans %}
+
+{% endif %}
+
+
+{% endblock %}
+

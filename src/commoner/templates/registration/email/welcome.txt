@@ -3,7 +3,7 @@ Thank you for supporting Creative Commons.  Your {{site.name}}
 account is ready for you to activate.  To complete registration
 just visit this URL:
 
-  http://{{site.domain}}{{registration.get_absolute_url}}
+  http://{{site.domain}}/a/register/{{activation_key}}
 
 Note you must be at least 13 years old to join the CC Network and
 activate this account.  If you are between 13 years of age and the age

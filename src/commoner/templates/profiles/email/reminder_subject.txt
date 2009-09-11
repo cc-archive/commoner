@@ -1,0 +1,2 @@
+{% if active %}{{ site.name }} account approaching expiration
+{% else %}Your {{ site.name }} account has expired{% endif %}

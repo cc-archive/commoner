@@ -1,7 +1,7 @@
 import django.test 
 
 class TestBasics(django.test.TestCase):
-    fixtures = ['test_users.json', ]
+    fixtures = ['test_users.json', 'test_profiles.json', ]
 
     def test_urls_exist(self):
         """Basic test that work views exist."""

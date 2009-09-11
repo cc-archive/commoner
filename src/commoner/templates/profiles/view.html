@@ -30,18 +30,29 @@
   <span rel="sioc:member_of" property="foaf:nick" resource="/">{{ profile.display_name }}</span>
 {% endblock %}
 
+{% block page_icon_class %}
+{% if profile.is_organization %}organization{% endif %}
+{% endblock %}
+
 {% block page_sub_header %}
-  {% if profile.active %}
-    {% trans "Active" %} 
+  {% if profile.free %}
+	{% trans "Free Account" %}
   {% else %}
-    {% trans "Inactive" %}
-  {% endif %}
+  {% if profile.is_organization %}
+	{% trans "Organization Account" %}
+  {% else %}
+    {% if not profile.active %}
+      <a href="{% url account_overview %}">{% trans "Inactive" %}</a> 
+    {% endif %}
+    {% trans "Premium Account" %}
+  {% endif %}{% endif %}
 {% endblock %}
 
 {% block extra_nav %}
 {% if user.is_authenticated %}
   {% ifequal user.username profile_user.username %}
 <li><a href="{% url profile_edit %}">{% trans "Edit Profile" %}</a></li>
+<li><a href="{% url account_overview %}">{% trans "Account Overview" %}</a></li>
 <li><a href="{% url openid_settings %}">{% trans "OpenID Settings" %}</a></li>
   {% endifequal %}{% endif %}
 {% endblock %}
@@ -90,7 +101,11 @@
 
 <div class="column-narrow column">
   {% if user.is_authenticated %}
+    
     {% ifequal user.username profile_user.username %}
+
+    {% if profile.premium %}
+    
       <h4>{% trans "Place this badge on your website" %}</h4>
       <div class="profile-box">
 	<table style="margin: 0 auto;">
@@ -120,6 +135,8 @@
 		</p>
       </div>
 
+      {% endif %}
+
 	  <h4>{% trans "Your OpenID URL" %}</h4>
 	  <div class="profile-box">
 	    <input type="text" onclick="this.select()" readonly="readonly" 
@@ -136,6 +153,9 @@
 		</p>
 	  </div>
     {% endifequal %}{% endif %}
+
+	{% if not profile.free and profile.active %}
+
 	{% ifequal user.username profile_user.username %}
 	<a class="add_work" title="add a work" 
 	   href="{% url add_content %}">{% trans "Add" %}</a>
@@ -174,6 +194,8 @@
 	{% endblocktrans %}</span>
       {% endifequal %}
     {% endif %}
+
+	{% endif %}
 </div>
 
 <br style="clear: both" />
