@@ -30,3 +30,6 @@ last_reminders = CommonerProfile.objects.filter(
 
 # send the emails with an elegant one liner :)
 map(lambda p: p.send_reminder_email(), first_reminders|last_reminders)
+
+# whatever, this is good enough IMO
+print '\n'.join(["%s - %s - %s" % (p.email, p.user, p.expires) for p in first_reminders|last_reminders])
