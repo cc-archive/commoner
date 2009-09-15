@@ -123,8 +123,8 @@ for contrib in contribs:
         if email:
        	    p = PromoCode.objects.create_promo_code(
                     unicode(email['email']), # email addr
-            	    unicode(transaction_id or 0), # paypal transaction id
-            	    unicode(contrib['id']),
+            	    unicode(contrib['trxn_id']), # paypal transaction id
+            	    unicode(contrib['invoice_id']),
             	    PRODUCTION)  # civicrm contribution id
         
             print "%s, %s" % (p.code, p.recipient)
