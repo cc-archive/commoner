@@ -12,7 +12,8 @@ class PromoCodeAdminForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         # if not done here, unique_code_string is only loaded when admin is bootstrapped
-        kwargs['initial'] = {'code': PromoCode.objects.unique_code_string()}
+        if 'instance' not in kwargs:
+            kwargs['initial'] = {'code': PromoCode.objects.unique_code_string()}
         super(PromoCodeAdminForm, self).__init__(*args, **kwargs)
 
     def save(self, force_insert=False, force_update=False, commit=True):
