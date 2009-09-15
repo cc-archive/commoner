@@ -25,10 +25,15 @@ class PromoCodeManager(models.Manager):
 
         return promo
 
-    def gencode(self):
+    def unique_code_string(self):
         """ Generates a random 8 char string from the base62 set. """
-        return ''.join([random.choice(BASE62) for i in range(0,8)])
+        code_string = ''.join([random.choice(BASE62) for i in range(0,8)])
 
+        if self.filter(code = code_string).count() > 0: 
+            code_string = self.unique_code_string()
+
+        return code_string
+        
     def create_promo_code(self, email=None, trxn_id=None, contrib_id=None,
                           send_email=True):
 
@@ -37,13 +42,7 @@ class PromoCodeManager(models.Manager):
 
         # need to generate a random code and verify that it is unique
         # rarely will this loop get executed
-        promo_code = self.gencode()
-        
-        # catching an IntegrityError would save a db hit, but importing
-        # the exception is db_engine specific and complicates testing env
-        while self.filter(code = promo_code).count() > 0: # db hit
-            # code has already been used, create another
-            promo_code = self.gencode()
+        promo_code = self.unique_code_string()
 
         code = self.create(code=promo_code,
                            recipient=(email or ''),
@@ -51,38 +50,36 @@ class PromoCodeManager(models.Manager):
                            contribution_id=contrib_id)
 
         if send_email and email:
-
-            from django.core.mail import send_mail
-            current_site = Site.objects.get_current()
-            
-            subject = render_to_string('promocodes/email/subject.txt',
-                                       { 'site': current_site })
-            # Email subject *must not* contain newlines
-            subject = ''.join(subject.splitlines())
-            
-            message = render_to_string('promocodes/email/welcome.txt',
-                                       { 'code':code, 'site': current_site })
-            
-            send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email])
+            self.send_invite_letter(code)
 
         return code
                     
-        
+    def send_invite_letter(self, code):
 
+        from django.core.mail import send_mail
+        current_site = Site.objects.get_current()
+            
+        subject = render_to_string('promocodes/email/subject.txt',
+                                       { 'site': current_site })
+        # Email subject *must not* contain newlines
+        subject = ''.join(subject.splitlines())
+            
+        message = render_to_string('promocodes/email/welcome.txt',
+                                   { 'code':code, 'site': current_site })
+            
+        result = send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [code.recipient])
+
+        return result
+        
 class PromoCode(models.Model):
-    
-    """ 
-    TODO decide that you are fine with this module and document it
-    """
 
     # the real meat, limiting to 8 char for less ink and confusion
-    code = models.CharField(_("code"), max_length=8, primary_key=True,
-                            unique=True, editable=False)
+    code = models.CharField(_("code"), max_length=8, primary_key=True, unique=True)
     
     # who the code was originally sent to, might be useful
-    recipient = models.EmailField(_("promo code email recipient"), blank=True)
+    recipient = models.EmailField(_("promo code email recipient"), blank=False)
     
-    created = models.DateTimeField(_("date created"), default=datetime.now())
+    created = models.DateTimeField(_("date created"), auto_now=True)
     expires = models.DateTimeField(_("date expires"), blank=True, null=False)
 
     # promo codes are created with 2 methods:
