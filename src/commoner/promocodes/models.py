@@ -87,8 +87,8 @@ class PromoCode(models.Model):
     
     transaction_id = models.CharField(_("paypal transaction id"),
                                       max_length=255, blank=True, null=True)
-    contribution_id = models.IntegerField(_("CiviCRM contribution id"),
-                                          blank=True, null=True)
+    contribution_id = models.CharField(_("CiviCRM invoice id"),
+                                       max_length=255, blank=True, null=True)
                                           
     used_by = models.ForeignKey(User, blank=True, null=True)
     used_on = models.DateTimeField(_("date used"), blank=True, null=True)
