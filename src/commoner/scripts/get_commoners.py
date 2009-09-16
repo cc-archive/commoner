@@ -115,16 +115,14 @@ for contrib in contribs:
         # We may utilize this again in the future...
         # paypal = tbl_paypal.select(tbl_paypal.c.entity_id == contrib['contact_id']).execute().fetchone()
 
-        # see if this has been processed
-        if PromoCode.objects.filter(contribution_id = contrib['invoice_id']).count() > 0:
-            continue
-
-        # send the welcome
-        if email:
-       	    p = PromoCode.objects.create_promo_code(
-                    unicode(email['email']), # email addr
-            	    unicode(contrib['trxn_id']), # paypal transaction id
-            	    unicode(contrib['invoice_id']),
-            	    PRODUCTION)  # civicrm contribution id
+        # make that promo code has not been created for this contribution
+        if PromoCode.objects.filter(contribution_id = contrib['invoice_id']).count() == 0:
+            # send the welcome
+            if email:
+                p = PromoCode.objects.create_promo_code(
+                        unicode(email['email']), # email addr
+            	        unicode(contrib['trxn_id']), # paypal transaction id
+            	        unicode(contrib['invoice_id']),
+            	        PRODUCTION)  # civicrm contribution id
         
-            print "%s, %s" % (p.code, p.recipient)
+                print "%s, %s" % (p.code, p.recipient)
