@@ -16,7 +16,7 @@ class TestOpenID(django.test.TestCase):
         
         settings.TESTING = False
         
-        response = self.client.get('/normal/')
+        response = self.client.get('/normal')
         # this should be forbidden
         self.assertEquals(response.status_code, 403)
     
@@ -25,12 +25,12 @@ class TestOpenID(django.test.TestCase):
         
         settings.TESTING = False
         
-        response = self.client.get('/testing/')
+        response = self.client.get('/testing')
         # we should get a moved permanently redirect
         self.assertEquals(response.status_code, 301)
         # since we can't actually open the https page, 
         # lets just verify that the 301 points there
-        self.assertEquals(response['Location'], 'https://testserver/testing/')
+        self.assertEquals(response['Location'], 'https://testserver/testing')
         
         """
         TODO
@@ -50,6 +50,6 @@ class TestOpenID(django.test.TestCase):
 
         settings.TESTING = True
 
-        response = self.client.get('/normal/')
+        response = self.client.get('/normal')
         # this should be forbidden
         self.assertEquals(response.status_code, 200)
