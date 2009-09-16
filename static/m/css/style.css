@@ -615,3 +615,7 @@ ul#benefits li {
 input#id_promo{
 	margin-bottom:10px;
 }
+
+.backlink {
+    float:right;
+}
