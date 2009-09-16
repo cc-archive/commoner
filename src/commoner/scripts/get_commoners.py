@@ -116,7 +116,7 @@ for contrib in contribs:
         # paypal = tbl_paypal.select(tbl_paypal.c.entity_id == contrib['contact_id']).execute().fetchone()
 
         # see if this has been processed
-        if PromoCode.objects.filter(contribution_id = contrib['id']).count() > 0:
+        if PromoCode.objects.filter(contribution_id = contrib['invoice_id']).count() > 0:
             continue
 
         # send the welcome
