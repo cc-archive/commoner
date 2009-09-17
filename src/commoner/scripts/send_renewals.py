@@ -19,11 +19,13 @@ fifteen_days = today + timedelta(days=15)
 
 # look for profiles expiring in the next 30 days from now
 first_reminders = CommonerProfile.objects.filter(
+                      gratis=False,
                       expires__day = month_from_today.day,
                       expires__month = month_from_today.month,
                       expires__year = month_from_today.year)
 
 last_reminders = CommonerProfile.objects.filter(
+                      gratis=False,
                       expires__day = fifteen_days.day,
                       expires__month = fifteen_days.month,
                       expires__year = fifteen_days.year)

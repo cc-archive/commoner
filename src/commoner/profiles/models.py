@@ -51,6 +51,8 @@ class CommonerProfile(models.Model):
     # TODO: rework registration to explicitly set level, change default to 'free'
     level = models.CharField(_("Level of profile"), choices=PROFILE_LEVELS,
                     max_length=255, default=FREE)
+
+    gratis = models.BooleanField(_("Gratis profile"), default=False)
     
     nickname = models.CharField(_("Your name"), max_length=255, blank=True)
     photo = models.ImageField(_("Photo"), storage=get_storage(), 
@@ -119,7 +121,7 @@ class CommonerProfile(models.Model):
         """Return True if the profile is not expired. Ignore the time of the
         expiration date. """
 
-        return (date.today() < self.expires.date())
+        return (date.today() < self.expires.date()) or self.gratis
     
     @property
     def is_legacy(self):
