@@ -14,6 +14,7 @@ from django.template.loader import render_to_string
 
 from commoner.util import getBaseURL, get_storage
 from commoner.registration.signals import user_activated
+from commoner.log.models import LogEntry
 
 class CommonerProfileManager(models.Manager):
 
@@ -179,6 +180,10 @@ class CommonerProfile(models.Model):
         message = render_to_string(template,
                                    {'site':current_site,
                                     'active':self.active, 'days':days})   
+
+        log_entry = LogEntry.objects.record("reminder_sent",
+                                      str({'days':days,'template':template}),
+                                      self).save()
         
         return send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [self.email])
     
