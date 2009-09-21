@@ -6,7 +6,6 @@ DEBUG = TEMPLATE_DEBUG = True
 TESTING = len(filter(lambda x: x.find('test') != -1, sys.argv)) > 0
 
 ADMINS = (
-    ('Nathan R. Yergler', 'nathan@creativecommons.org'),
     ('Creative Commons Webmaster', 'webmaster@creativecommons.org'),
 )
 
