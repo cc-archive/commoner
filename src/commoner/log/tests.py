@@ -10,7 +10,8 @@ class TestLogEntries(django.test.TestCase):
 
     def test_add_basic_log_entry(self):
 
-        entry = LogEntry("testing", "testing message")
+        entry = LogEntry.objects.record("testing",
+                                        "testing message")
         entry.save()
 
         self.assertEquals(entry.message_id, "testing")
@@ -19,7 +20,9 @@ class TestLogEntries(django.test.TestCase):
 
     def test_add_sends_email(self):
 
-        entry = LogEntry("testing", "testing message", send_email=True)
+        entry = LogEntry.objects.record("testing",
+                                        "testing message",
+                                        send_email=True)
         entry.save()
 
         self.assert_(len(mail.outbox) > 0)
@@ -28,7 +31,9 @@ class TestLogEntries(django.test.TestCase):
 
         user = auth.models.User.objects.get(username='testing')
 
-        entry = LogEntry("testing", "testing message", user)
+        entry = LogEntry.objects.record("testing",
+                                        "testing message",
+                                        user)
         entry.save()
 
         self.assertEquals(entry.message_id, "testing")
