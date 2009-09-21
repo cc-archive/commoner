@@ -164,18 +164,22 @@ class CommonerProfile(models.Model):
         will be sent to based on profile.user.email and the profile.expires date.
         """
         from django.core.mail import send_mail
-
+        import random
+        
         # determine days before or past expiration on profile
         days = abs((self.expires.date() - date.today()).days)
+
+        template = random.choice(['profiles/email/reminder_content_A.txt',
+                     'profiles/email/reminder_content_B.txt',])
         
         current_site = Site.objects.get_current()
         subject = render_to_string('profiles/email/reminder_subject.txt',
                                    {'site':current_site,
                                     'active':self.active}).strip()
-        message = render_to_string('profiles/email/reminder_content.txt',
+        message = render_to_string(template,
                                    {'site':current_site,
-                                    'active':self.active, 'days':days})
-
+                                    'active':self.active, 'days':days})   
+        
         return send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [self.email])
     
     def renew(self, expires_on=None):

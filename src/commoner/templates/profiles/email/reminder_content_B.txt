@@ -1,0 +1,13 @@
+Greetings,
+
+This is just a quick note to remind you that your {{site.name}} account {% if active %}will be expiring in {{days}} day{{days|pluralize}}.{% else %}expired {{days}} day{{days|pluralize}} ago.{% endif %}, and we'd love it if you chose to renew your membership for another year.
+
+You should renew your membership on the {{ site.name }} because it will ensure that you'll be able to register the new works you create over the next year. You'll also be supporting our efforts as an organization as a whole and letting the world know that you're a valued member of our community.
+
+Please continue supporting Creative Commons and renew your ability to register works for an additional year: https://creativecommons.net/a/renew/
+
+If you don't renew your account, don't worry, your previous registrations will remain public but you will not be able to register new works in the future. We'll also continue to support your OpenID account even if you don't renew.
+
+Thank you very much for your continued support,
+
+-- Creative Commons

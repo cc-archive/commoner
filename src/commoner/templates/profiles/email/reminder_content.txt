@@ -1,7 +1,0 @@
-Greetings,
-
-This is a notification message from {{site.name}}.
-
-Your {{ site.name }} account {% if active %}will be expiring in {{days}} day{{days|pluralize}}.{% else %}expired {{days}} day{{days|pluralize}} ago.{% endif %}  To renew your account for an additional year, please visit https://creativecommons.net/a/renew/ and learn about how you can prevent your account from expiring.
-
--- Creative Commons
