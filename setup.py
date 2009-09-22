@@ -16,10 +16,10 @@ setup(
     entry_points = {
 
         'console_scripts' : [
-            'register = commoner.registration.scripts:register',
-            'welcome = commoner.registration.scripts:welcome',
             'noop = commoner.scripts:noop',
             'idjango = commoner_i.scripts:manage',
+            'renewals = commoner.scripts.send_renewals:main',
+            'invites = commoner.scripts.send_invites:main',
             ]
         },
 
