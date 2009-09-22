@@ -7,6 +7,8 @@ they used at donation time.
 """
 
 import warnings
+warnings.simplefilter("ignore", UserWarning)
+
 import sys
 import sqlalchemy
 import datetime 
@@ -14,7 +16,6 @@ import datetime
 from commoner.promocodes.models import PromoCode
 
 PRODUCTION = False
-warnings.simplefilter("ignore", UserWarning)
 
 def main():
     
