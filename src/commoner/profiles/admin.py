@@ -7,6 +7,7 @@ make_gratis.short_description = "Mark selected profiles as gratis"
 
 class CommonerProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'level', 'nickname', 'gratis', 'expires')
+    search_fields = ('user__username',)
     actions = [make_gratis]
 
 admin.site.register(CommonerProfile, CommonerProfileAdmin)
