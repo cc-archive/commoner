@@ -42,17 +42,16 @@
         {% else %}
             <h2>Premium Account</h2>		
             <p>
-	      {% if not profile.gratis %}
-              Your account will expire in <strong>{{profile.expires|timeuntil}}</strong>.
+	      {% if not profile.gratis %} Your account will expire
+              in <strong>{{profile.expires|timeuntil}}</strong>. 
+	      <a href="{% url account_renew %}">Click here</a> to
+              renew your account for an additional year.
+
 	      {% else %}
 	      Your account is complementary; 
 	      consider <a href="http://support.creativecommons.org/donate">supporting Creative Commons</a>.
 	      {% endif %}
 		
-            {# need to put some conditional logic here #}
-		
-            <a href="{% url account_renew %}">Click here</a> 
-            to renew your account for an additional year.
             </p>
         {% endif %}
 	
