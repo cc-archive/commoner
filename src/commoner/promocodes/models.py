@@ -94,6 +94,10 @@ class PromoCode(models.Model):
     used_on = models.DateTimeField(_("date used"), blank=True, null=True)
 
     objects = PromoCodeManager()
+
+    class Meta:
+        verbose_name = _(u'Authorization Code')
+        verbose_name_plural = _(u'Authorization Codes')
     
     def __unicode__(self):
         return self.code
