@@ -149,14 +149,14 @@ class TestPromoCodeRenewals(TestCase):
         # ensure that if the user is authenticated that a 302 occurs
         self.client.login(username='test', password='test')
         response = self.client.get("/a/redeem/abcdefgh/")
-        self.assertRedirects(response, "/a/renew/?c=abcdefgh")
+        self.assertRedirects(response, "/a/renew/complete/?c=abcdefgh")
 
         # ensure if the user is free, then it should 302 to upgrade
         user = self._create_and_activate_user(username='testee', promo=None)
         self.assert_(user.get_profile().free)
         self.client.login(username='testee', password='test')
         response = self.client.get("/a/redeem/abcdefgh/")
-        self.assertRedirects(response, "/a/upgrade/?c=abcdefgh")
+        self.assertRedirects(response, "/a/upgrade/complete/?c=abcdefgh")
 
     def test_promocode_GET_var_populates_textfields(self):
         """ renew/?c=codecode and upgrade/?c=codecode should default the
@@ -165,13 +165,13 @@ class TestPromoCodeRenewals(TestCase):
         user = self._create_and_activate_user()
         self.client.login(username='test', password='test')
         
-        response = self.client.get("/a/renew/?c=abcdefgh")
+        response = self.client.get("/a/renew/complete/?c=abcdefgh")
         self.assert_(response.context[0]['form'].fields['promo'].initial == 'abcdefgh')
 
         user = self._create_and_activate_user(username='testee', promo=None)
         self.client.login(username='testee', password='test')
 
-        response = self.client.get("/a/upgrade/?c=abcdefgh")
+        response = self.client.get("/a/upgrade/complete/?c=abcdefgh")
         self.assert_(response.context[0]['form'].fields['promo'].initial == 'abcdefgh')
 
     def test_promo_code_creation(self):
@@ -236,15 +236,15 @@ class TestPromoCodeRenewals(TestCase):
         
         self.client.login(username='test', password='test')
 
-        response = self.client.get('/a/upgrade/')
-        self.assertRedirects(response, '/a/renew/')
+        response = self.client.get('/a/upgrade/complete/')
+        self.assertRedirects(response, '/a/renew/complete/')
 
         # create a FREE user
         user = self._create_and_activate_user(username='testee', promo=None)
         self.client.login(username='testee', password='test')
 
-        response = self.client.get('/a/renew/')
-        self.assertRedirects(response, '/a/upgrade/')
+        response = self.client.get('/a/renew/complete/')
+        self.assertRedirects(response, '/a/upgrade/complete/')
         
     def test_account_renewal_form(self):
         """
@@ -255,15 +255,15 @@ class TestPromoCodeRenewals(TestCase):
         user = self._create_and_activate_user()
 
         self.client.login(username='test', password='test')
-        response = self.client.get('/a/renew/')
+        response = self.client.get('/a/renew/complete/')
         self.assertEquals(response.status_code, 200)
 
         original_expiration = user.get_profile().expires
         
-        response = self.client.post('/a/renew/', dict(promo='12345678'))
+        response = self.client.post('/a/renew/complete/', dict(promo='12345678'))
         
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'promocodes/upgrade_success.html')
+        self.assertTemplateUsed(response, 'promocodes/apply_success.html')
         self.assertFalse(response.context[0]['upgraded'])
 
         self.assert_(response.context[0]['profile'])
@@ -287,13 +287,13 @@ class TestPromoCodeRenewals(TestCase):
         
         self.client.login(username='testee', password='test')
 
-        response = self.client.get('/a/upgrade/')
+        response = self.client.get('/a/upgrade/complete/')
         self.assertEquals(response.status_code, 200)
 
-        response = self.client.post('/a/renew/', dict(promo='12345678'))
+        response = self.client.post('/a/renew/complete/', dict(promo='12345678'))
         
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'promocodes/upgrade_success.html')
+        self.assertTemplateUsed(response, 'promocodes/apply_success.html')
         self.assert_(response.context[0]['upgraded'])
 
         self.assert_(response.context[0]['profile'])

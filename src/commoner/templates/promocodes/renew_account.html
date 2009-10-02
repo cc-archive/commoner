@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load getattribute %}
+
+{% block header %}
+<link href="https://support.creativecommons.org/sites/default/themes/cc/css/join.css" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block head_title %}{% trans "Account" %} -{% endblock %}
+
+{% block page_header %}
+  {% trans "Renew Your Commitment to the CC Network" %}
+{% endblock %}
+
+{% block page_icon_class %}edit{% endblock %}
+
+{% block extra_nav %}
+{% endblock %}
+
+{% block body %}
+
+
+<p>Thank you for being a part of the Creative Commons Network over the last year. If you renew you'll be able to continue to register new works on the Network for an additional year.</p>
+
+<p>If you choose not to renew, your account will be set as "inactive" and you won't be able to register new works, but your profile will remain public and you'll still be able to use your OpenID profile across the web.
+Click one of the two buttons below to donate to Creative Commons and receive an authorization code that will enable you to renew your account here.</p>
+
+<p>Thanks for your support!</p>
+
+<ul id="join">
+
+<li>
+   <h2 style="text-align: center; padding-bottom: 0pt; margin-top: 1em;">&nbsp;</h2>
+   <h2><a href="https://support.creativecommons.org/sites/default/modules/civicrm/bin/OneClickDonate.php?amount=50&amp;source=CC+Network+Renewal&amp;sloptout=1" style="border: 1px solid rgb(204, 204, 204); margin: 0pt; margin-bottom:10px; padding: 1em; display: block; -moz-border-radius-topleft: 5px; -moz-border-radius-topright: 5px; -moz-border-radius-bottomright: 5px; -moz-border-radius-bottomleft: 5px;"><span class="button">$50</span> — Renew</a></h2>
+
+</li>
+
+<li class="students">
+<h2 style="text-align: center; padding-bottom: 0pt; margin-top: 1em;">Students</h2>
+<h2 style="background-color: rgb(255, 255, 255);"><a href="https://support.creativecommons.org/sites/default/modules/civicrm/bin/OneClickDonate.php?amount=25&amp;source=CC+Network+Renewal+%28Student%29&amp;sloptout=1" style="border: 1px solid rgb(204, 204, 204); margin: 0pt; margin-bottom:10px; padding: 1em; display: block; -moz-border-radius-topleft: 5px; -moz-border-radius-topright: 5px; -moz-border-radius-bottomright: 5px; -moz-border-radius-bottomleft: 5px;"><span class="button">$25</span> — Renew</a></h2>
+ </li>
+
+</ul>
+
+
+<div class="clear"></div>
+
+{% endblock %}

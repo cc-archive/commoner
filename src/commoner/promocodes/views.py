@@ -43,7 +43,7 @@ def account_upgrade(request):
             # render to a page detailing what just happened and how long their
             # premium membership will last.
                         
-            return render_to_response("promocodes/upgrade_success.html",
+            return render_to_response("promocodes/apply_success.html",
                                       {'profile':profile, 'upgraded':upgrading},
                                       context_instance=RequestContext(request))
             
@@ -57,10 +57,10 @@ def account_upgrade(request):
         if 'c' in request.GET:
             param_string = "?c=%s" % request.GET['c']        
         
-        if profile.free and request.path == reverse('account_renew'):
-            return HttpResponseRedirect(reverse('account_upgrade') + param_string)
-        elif not profile.free and request.path == reverse('account_upgrade'):
-            return HttpResponseRedirect(reverse('account_renew') + param_string)
+        if profile.free and request.path == reverse('account_renew_complete'):
+            return HttpResponseRedirect(reverse('account_upgrade_complete') + param_string)
+        elif not profile.free and request.path == reverse('account_upgrade_complete'):
+            return HttpResponseRedirect(reverse('account_renew_complete') + param_string)
 
         form = PremiumUpgradeForm()
 
@@ -68,7 +68,7 @@ def account_upgrade(request):
         if 'c' in request.GET:  
             form.fields['promo'].initial = request.GET['c']
             
-    return render_to_response("promocodes/account_upgrade.html",
+    return render_to_response("promocodes/apply_code.html",
                               {'form':form, 'profile':profile, },
                               context_instance=RequestContext(request))
         
@@ -86,9 +86,9 @@ def redeem_code(request, code=None):
     if request.user.is_authenticated():
         profile = request.user.get_profile()
         if profile.free:
-            return HttpResponseRedirect('/a/upgrade/?c=%s' % code)
+            return HttpResponseRedirect('/a/upgrade/complete/?c=%s' % code)
         else:
-            return HttpResponseRedirect('/a/renew/?c=%s' % code)
+            return HttpResponseRedirect('/a/renew/complete/?c=%s' % code)
     
     return render_to_response("promocodes/redeem_code.html", {'code':code},
                               context_instance=RequestContext(request))

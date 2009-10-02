@@ -68,10 +68,21 @@ urlpatterns = patterns(
         name='delete_account'),
     url(r'^a/overview/$', 'commoner.promocodes.views.account_overview', 
         name='account_overview'),
-    url(r'^a/upgrade/$', 'commoner.promocodes.views.account_upgrade', 
-        name='account_upgrade'),
-    url(r'^a/renew/$', 'commoner.promocodes.views.account_upgrade', 
-        name='account_renew'),
+
+    # the follow url is just a stub for right now, will implement when
+    # we start dealing free accounts
+    url(r'^a/upgrade/$', 'commoner.promocodes.views.account_upgrade',
+        name='account_upgrade'), 
+    url(r'^a/upgrade/complete/$', 'commoner.promocodes.views.account_upgrade', 
+        name='account_upgrade_complete'),
+
+    # using a code for renewing an account
+    url(r'^a/renew/$', 'django.views.generic.simple.direct_to_template',
+        {'template': 'promocodes/renew_account.html'}, name='account_renew'),
+    url(r'^a/renew/complete/$', 'commoner.promocodes.views.account_upgrade', 
+        name='account_renew_complete'),
+
+    # informational page on how a user may use the code
     url(r'^a/redeem/(?P<code>[\w\d]{8})/$', 'commoner.promocodes.views.redeem_code',
         name='redeem_code'),
     
