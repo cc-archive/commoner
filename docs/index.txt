@@ -13,13 +13,14 @@ Contents
 --------
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    
    overview
    install
    administrators
    metadata
    developers
+   glossary
    license
 
 Indices and tables

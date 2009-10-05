@@ -1,0 +1,26 @@
+Glossary
+========
+
+.. glossary::
+   :sorted:
+
+   administrative interface
+      A portion of the web application restricted to staff and
+      administrators; typically found by adding ``/admin/`` to the
+      site URL.
+
+   authorization code
+      An Authorization Code allows a user to create a new premium
+      account or extend the expiration date of an existing one by a
+      year.
+
+   user profile
+      Every User has a User Profile which contains information about
+      them, such as their nick name, website, and a brief description
+      of their participation with Creative Commons ("my story" in
+      initial version).
+
+      A User Profile may be free or premium (paid); if the account is
+      a premium account, the expiration date controls when some
+      premium features are disabled (see :ref:`account-expiration`).
+
