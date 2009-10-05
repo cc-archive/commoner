@@ -71,7 +71,9 @@ class CommonerProfile(models.Model):
     redirect_https = models.BooleanField(default=True)
 
     objects = CommonerProfileManager()
-    
+
+    class Meta:
+        verbose_name = 'user profile'
         
     def __unicode__(self):        
         if self.nickname:
