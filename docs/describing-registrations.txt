@@ -1,0 +1,556 @@
+=============================
+Describing Work Registrations
+=============================
+
+:Author: Nathan R. Yergler <nathan@creativecommons.org>
+:Copyright: Copyright 2009, Creative Commons; licensed to the public
+  under `Creative Commons Attribution 3.0 Unported
+  <http://creativecommons.org/licenses/by/3.0/>`_. 
+:Date: 12 May 2009
+
+
+Abstract
+========
+
+Describes how a Registry and creator (Registrant) can publish
+information about Work Registrations in a decentralized, mutually
+reinforcing and extensible manner.
+
+
+.. contents:: Table of Contents
+   :depth: 3
+   :backlinks: entry
+
+
+Requirements, Notation, and Conventions
+=======================================
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+document are to be interpreted as described in [RFC2119]_.
+
+
+Terminology
+===========
+
+Consumer :
+  Software designed to inspect and verify registrations.
+_`IRI Set` :
+  A set of regular expressions, specified as inclusions and
+  exclusions, which identify a set of resources included in a
+  Registration.
+Profile URI :
+  A page published by the Registry containing registration
+  information for a particular Registrant's works.  
+Registration :
+  A record of a Work, presented by the Registrant to the Registry;
+  may optionally include additional information such as a digital
+  fingerprint.
+Registrant :
+  The publisher of the work.
+Registry :
+  The site maintaining registration records; a Registry may
+  optionally impose standards for user identification.
+Work :
+  A digital work published on the Internet.
+
+
+Introduction
+============
+
+This document describes a light-weight method for connecting digital
+Works with Registration information stored by a Registry.  The goal
+is to develop a system which provides visible notice to visitors that
+a Work is registered, without imposing additional limitations on what
+Registry may be used or what software the visitor might be using.
+The visible notice is important because it leads the user to the
+Registry where she may find additional information about the ways in
+which the work may be used or how to obtain additional rights.  We
+also expect software developers to be interested in discovering
+registration information.  [RDFa]_ provides a means of
+describing the relationship between the Work and the Registry in a
+way that is visible to users as well as machine readable.
+Additionally, it allows individual registries to innovate around
+identity and verification while maintaining Consumer interoperability.
+
+This work also builds upon the work of [ccREL]_, [SIOC]_ and
+[POWDER]_.  [ccREL]_ describes a language for publishing license and
+attribution information about Works in a distributed manner.  Our
+experience and success with publishing this information and using it
+to drive applications informed the design of this specification.
+
+When evaluating vocabularies for use, [SIOC]_ was
+identified as an ideal candidate because it models the ownership and
+containment semantics needed for a Registry.  Specifically, it allows
+us to model the ownership of a Work by a Registrant (identified by the
+their Profile URI).  It also allows us to model the containment of a
+Work in a Registration.
+
+Considering Registrations, it is desirable to allow simultaneous
+registration of multiple Works.  The works may be logically grouped
+together, such as different version of the same abstract work, or may
+be grouped for convenience, such as registering an entire
+blog. [POWDER]_ describes a mechanism for publishing descriptions of
+multiple resources; in particular [GROUP]_ describes how to identiy
+sets of resources based on their IRI.  We use a subset of this
+fucnctionality for describing Work groups that are part of a
+Registration.
+
+
+Overview
+========
+
+#. The Registrant publishes an assertion that the work is registered
+   at a Registry.
+#. The Registry publishes assertions indicating the work is
+   registered; the registration may identify the work by URI or by an
+   IRI Set.
+#. The Registry provides a lookup service as a convenience for
+   Consumers.
+#. Consumers wishing to verify the registration SHALL:
+
+   #. Beginning with the Work URI, look for ownership assertions; this
+      assertion will identify the Profile URI.
+   #. Perform `resolution`_ on the Profile URI to build the
+      registration graph.
+   #. Perform `verification`_ to establish the authenticity of the
+      claim.
+
+Publishing
+==========
+
+This section describes how Registrants and Registries may publish
+information about Work Registrations.  Examples are provided in
+[RDFa]_ as well as [N3]_.  Note that the RDFa examples may
+be written in multiple forms; those presented are simply one way to
+write each.
+
+The examples assume the following namespace mappings:
+
+  =============  ==================================================
+  Prefix          URL
+  =============  ==================================================
+   ``(none)``     ``http://www.w3.org/1999/xhtml``
+   ``cc``         ``http://creativecommons.org/ns#``
+   ``dct``        ``http://purl.org/dc/terms/``
+   ``powder``     ``http://www.w3.org/2007/05/powder#``
+   ``sioc``       ``http://rdfs.org/sioc/ns#``
+   ``rdf``        ``http://www.w3.org/1999/02/22-rdf-syntax-ns#``
+  =============  ==================================================
+
+These mappings may be achieved using the following XHTML::
+
+  <html
+    xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:cc="http://creativecommons.org/ns#"
+    xmlns:dct="http://purl.org/dc/terms/"
+    xmlns:powder="http://www.w3.org/2007/05/powder#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:sioc="http://rdfs.org/sioc/ns#">
+
+
+Registrant Publication
+----------------------
+
+The Registrant MUST publish an assertion that the work has an owner.
+The owner resource MUST be a Registrant Profile.
+
+.. admonition:: RDFa
+
+   :: 
+
+    This work is registered by 
+    <a rel="sioc:has_owner"
+       href="http://registry.example.org/users/auser">A. User</a>
+
+.. admonition:: N3
+
+   ::
+
+    <> <http://rdfs.org/sioc/ns#has_owner>
+         <http://registry.example.org/users/auser> .
+
+The Registrant MAY publish information regarding the title, format and
+creator.
+
+Registar Publication
+--------------------
+
+Profile Information
+*******************
+
+This section describes requirements for Profiles published by
+Registries.  A Profile SHOULD map to a Registrant.
+
+The Registry MUST publish assertions regarding the Registrant at the
+Profile URI.
+
+.. admonition:: RDFa
+
+   *published at* ``http://registry.example.org/users/auser/`` 
+   :: 
+
+     <span about="" typeof="sioc:User" 
+           property="sioc:name">A. User</span>
+
+.. admonition:: N3
+
+   ::
+
+     <http://registry.example.org/users/auser/> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> 
+          <http://rdfs.org/sioc/ns#User> .
+     <http://registry.example.org/users/auser/> <http://rdfs.org/sioc/ns#name> "A. User"@en .
+
+The Registry MUST publish information about a `Work Lookup`_ service
+for Consumers to use.
+
+
+.. admonition:: RDFa
+
+   :: 
+
+     <head xmlns:sioc_service="http://rdfs.org/sioc/services#">
+        <link about="/" rel="sioc_service:has_service"
+	      href="http://registrar.example.org/lookup/" />
+        <link about="http://registrar.example.org/lookup/" 
+	      rel="sioc_service:service_protocol"
+	      href="http://wiki.creativecommons.org/work-lookup" />
+     </head>
+
+.. admonition:: N3
+
+   ::
+
+     <http://registrar.example.org/> <http://rdfs.org/sioc/services#has_service> <http://registrar.example.org/lookup/> .
+     <http://registrar.example.org/lookup/> <http://rdfs.org/sioc/services#service_protocol> <http://wiki.creativecommons.org/work-lookup> .
+
+.. warning::
+   The ``sioc_service:service_protocol`` identifier will almost
+   certainly change as this specification develops.
+
+The Registry MAY publish information about membership in the site or
+specific groups:
+
+.. admonition:: RDFa
+
+   *published at* ``http://registry.example.org/users/auser/`` 
+   :: 
+
+     <a rel="sioc:member_of" 
+        href="http://registry.example.org/">...</a>
+
+.. admonition:: N3
+
+   ::
+
+     <http://registry.example.org/users/auser/> <http://rdfs.org/sioc/ns#member_of> 
+        <http://registry.example.org/> .
+
+
+If the Registry publishes membership information, the Registry
+SHOULD publish simple information about container:
+
+.. admonition:: RDFa
+
+   :: 
+
+     <a href="http://registry.example.org">
+	<span property="dct:title">...</span>
+     </a>
+
+.. admonition:: N3
+
+   ::
+
+     <http://registry.example.org/> <http://purl.org/dc/terms/title> 
+        "Sample Registry"@en .
+
+Registration Information
+************************
+
+For each Registration the Registry MUST publish assertions linking the
+Profile to the Registration.  Each Regsitration contains one or more
+Works which are registered.  
+
+Registrations MAY have their own pages.
+
+.. admonition:: RDFa
+
+   :: 
+
+     <a about="http://registry.example.org/users/auser/" 
+        rel="sioc:owner_of"
+        href="http://example.org/~auser/work.html">
+        ...
+    </a>
+
+.. admonition:: N3
+
+   ::
+
+     <http://registry.example.org/users/auser/> <http://rdfs.org/sioc/ns#owner_of>
+          <http://example.org/~auser/work.html> .
+
+
+Each Registration MUST include information to identify the registered
+Work(s).  Registrations may contain multiple Works and have a
+containment relationship with each Work.  Therefore a Registation is
+described as the *parent* of the Work.  Works may be identified in the
+Registration by URI or `using an IRI Set`_.
+
+The Owner of the Registration is also the Profile.  The relationship
+between the work and the Registration MUST be described as follows:
+
+.. _using an IRI Set: `Identifying Works By IRI Set`_
+
+.. admonition:: RDFa
+
+   :: 
+
+     <a about="http://registry.example.org/users/auser/registrations/1/"
+        rel="sioc:parent_of" rev="sioc:has_parent"
+     	href="http://example.org/~auser/work.html" />
+     <a about="http://registry.example.org/users/auser/"
+        rel="sioc:owner_of" rev="sioc:has_owner"
+        href="http://registry.example.org/users/auser/registrations/1/">
+	Registration Details
+     </a>
+
+.. admonition:: N3
+
+   ::
+
+     <http://example.org/~auser/work.html> <http://rdfs.org/sioc/ns#has_parent> 
+        <http://registry.example.org/users/auser/registrations/1/> .
+
+     <http://registry.example.org/users/auser/registrations/1/> <http://rdfs.org/sioc/ns#parent_of> 
+	<http://example.org/~auser/work.html> .
+     <http://registry.example.org/users/auser/registrations/1/> <http://rdfs.org/sioc/ns#has_owner> 
+	<http://registry.example.org/users/auser/> .
+
+     <http://registry.example.org/users/auser/> <http://rdfs.org/sioc/ns#owner_of> 
+	<http://registry.example.org/users/auser/registrations/1/> .
+
+
+Alternately a Registry MAY publish the Registration information on the
+Profile page.
+
+.. admonition:: RDFa
+
+   *Published at* ``http://registry.example.org/users/auser/``:: 
+
+     <div about="" id="reg1" rel="sioc:owner_of" resource="#reg1">
+       <a href="http://example.org/~auser/work.html"
+       rel="sioc:parent_of" rev="sioc:has_parent">registered work</a>
+     </div>
+
+.. admonition:: N3
+
+   ::
+
+     <http://registry.example.org/users/auser/> <http://rdfs.org/sioc/ns#owner_of> 
+       <http://registry.example.org/users/auser/#reg1> .
+
+     <http://registry.example.org/users/auser/#reg1> <http://rdfs.org/sioc/ns#has_owner> 
+       <http://registry.example.org/users/auser/> .
+     <http://registry.example.org/users/auser/#reg1> <http://rdfs.org/sioc/ns#parent_of> 
+       <http://example.org/~auser/work.html> .
+
+      <http://example.org/~auser/work.html> <http://rdfs.org/sioc/ns#has_parent> 
+        <http://registry.example.org/users/auser/#reg1> .
+
+
+A Registry MAY provide a page which gathers all Registration
+information for this Profile.  The Registration index is identified on
+the Profile page.
+
+.. admonition:: RDFa
+
+   *Published at* ``http://registry.example.org/users/auser/``:: 
+
+     <a rel="cc:registrations"
+        href="http://registry.example.org/users/auser/registrations/">
+        all registrations
+    </a>
+
+.. admonition:: N3
+
+   ::
+
+     <http://registry.example.org/users/auser/> <http://creativecommons.org/ns#registrations>
+          <http://registry.example.org/users/auser/registrations/> .
+
+The Registration list MUST publish scoped assertions for each
+Registration which belongs to the Profile.
+
+
+Registration Details
+********************
+
+In addition to the contained Works, the Registry MAY publish
+additional information about registrations.  This Registration
+information may include information about when the Work was
+registered, availability of copies, fingerprints or other Registry
+specific information.
+
+
+Identifying Works By IRI Set
+****************************
+
+It is sometimes desirable to register an entire group of works; for
+example, an entire site that is created by an individual.  In this
+case a Registry MAY support registration of a group of resources by
+describing an `IRI Set`_.
+
+POWDER describes a method for selecting a set of resources based on a
+set of IRI patterns.  These patterns are used to describe registration
+of a group of resources.  If a Registry supports IRI Set-based
+registration, the Registry MUST publish this information as the
+``iriset`` of the Registration.
+
+[GROUP]_ outlines several ways of filtering IRIs, along with
+`reductions to regular expressions
+<http://www.w3.org/TR/2009/WD-powder-grouping-20090403/#byIRIcomp>`_.
+Registries providing IRI Set registration MUST reduce inclusions to
+the lowest common denominator, ``includeregex`` and ``excluderegex``.
+
+Example
+~~~~~~~
+
+This example builds upon the `Registration Details`_ example and
+defines an inclusion for all resources beginning with the URL
+``http://example.org/blog``.
+
+.. admonition:: RDFa
+
+   :: 
+
+     <div about="http://registry.example.org/users/auser/registrations/1/" 
+          rel="powder:iriset">
+  
+      Includes all works beginning with this URL.
+  
+      <span property="powder:includeregex" 
+            content="\:\/\/(([^\/\?\#]*)\@)?([^\:\/\?\#\@]*)(\:([0-9]+))?(\/blog)" />
+      <span property="powder:includeregex" 
+            content="\:\/\/(([^\/\?\#]*)\@)?([^\:\/\?\#\@]+\.)?(example\.org)(\:([0-9]+))?\/" />
+  
+      <span property="powder:includeregex" content="^(http)\:\/\/" /> 
+     </div>
+
+.. admonition:: N3
+
+   ::
+
+     <http://registry.example.org/users/auser/registrations/1/> <http://www.w3.org/2007/05/powder#iriset> _:n0 .
+
+     _:n0 <http://www.w3.org/2007/05/powder#includeregex> "\\:\\/\\/(([^\\/\\?\\#]*)\\@)?([^\\:\\/\\?\\#\\@]*)(\\:([0-9]+))?(\\/blog)"@en .
+     _:n0 <http://www.w3.org/2007/05/powder#includeregex> "\\:\\/\\/(([^\\/\\?\\#]*)\\@)?([^\\:\\/\\?\\#\\@]+\\.)?(example\\.org)(\\:([0-9]+))?\\/"@en .
+     _:n0 <http://www.w3.org/2007/05/powder#includeregex> "^(http)\\:\\/\\/"@en .
+
+Consumers MUST process rules by first applying inclusions, followed by
+exclusions; see Verification_ for more information.
+
+Work Lookup
+===========
+
+Registries MUST support the work lookup URI for resolving a Work URI
+to its Registration if available.  The Work Lookup service is
+advertised as part of the published `Profile Information`_.
+
+The lookup service supports querying by URI.  A Consumer who wishes to
+query the Registrar SHALL encode the Work URI as the ``uri`` parameter
+in the HTTP querystring.  
+
+* If the Work URI is registered the Registar MUST return a document
+  with RDFa describing the registration as outlined in
+  `Registration Information`_.
+
+  * The Registrar MAY return an HTTP 200 with the document.
+  * The Registrar MAY return an HTTP 302 with the URL of the specific
+    Registration.  If the registrar returns a 302 the Consumer MUST
+    follow to the Registration.
+
+* If the Work URI is not registered, the Registrar MUST return an HTTP
+  404.
+* If multiple Registrations match the Work URI, the Registrar MUST
+  return an HTTP 300.  The returned document MUST include RDFa
+  describing all matching Registrations.
+
+
+Consumers
+=========
+
+Resolution
+----------
+
+Consumers perform Resolution in order to establish the graph of
+registration information for performing Verification.
+
+#. Retrieve the Profile URI and extract the `Work Lookup`_ service URI.
+#. Call the lookup service, specifying the Work URI.
+#. The graph extracted from the call to the lookup service is the
+   context for `Verification`_.
+
+
+Verification
+------------
+
+Consumers perform Verification to confirm a Registration claim
+published by a Registrant.  The procedure for verifying a claim is as
+follows:
+
+#. Establish the graph for evaluating Registration claims.  The graph
+   SHOULD be established by performing `Resolution`_.
+#. Query the graph for the owner of the Work URI.
+
+   .. admonition:: SPARQL
+
+      ::
+
+         PREFIX sioc:  <http://rdfs.org/sioc/ns#>
+
+	 SELECT DISTINCT ?profile
+
+         WHERE {
+      	     ?profile sioc:owner_of ?r .
+             ?r sioc:has_owner ?profile .
+         }
+
+
+   If the Profile asserted by the Registrant published information is
+   in the result set, Verification **succeeds**.
+
+#. If the Profile asserted by the Registrant published information is
+   not in the result set, Verification **fails**.
+
+
+References
+==========
+
+.. [ccREL] `Creative Commons Rights Expression Language
+   <http://www.w3.org/Submission/ccREL/>`_, H. Abelson, B. Adida,
+   M. Linksvayer, N. Yergler.  This document is at
+   http://www.w3.org/Submission/ccREL/.
+.. [GROUP] `Protocol for Web Description Resources (POWDER): Grouping
+   of Resources <http://www.w3.org/TR/powder-grouping/>`_, A. Perego,
+   P. Archer. This document is at
+   http://www.w3.org/TR/powder-grouping/
+.. [N3] `Notation 3 <http://www.w3.org/DesignIssues/Notation3>`_,
+   T. Berners-Lee. This document is at
+   http://www.w3.org/DesignIssues/Notation3
+.. [POWDER] `Protocol for Web Description Resources (POWDER): Primer
+   <http://www.w3.org/TR/powder-primer/>`_, K. Scheppe,
+   D. Pentecost. W3C Working Draft, 15 August 2008. This document is
+   at http://www.w3.org/TR/powder-primer/ 
+.. [RDFa] `RDFa in XHTML: Syntax and Processing
+   <http://www.w3.org/TR/rdfa-syntax/>`_, B. Adida, editor. This
+   document is at http://www.w3.org/TR/rdfa-syntax/.
+.. [RFC2119] `RFC2119: Key words for use in RFCs to Indicate
+   Requirement Levels <ftp://ftp.isi.edu/in-notes/rfc2119.txt>`_,
+   B. Bradner. This document is at
+   ftp://ftp.isi.edu/in-notes/rfc2119.txt
+.. [SIOC] `Semantically-Interlinked Online Communities
+   <http://rdfs.org/sioc/spec/>`_. This document is at
+   http://rdfs.org/sioc/spec/.
+

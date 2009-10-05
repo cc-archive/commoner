@@ -1,6 +1,14 @@
 Metadata Reference
 ==================
 
+.. WARNING::
+
+   This page describes the metadata currently deployed on CC Network
+   and consumed by the license deeds.  A draft specification has been
+   published which simplifies some portions of this.
+
+   New implementers should consult :doc:`describing-registrations`.
+
 This section describes the metadata published by Commoner.  For the
 purposes of this document, we assume the following namespaces are
 defined:
