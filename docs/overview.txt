@@ -1,16 +1,58 @@
+========
+Overview
+========
+
 Features
 ========
 
 OpenID
 ------
 
-Commoner implements Open ID 2.0.  OpenID support is based on the
+CC Network implements Open ID 2.0.  OpenID support is based on the
 `Python OpenID <http://openidenabled.com/python-openid/>`_ library.
 
 Work Registration
 -----------------
 
-One of Commoner's goals is to act as a test bed for exploring digital
+One of CC Network's goals is to act as a test bed for exploring digital
 copyright registry technology.  Part of that includes allowing users
-to register works they've created with Commoner.  The ``works``
+to register works they've created with the CC Network.  The ``works``
 application is responsible for this functionality.
+
+Accounts
+========
+
+CC Network supports free, premium (paid), and organization accounts.
+In many places an account is represented by a :term:`user profile`.
+
+.. NOTE::
+
+   Free accounts are currently disabled on the production site.
+
+Premium accounts are good for one year by default; an
+:term:`authorization code` is required to renew the account and
+continue using the entire suite of premium features.
+
+Features
+--------
+
+Premium and organization accounts have the following features
+associated with them:
+
+* OpenID
+* Work Registration
+
+.. _account-expiration:
+
+Expiration
+----------
+
+Premium accounts have an expiration date associated with them.  When
+Premium accounts expire, the following features are disabled:
+
+* Registering new works
+
+Note that a user's OpenID will continue to work and any existing work
+registrations will remain intact.
+
+An account which has expired is labeled *inactive*.
