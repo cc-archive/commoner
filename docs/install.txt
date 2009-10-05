@@ -1,3 +1,11 @@
+==================
+Installation Guide
+==================
+
+.. contents:: Table of Contents
+   :depth: 2
+   :backlinks: entry
+
 Installation
 ============
 
@@ -12,12 +20,8 @@ To check out the current version::
   $ git clone git://code.creativecommons.org/commoner.git
 
 This will create a directory, ``commoner``, and check out the current
-development version.  To work with the code currently deployed as the
-`CC Network <http://creativecommons.net>`_, switch to the
-``production`` branch::
-
-  $ cd commoner
-  $ git checkout production
+production version.  CC Network development happens in branches, and
+is merged to the ``master`` branch when ready for deployment.
 
 Dependencies
 ~~~~~~~~~~~~
@@ -32,7 +36,6 @@ This will download `setuptools
 <http://peak.telecommunity.com/DevCenter/setuptools>`_ and create the
 buildout script. To retrieve dependencies and create control scripts
 run::
-
 
   $ ./bin/buildout
 
@@ -75,13 +78,14 @@ Testing Your Installation
 After running buildout and configuring your database you can get
 started by running::
 
-  $ ./bin/django syncdb
+  $ ./bin/commoner syncdb
+  $ ./bin/commoner migrate
 
 This will initialize your database and prompt you to create an
 administrative user.  After that is complete you can use the internal
 webserver for testing::
 
-  $ ./bin/django runserver
+  $ ./bin/commoner runserver
 
 Opening your browser to http://localhost:8000/ will display the
 Commoner homepage with the default look and feel (which is the same as
@@ -119,7 +123,7 @@ Here is part of the configuration used for `creativecommons.net
 	  Allow from all
       </Directory>
 
-      WSGIScriptAlias / [commoner_dir]/bin/cc.net.wsgi
+      WSGIScriptAlias / [commoner_dir]/bin/commoner.wsgi
       WSGIDaemonProcess commoner processes=10 threads=1 \
           home=[commoner_dir] python-eggs=/tmp/egg-cache
       WSGIProcessGroup commoner
