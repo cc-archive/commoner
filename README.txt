@@ -1,11 +1,12 @@
-========
-COMMONER
-========
+=====================
+CC Network (commoner)
+=====================
 
-:Author: Nathan R. Yergler <nathan@creativecommons.org>
+:Author: John Doig <john@creativecommons.org>,
+	 Nathan R. Yergler <nathan@creativecommons.org>,	 
 :Organization: `Creative Commons <http://creativecommons.org>`_
 :Copyright: 
-   2008, Nathan R. Yergler, Creative Commons; 
+   2008, John Doig, Nathan R. Yergler, Creative Commons; 
    licensed to the public under the `AGPL v3 or later 
    <http://www.fsf.org/licensing/licenses/agpl.html>`_.
    See LICENSE for details.

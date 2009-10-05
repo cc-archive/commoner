@@ -35,7 +35,7 @@ source_suffix = '.txt'
 master_doc = 'index'
 
 # General substitutions.
-project = u'Commoner'
+project = u'CC Network (commoner)'
 # copyright = None
 
 # The default replacements for |version| and |release|, also used in various
