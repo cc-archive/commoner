@@ -1,19 +1,24 @@
-Commoner Documentation
-====================================
+CC Network Documentation
+========================
 
-Commoner is an application which implements a simple copyright registry and
-supports `ccREL <http://wiki.creativecommons.org/ccREL>`_/`RDFa
-<http://wiki.creativecommons.org/RDFa>`_ based discovery of work information.
+This documentation describes the software which powers the `Creative
+Commons Network`_.
+
+CC Network implements a simple copyright registry and supports `ccREL
+<http://wiki.creativecommons.org/ccREL>`_/`RDFa
+<http://wiki.creativecommons.org/RDFa>`_ based discovery of work
+information.
 
 Contents
 --------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    
    overview
-   metadata
+   install
    administrators
+   metadata
    developers
    license
 
@@ -24,3 +29,4 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
+.. _`Creative Commons Network`: http://creativecommons.net
