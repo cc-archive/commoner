@@ -171,3 +171,9 @@ def services_url_context(request):
     services = dict(lookup_work=lookup_work)
 
     return dict(services=services)
+
+
+import string
+BASE62 = string.letters + string.digits
+def base62_string(length):
+    return ''.join([random.choice(BASE62) for i in range(0,length)])

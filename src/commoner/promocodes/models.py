@@ -9,8 +9,7 @@ from django.contrib.sites.models import Site
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
-# promo codes are case sensitive alpha-numeric strings
-BASE62 = string.letters + string.digits
+from commoner.util import base62_string
 
 class PromoCodeManager(models.Manager):
 
@@ -27,7 +26,7 @@ class PromoCodeManager(models.Manager):
 
     def unique_code_string(self):
         """ Generates a random 8 char string from the base62 set. """
-        code_string = ''.join([random.choice(BASE62) for i in range(0,8)])
+        code_string = base62_string(8)
 
         if self.filter(code = code_string).count() > 0: 
             code_string = self.unique_code_string()
