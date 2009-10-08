@@ -76,6 +76,7 @@ INSTALLED_APPS = (
     'commoner.metrics',
     'commoner.promocodes',
     'commoner.log',
+    'commoner.citations',
 )
 
 TEMPLATE_LOADERS = (
