@@ -108,7 +108,7 @@ def main():
 
             # make that promo code has not been created for this contribution
             if PromoCode.objects.contribution_is_unique(contrib['invoice_id'],
-                                                        contrib['contribution_recur_id'):
+                                                        contrib['contribution_recur_id']):
                 # send the welcome
                 if email:
                     p = PromoCode.objects.create_promo_code(
