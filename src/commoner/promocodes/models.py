@@ -33,9 +33,30 @@ class PromoCodeManager(models.Manager):
             code_string = self.unique_code_string()
 
         return code_string
-        
+
+    def contribution_is_unique(self, contrib_id, recurring_id=None):
+        """ Queries the database to check for whether or not a code has
+        been created for a particular contribution.  For recurring contributions,
+        a new transaction record is created in the Civi db when a monthly payment
+        is made, this method protects from sending a code to these donors each
+        month. """
+
+        # is the contribution unique
+        if self.filter(contribution_id__exact=contrib_id).count() > 0:
+
+            return False
+
+        # check if this is a recurring contrib that a code has been created for
+        elif recurring_id is not None and \
+             self.filter(recurring_contribution_id=recurring_id).count() > 0:
+
+            return False
+
+        # safe to create a code for
+        return True
+    
     def create_promo_code(self, email=None, trxn_id=None, contrib_id=None,
-                          send_email=True):
+                          recurring_id=None, send_email=True):
 
         """ Manager method that will handle promo code creation triggered
         by the script running on the CiviCRM databse. """
@@ -47,13 +68,14 @@ class PromoCodeManager(models.Manager):
         code = self.create(code=promo_code,
                            recipient=(email or ''),
                            transaction_id=trxn_id,
+                           recurring_contribution_id=recurring_id,
                            contribution_id=contrib_id)
 
         if send_email and email:
             self.send_invite_letter(code)
 
         return code
-                    
+    
     def send_invite_letter(self, code):
 
         from django.core.mail import send_mail
@@ -87,9 +109,11 @@ class PromoCode(models.Model):
     
     transaction_id = models.CharField(_("paypal transaction id"),
                                       max_length=255, blank=True, null=True)
+    
     contribution_id = models.CharField(_("CiviCRM invoice id"),
                                        max_length=255, blank=True, null=True)
-                                          
+    recurring_contribution_id = models.IntegerField(blank=True, null=True)
+    
     used_by = models.ForeignKey(User, blank=True, null=True)
     used_on = models.DateTimeField(_("date used"), blank=True, null=True)
 
