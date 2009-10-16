@@ -115,7 +115,7 @@ def main():
                             unicode(email['email']), # email addr
                             unicode(contrib['trxn_id']), # paypal transaction id
                             unicode(contrib['invoice_id']),
-                            int(contrib['contribution_recur_id']),
+                            contrib['contribution_recur_id'],
                             PRODUCTION)  # civicrm contribution id
 
                     print "%s, %s" % (p.code, p.recipient)
