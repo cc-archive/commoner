@@ -36,7 +36,8 @@ class PromoCodeAdmin(admin.ModelAdmin):
     fields = ('code', 'recipient', 'expires', 'transaction_id', 'contribution_id', 'send_email',)
     ordering = ('-created',)
     search_fields = ('recipient', 'transaction_id', 'contribution_id',)
-    
+    date_hierarchy = 'created'
+        
     # get the pretty admin boolean icons, still no filter abilities
     def used(self, object):
         return object.used
