@@ -107,7 +107,8 @@ def main():
             # paypal = tbl_paypal.select(tbl_paypal.c.entity_id == contrib['contact_id']).execute().fetchone()
 
             # make that promo code has not been created for this contribution
-            if PromoCode.objects.contribution_is_unique(contrib['invoice_id'],
+            if contrib['invoice_id'] is not None and contrib['invoice_id'] != '' and \
+               PromoCode.objects.contribution_is_unique(contrib['invoice_id'],
                                                         contrib['contribution_recur_id']):
                 # send the welcome
                 if email:
