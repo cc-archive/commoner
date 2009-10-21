@@ -110,9 +110,6 @@ class PromoCode(models.Model):
     transaction_id = models.CharField(_("paypal transaction id"),
                                       max_length=255, blank=True, null=True)
     
-    contribution_id = models.CharField(_("CiviCRM invoice id"),
-                                       max_length=255, blank=True, null=True)
-
     civicrm_id = models.IntegerField(_("CiviCRM contribution id"))                                   
     recurring_contribution_id = models.IntegerField(blank=True, null=True)
     
