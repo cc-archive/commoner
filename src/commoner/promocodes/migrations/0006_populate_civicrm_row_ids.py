@@ -1,3 +1,4 @@
+import sqlalchemy
 
 from south.db import db
 from django.db import models
@@ -5,6 +6,8 @@ from commoner.promocodes.models import *
 
 class Migration:
 
+    no_dry_run = True
+    
     def setUp(self):
 
         # setup database connectivity
@@ -24,11 +27,27 @@ class Migration:
         # walk through the codes and try to populate the contribution id's
         for code in codes:
 
-            contrib = self.civicontrib.select(invoice_id=code.contribution_id).execute().fetchone()
+            try:
 
-            if contrib:
-                code.civicrm_id = contrib['id']
+                # early codes actually contain the data we want
+                civi_id = int(code.contribution_id)
+                code.civicrm_id = civi_id
                 code.save()
+
+                print "%s migrated column, %d" % (code.code, civi_id,)
+                
+            except:
+                
+                contrib = self.civicontrib.select(
+                              self.civicontrib.c.invoice_id == code.contribution_id
+                          ).execute().fetchone()
+
+                if contrib:
+                    code.civicrm_id = int(contrib['id'])
+                    code.save()
+
+                    print "%s fetched row id, %d" % (code.code, contrib['id'])
+
             
     def backwards(self, orm):
         "Write your backwards migration here"
