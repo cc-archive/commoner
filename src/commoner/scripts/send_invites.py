@@ -107,15 +107,14 @@ def main():
             # paypal = tbl_paypal.select(tbl_paypal.c.entity_id == contrib['contact_id']).execute().fetchone()
 
             # make that promo code has not been created for this contribution
-            if contrib['invoice_id'] is not None and contrib['invoice_id'] != '' and \
-               PromoCode.objects.contribution_is_unique(contrib['invoice_id'],
+            if PromoCode.objects.contribution_is_unique(contrib['id'],
                                                         contrib['contribution_recur_id']):
                 # send the welcome
                 if email:
                     p = PromoCode.objects.create_promo_code(
                             unicode(email['email']), # email addr
                             unicode(contrib['trxn_id']), # paypal transaction id
-                            unicode(contrib['invoice_id']),
+                            contrib['id'],
                             contrib['contribution_recur_id'],
                             PRODUCTION)  # civicrm contribution id
 

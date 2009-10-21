@@ -33,9 +33,9 @@ class PromoCodeAdmin(admin.ModelAdmin):
     form = PromoCodeAdminForm
 
     list_display = ('recipient', 'code', 'created', 'used')    
-    fields = ('code', 'recipient', 'expires', 'transaction_id', 'contribution_id', 'send_email',)
+    fields = ('code', 'recipient', 'expires', 'transaction_id', 'civicrm_id', 'send_email',)
     ordering = ('-created',)
-    search_fields = ('recipient', 'transaction_id', 'contribution_id',)
+    search_fields = ('recipient', 'transaction_id', 'civicrm_id',)
     date_hierarchy = 'created'
         
     # get the pretty admin boolean icons, still no filter abilities

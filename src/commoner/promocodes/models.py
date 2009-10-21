@@ -42,7 +42,7 @@ class PromoCodeManager(models.Manager):
         month. """
 
         # is the contribution unique
-        if self.filter(contribution_id__exact=contrib_id).count() > 0:
+        if self.filter(civicrm_id__exact=contrib_id).count() > 0:
 
             return False
 
@@ -69,7 +69,7 @@ class PromoCodeManager(models.Manager):
                            recipient=(email or ''),
                            transaction_id=trxn_id,
                            recurring_contribution_id=recurring_id,
-                           contribution_id=contrib_id)
+                           civicrm_id=contrib_id)
 
         if send_email and email:
             self.send_invite_letter(code)
