@@ -1,4 +1,3 @@
-import sqlalchemy
 
 from south.db import db
 from django.db import models
@@ -10,6 +9,7 @@ class Migration:
     
     def setUp(self):
 
+        import sqlalchemy
         # setup database connectivity
         cividb = sqlalchemy.create_engine('mysql://civicrm:Civicrm.@localhost/civicrm', convert_unicode=True, encoding='latin1') 
         

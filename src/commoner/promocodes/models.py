@@ -101,7 +101,7 @@ class PromoCode(models.Model):
     # who the code was originally sent to, might be useful
     recipient = models.EmailField(_("promo code email recipient"), blank=False)
     
-    created = models.DateTimeField(_("date created"), auto_now=True)
+    created = models.DateTimeField(_("date created"), auto_now_add=True)
     expires = models.DateTimeField(_("date expires"), blank=True, null=False)
 
     # promo codes are created with 2 methods:
