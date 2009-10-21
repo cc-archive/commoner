@@ -112,6 +112,8 @@ class PromoCode(models.Model):
     
     contribution_id = models.CharField(_("CiviCRM invoice id"),
                                        max_length=255, blank=True, null=True)
+
+    civicrm_id = models.IntegerField(_("CiviCRM contribution id"))                                   
     recurring_contribution_id = models.IntegerField(blank=True, null=True)
     
     used_by = models.ForeignKey(User, blank=True, null=True)
