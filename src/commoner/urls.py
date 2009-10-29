@@ -115,6 +115,17 @@ urlpatterns = patterns(
         name='works_feed'),
     url(r'^r/recent/atom$', 'commoner.works.feeds.recent_updates_feed',
         name='recent_updates_feed'),
+
+    # Webcitations
+    url(r'^c/$',
+        'commoner.citations.views.create',
+        name='citation_create'),
+    url(r'^c/(?P<cid>[\d\w]{5})/$',
+        'commoner.citations.views.view',
+        name='citation_view'),
+    url(r'^c/(?P<cid>[\d\w]{5})/r/$',
+        'commoner.citations.views.redirect',
+        name='citation_redirect'),
     
     # Metadata scraper support
     url(r'^t/triples', 'commoner.scraper.views.triples',
