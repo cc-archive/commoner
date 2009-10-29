@@ -173,7 +173,7 @@ def services_url_context(request):
     return dict(services=services)
 
 
-import string
+import string, random
 BASE62 = string.letters + string.digits
-def base62_string(length):
+def base62string(length):
     return ''.join([random.choice(BASE62) for i in range(0,length)])
