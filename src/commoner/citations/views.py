@@ -69,24 +69,35 @@ def create(request):
     q_license = """
     PREFIX cc: <http://creativecommons.org/ns#>
     PREFIX xhtml: <http://www.w3.org/1999/xhtml/vocab#>
-    PREFIX purl: <http://purl.org/dc/terms/>
+    PREFIX dc: <http://purl.org/dc/terms/>
     
-        SELECT ?license_uri
+    SELECT ?license_uri
 
         WHERE {
               { <%(uri)s> cc:license ?license_uri . }
           UNION 
               { <%(uri)s> xhtml:license ?license_uri . } 
           UNION
-              { <%(uri)s> purl:license ?license_uri . }
+              { <%(uri)s> dc:license ?license_uri . }
         }
     """ 
-    cc_license = rdfa_triples.query( q_license % {'uri' : c.resolved_url} )
+    citation_license = rdfa_triples.query( q_license % {'uri' : c.resolved_url} )
 
-    if len(cc_license) > 0:
-        c.license_url = str( list(cc_license)[0][0] )
+    if len(citation_license) > 0:
+        c.license_url = str( list(citation_license)[0][0] )
         c.save()
-    
+
+    # check for dc:title
+    q_title = """
+    PREFIX dc: <http://purl.org/dc/terms/>
+    SELECT ?title
+         WHERE { <%(uri)s> dc:title ?title . }
+    """
+    citation_title = rdfa_triples.query( q_title % {'uri' : c.resolved_url} )
+    if len(citation_title) > 0:
+        c.title = str( list(citation_title)[0][0] )
+        c.save()
+
     # if all was successfull, redirect to the new citation's canonical url
     return HttpResponseRedirect(c.get_absolute_url())
 
