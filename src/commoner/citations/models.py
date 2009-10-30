@@ -35,6 +35,8 @@ class CitationManager(models.Manager):
         return citation, 'urlkey' in kwargs
     
 class Citation(models.Model):
+
+    title = models.CharField(max_length=256, blank=True)
     
     cited_url = models.URLField(verify_exists=False) 
     resolved_url = models.URLField(verify_exists=False)
