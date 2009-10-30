@@ -4,7 +4,9 @@ from django.http import Http404, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
+from django.utils.translation import ugettext_lazy as _
 
+from django.forms.fields import url_re
 from commoner.scraper.views import _triples
 
 from models import Citation, MetaData
@@ -26,6 +28,10 @@ def create(request):
     if url is None:
         raise Http404
 
+    # assume that this is an http uri
+    if "://" not in url:
+        url = u'http://%s' % url
+        
     try:
         response = urllib2.urlopen(url)
 
@@ -48,7 +54,6 @@ def create(request):
         resolved_url=response.url)
     
     store = RdfaStore('webcitations').get_store()
-
     graph_id = rdflib.URIRef(c.canonical_url())
 
     parser = RdfaParser()
@@ -61,6 +66,26 @@ def create(request):
     rdfa_triples.commit()
 
     # check for license in triples, attributionName, attributionURL, etc.
+    q_license = """
+    PREFIX cc: <http://creativecommons.org/ns#>
+    PREFIX xhtml: <http://www.w3.org/1999/xhtml/vocab#>
+    PREFIX purl: <http://purl.org/dc/terms/>
+    
+        SELECT ?license_uri
+
+        WHERE {
+              { <%(uri)s> cc:license ?license_uri . }
+          UNION 
+              { <%(uri)s> xhtml:license ?license_uri . } 
+          UNION
+              { <%(uri)s> purl:license ?license_uri . }
+        }
+    """ 
+    cc_license = rdfa_triples.query( q_license % {'uri' : c.resolved_url} )
+
+    if len(cc_license) > 0:
+        c.license_url = str( list(cc_license)[0][0] )
+        c.save()
     
     # if all was successfull, redirect to the new citation's canonical url
     return HttpResponseRedirect(c.get_absolute_url())
