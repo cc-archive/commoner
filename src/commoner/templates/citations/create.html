@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block header %}
+
+{% endblock %}
+
+
+{% block page_header %}
+   {% trans "Cite a Work" %}
+{% endblock %}
+
+{% block page_icon_class %}edit{% endblock %}
+
+{% block body %}
+
+
+<div class="form">
+ 
+
+  <form method="get" action=".">
+
+    <div class="field">
+      <span class="field_label">{{form.url.label}}</span>
+      {{form.url}} 
+      <img id="loading_metadata" src="/m/images/loading.gif"
+	   style="display:none;" />
+      <div class="help">{{form.url.help_text}}</div>
+      
+      {% if form.url.errors %}
+      <div class="errors">
+	    {{ form.url.errors }}
+      </div>
+      {% endif %}
+    </div>
+
+    <input type="submit" value='{% trans "Save" %}' /> 
+    <a href="{{user.get_profile.get_absolute_url}}">{% trans "Cancel" %}</a>
+
+  </form>
+</div>
+
+{% endblock %}

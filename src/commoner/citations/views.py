@@ -10,7 +10,7 @@ from django.forms.fields import url_re
 from commoner.scraper.views import _triples
 
 from models import Citation, MetaData
-from forms import AddReuserForm, AddMetadataForm
+from forms import AddCitationForm, AddReuserForm, AddMetadataForm
 
 from triplestore import RdfaStore
 
@@ -24,34 +24,27 @@ from rdflib.Graph import Graph
 def create(request):
 
     url = request.GET.get('url') or request.POST.get('url')
-
+    
     if url is None:
-        raise Http404
-
-    # assume that this is an http uri
-    if "://" not in url:
-        url = u'http://%s' % url
-        
-    try:
-        response = urllib2.urlopen(url)
-
-    except urllib2.URLError, e:
-
-        if hasattr(e, 'reason'):
-            message = _("We failed to reach the provided URL, please check the URL and try again.")
-        elif hasattr(e, 'code'):
-            message = _("The server failed to fulfill our request, please check the URL and try again.")
-            
-        return render_to_response("citations/error.html",
-                                  {'message':message},
+        form = AddCitationForm()
+        return render_to_response("citations/create.html",
+                                  {'form':form},
                                   context_instance=RequestContext(request))
-
+    else:
+        form = AddCitationForm({'url':url})
+        
+    if not form.is_valid():
+        return render_to_response("citations/create.html",
+                                  {'form':form},
+                                  context_instance=RequestContext(request))
+    
     # we need to compare fingerprints before saving
     # not diving into the cache stores at this moment so ignore fingerprinting
+
     c = Citation.objects.create(
         cited_by=request.user,
         cited_url=url,
-        resolved_url=response.url)
+        resolved_url=form.response.url)
     
     store = RdfaStore('webcitations').get_store()
     graph_id = rdflib.URIRef(c.canonical_url())
@@ -60,12 +53,13 @@ def create(request):
     rdfa_triples = Graph(store=store, identifier=graph_id)
     sink = GraphSink(rdfa_triples)
   
-    parser.parse_string(response.read(), c.resolved_url, sink=sink)
+    parser.parse_string(form.response.read(), c.resolved_url, sink=sink)
 
-    # save our triples in the store
     rdfa_triples.commit()
 
     # check for license in triples, attributionName, attributionURL, etc.
+    # the following SPARQL queries need to moved into an RDF store helper
+    
     q_license = """
     PREFIX cc: <http://creativecommons.org/ns#>
     PREFIX xhtml: <http://www.w3.org/1999/xhtml/vocab#>
@@ -118,3 +112,25 @@ def view(request, cid):
 def redirect(request, cid):
     c = get_object_or_404(Citation, urlkey__exact=cid)
     return HttpResponseRedirect(c.resolved_url)
+
+
+"""
+    # assume that this is an http uri
+    # move this in to the form validation
+    if "://" not in url:
+        url = u'http://%s' % url
+        
+    try:
+        response = urllib2.urlopen(url)
+
+    except urllib2.URLError, e:
+
+        if hasattr(e, 'reason'):
+            message = _("We failed to reach the provided URL, please check the URL and try again.")
+        elif hasattr(e, 'code'):
+            message = _("The server failed to fulfill our request, please check the URL and try again.")
+            
+        return render_to_response("citations/error.html",
+                                  {'message':message},
+                                  context_instance=RequestContext(request))
+    """
