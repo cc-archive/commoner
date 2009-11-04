@@ -126,6 +126,9 @@ urlpatterns = patterns(
     url(r'^c/(?P<cid>[\d\w]{5})/r/$',
         'commoner.citations.views.redirect',
         name='citation_redirect'),
+    url(r'^c/(?P<cid>[\d\w]{5})/t/$',
+        'commoner.citations.views.view',
+        name='citation_trackback'),
     
     # Metadata scraper support
     url(r'^t/triples', 'commoner.scraper.views.triples',
