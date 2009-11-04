@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load i18n %}
+{% load rdfa %}
 
 {% block head_title %} {% endblock %}
 
@@ -18,21 +19,22 @@
 {% block body %}
 
 
-<h1>{{ citation.cited_url }} (<a href="{{citation.resolved_url}}">link</a>)</h1>
+<h1>{% if citation.title %}{{ citation.title }}{% else %}Untitled{% endif %} (<a href="{{citation.resolved_url}}">link</a>)</h1>
 
 <br />
 
 Cited by <a href="{% url profile_view citation.cited_by %}">{{ citation.cited_by }}</a>
  on {{ citation.cited_on }}
 
+<br />
+{{ citation.license_url }}
+
 <h3>Download</h3>
 
 <h3>Attribute this work in HTML</h3>
-
-<input type="text" size="50" readonly="true" value="the attributionURL, attributionName, source, morePermissions" onclick="this.select()" />
+<input type="text" size="50" readonly="true" value="" onclick="this.select()" />
 
 <h3>Plain Text Attribution</h3>
-
 <input type="text" size="50" readonly="true" value=" should be stored for attribution text generation" onclick="this.select()" />
 
 <h3>Permalink for this Citation</h3>
@@ -42,14 +44,14 @@ Cited by <a href="{% url profile_view citation.cited_by %}">{{ citation.cited_by
 <a href="{% url citation_redirect citation.urlkey %}">{{ citation.canonical_url }}r/</a>
 
 <h3>Metadata</h3>
-
 <ul>
 {% for metadata in citation.metadata.all %}
   <li><span style="width:75px;">{{ metadata.key }}:</span>{{ metadata.value }}</li>
 {% endfor %}
 {% for triple in citation.triples %}
-  <li>{{ triple }}</li>
+  {% rdfslabel triple %}
 {% endfor %}
+
   <li>{{ add_metadata_form.key }} : {{ add_metadata_form.value }}</li>
 </ul>
 
@@ -62,10 +64,9 @@ Cited by <a href="{% url profile_view citation.cited_by %}">{{ citation.cited_by
 
 <h3>Add Reuser</h3>
 <p>If this work has been used elsewhere on the web, post the permalink for the page below.</p>
-
 {{ add_reuser_form.url }}
 
 <h3>Trackback URL</h3>
-
+<input type="text" size="35" readonly="true" value="{{ citation.canonical_url }}t/" onclick="this.select()" />
 
 {% endblock %}
