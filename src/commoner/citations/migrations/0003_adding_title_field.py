@@ -54,7 +54,7 @@ class Migration:
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'license_url': ('django.db.models.fields.URLField', [], {'max_length': '255', 'blank': 'True'}),
             'resolved_url': ('django.db.models.fields.URLField', [], {'max_length': '200'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '256', 'blank': 'True'}),
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '256', 'blank': 'True', 'default':'""'}),
             'urlkey': ('django.db.models.fields.CharField', [], {'max_length': '5', 'unique': 'True'})
         },
         'citations.metadata': {
