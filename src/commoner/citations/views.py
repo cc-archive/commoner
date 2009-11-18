@@ -12,7 +12,8 @@ from commoner.scraper.views import _triples
 from models import Citation, MetaData
 from forms import AddCitationForm, AddReuserForm, AddMetadataForm
 
-from triplestore import RdfaStore
+from rdf.store import RdfaStore
+from rdf import helper
 
 from rdfadict import RdfaParser
 from rdfadict.sink.graph import GraphSink
@@ -38,60 +39,46 @@ def create(request):
                                   {'form':form},
                                   context_instance=RequestContext(request))
     
-    # we need to compare fingerprints before saving
-    # not diving into the cache stores at this moment so ignore fingerprinting
-
+    # creating now so that a permalink for the citation is generated
     c = Citation.objects.create(
         cited_by=request.user,
         cited_url=url,
         resolved_url=form.response.url)
+
     
     store = RdfaStore('webcitations').get_store()
+    # the graph's identifier is the newly generated permalink for this citation
     graph_id = rdflib.URIRef(c.canonical_url())
-
+    # use the parser to scrape and store the RDFa embedded at this URL
     parser = RdfaParser()
+    # initialize and empty graph to dump the cited work's triples into
     rdfa_triples = Graph(store=store, identifier=graph_id)
     sink = GraphSink(rdfa_triples)
-  
-    parser.parse_string(form.response.read(), c.resolved_url, sink=sink)
-
+    # use rdfadict to parse the data at this url and populate the sink with the
+    # resulting triples 
+    parser.parse_string(form.response.read(), form.response.url, sink=sink)
+    # save this graph to the RDF store db
     rdfa_triples.commit()
 
-    # check for license in triples, attributionName, attributionURL, etc.
-    # the following SPARQL queries need to moved into an RDF store helper
-    
-    q_license = """
-    PREFIX cc: <http://creativecommons.org/ns#>
-    PREFIX xhtml: <http://www.w3.org/1999/xhtml/vocab#>
-    PREFIX dc: <http://purl.org/dc/terms/>
-    
-    SELECT ?license_uri
-
-        WHERE {
-              { <%(uri)s> cc:license ?license_uri . }
-          UNION 
-              { <%(uri)s> xhtml:license ?license_uri . } 
-          UNION
-              { <%(uri)s> dc:license ?license_uri . }
-        }
-    """ 
-    citation_license = rdfa_triples.query( q_license % {'uri' : c.resolved_url} )
-
-    if len(citation_license) > 0:
-        c.license_url = str( list(citation_license)[0][0] )
+    # before finishing, look for any license information to save in
+    license_url = helper.get_license_uri(rdfa_triples, c.resolved_url) 
+    # query for the title of the work being cited
+    title = helper.get_work_title(rdfa_triples, c.resolved_url)
+    # save these fields to the citation
+    if title or license_url:
+        c.title = title
+        c.license_url = license_url
         c.save()
 
-    # check for dc:title
-    q_title = """
-    PREFIX dc: <http://purl.org/dc/terms/>
-    SELECT ?title
-         WHERE { <%(uri)s> dc:title ?title . }
-    """
-    citation_title = rdfa_triples.query( q_title % {'uri' : c.resolved_url} )
-    if len(citation_title) > 0:
-        c.title = str( list(citation_title)[0][0] )
-        c.save()
-
+    # loop through triples of the graph and for any that the rdfs:label can
+    # be determined, add the data as a MetaData object for this citation
+    # NOTE: this bit will dramatically slow the runtime, 
+    for s,p,o in rdfa_triples:
+        label = helper.get_rdfs_label(p)
+        if label != u'':
+            # Store label information in a MetaData object
+            m = MetaData.objects.create(citation=c, key=label, value=unicode(o))
+    
     # if all was successfull, redirect to the new citation's canonical url
     return HttpResponseRedirect(c.get_absolute_url())
 
@@ -112,25 +99,3 @@ def view(request, cid):
 def redirect(request, cid):
     c = get_object_or_404(Citation, urlkey__exact=cid)
     return HttpResponseRedirect(c.resolved_url)
-
-
-"""
-    # assume that this is an http uri
-    # move this in to the form validation
-    if "://" not in url:
-        url = u'http://%s' % url
-        
-    try:
-        response = urllib2.urlopen(url)
-
-    except urllib2.URLError, e:
-
-        if hasattr(e, 'reason'):
-            message = _("We failed to reach the provided URL, please check the URL and try again.")
-        elif hasattr(e, 'code'):
-            message = _("The server failed to fulfill our request, please check the URL and try again.")
-            
-        return render_to_response("citations/error.html",
-                                  {'message':message},
-                                  context_instance=RequestContext(request))
-    """

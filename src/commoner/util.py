@@ -177,3 +177,76 @@ import string, random
 BASE62 = string.letters + string.digits
 def base62string(length):
     return ''.join([random.choice(BASE62) for i in range(0,length)])
+
+""" taken from cc.license._lib.functions """
+import re
+def ccuri2dict(uri):
+    """Take a license uri and convert it into a dictionary of values."""
+    std_base = 'http://creativecommons.org/licenses/'
+    cc0_base = 'http://creativecommons.org/publicdomain/zero/'
+    
+    # minor error checking
+    
+    if not ( uri.startswith(std_base) or uri.startswith(cc0_base) ):
+        raise ValueError, "Malformed Creative Commons URI: <%s>" % uri
+
+    license_info = {}
+    raw_info = uri[len(base):]
+    raw_info = raw_info.rstrip('/')
+
+    # support urls with deed language
+    langre = re.compile("^deed.[\w]{2}$")
+    
+    info_list = raw_info.split('/') 
+
+    if len(info_list) not in (1,2,3):
+        if len(info_list) == 4 and re.match(langre, info_list[3]):
+            pass
+        else:
+            raise ValueError, "Malformed Creative Commons URI: <%s>" % uri
+
+    retval = dict( code=info_list[0] )
+    if len(info_list) > 1:
+        retval['version'] = info_list[1]
+    if len(info_list) > 2:
+        if not re.match(langre, info_list[2]):
+            retval['jurisdiction'] = info_list[2]
+
+    # XXX perform any validation on the dict produced?
+    return retval
+
+def attributionHTML(subject, license_url, attribURL=None, attribName=None):
+
+    try:
+       cclicense = ccuri2dict(license_url)
+    except ValueError, e:
+       # Only valid CC licenses are supported
+       return u''
+
+    div = '<div xmlns:cc="http://creativecommons.org/ns#" about="%s">%%s' % subject
+    if attribURL:
+        attrib = '<a rel="cc:attributionURL"%%shref="%s">%%s</a>' % attribURL
+        if attribName:
+            attrib = attrib % (' property="cc:attributionName" ', attribName,)
+        else:
+            attrib = attrib % (' ', attribURL,)
+    elif attribName:
+        attrib = '<span property="cc:attributionName">%s</span>' % attribName
+    else:
+        attrib = '<span>%s</span>' % subject
+    attrib += ' / <a rel="license" href="%s">CC %s</a>' % (license_url,
+                                                           cclicense['code'].upper(),)
+
+    return unicode(div % attrib)     
+
+def attributionText(subject, license_url, title=None, attribURL=None, attribName=None):
+    try:
+       cclicense = ccuri2dict(license_url)
+    except ValueError, e:
+       # Only valid CC licenses are supported
+       return u''
+    attrib = title or subject
+    if attribName:
+        attrib += " by %s" % attribName
+    attrib += ", available under a CC %s license." % cclicense['code'].upper()
+    return unicode(attrib)

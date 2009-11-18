@@ -3,9 +3,10 @@ from django.contrib.admin.models import User
 from django.contrib.sites.models import Site
 from django.utils.translation import gettext_lazy as _
 
-from commoner.util import base62string
+from commoner.util import base62string, attributionHTML, attributionText
 
-from triplestore import RdfaStore
+from commoner.citations.rdf.store import RdfaStore
+from commoner.citations.rdf import helper
 
 URLKEY_LEN = 5
 
@@ -69,6 +70,41 @@ class Citation(models.Model):
     def triples(self):
         return RdfaStore('webcitations').get_graph(self.canonical_url())
 
+    @property
+    def license(self):
+        """ shorthand and mneumonic accessor for license_url """
+        return self.license_url
+    
+    """
+    Retrieve licensing information for the cited work
+    """
+    @property
+    def attributionName(self):
+        return helper.get_attribution_name(self.triples(), self.resolved_url)
+    @property
+    def attributionURL(self):
+        return helper.get_attribution_url(self.triples(), self.resolved_url)
+    @property
+    def attribution_html(self):
+        return attributionHTML(self.resolved_url, self.license_url,
+                               self.attributionURL, self.attributionName)
+    @property
+    def attribution_text(self):
+        return attributionText(self.resolved_url, self.license_url, self.title,
+                               self.attributionURL, self.attributionName)
+
+class MetaDataManager(models.Manager):
+
+    def store_triple(self, predicate, obj):
+        """ store_triple accepts the predicate and object from an RDF triple
+        and stores the values in the metadata table for quicker lookups.
+        Ideally the RDFa that is scraped from a cited work should be
+        displayed to the user in a human readable format.  This requires
+        the use of rdfs:label properties, which is an expensive query.
+        """
+        pass
+        
+    
 class MetaData(models.Model):
     """ """
 

@@ -2,6 +2,7 @@
 
 {% load i18n %}
 {% load rdfa %}
+{% load license %}
 
 {% block head_title %} {% endblock %}
 
@@ -19,23 +20,28 @@
 {% block body %}
 
 
-<h1>{% if citation.title %}{{ citation.title }}{% else %}Untitled{% endif %} (<a href="{{citation.resolved_url}}">link</a>)</h1>
 
+<h1>{% if citation.title %}{{ citation.title }}{% else %}Untitled{% endif %} (<a href="{{citation.resolved_url}}">link</a>)</h1>
 <br />
+<a about="{{citation.resolved_url}}" rel="license" href="{{citation.license}}" >
+    <img src="{{citation.license|license_button}}" 
+	 alt="{{citation.license|license_code}}" 
+	 style="border:0;" /></a> 
+
+<p>
 
 Cited by <a href="{% url profile_view citation.cited_by %}">{{ citation.cited_by }}</a>
  on {{ citation.cited_on }}
 
-<br />
-{{ citation.license_url }}
+</p>
 
 <h3>Download</h3>
 
 <h3>Attribute this work in HTML</h3>
-<input type="text" size="50" readonly="true" value="" onclick="this.select()" />
+<input type="text" size="50" readonly="true" value="{{ citation.attribution_html|escape }}" onclick="this.select()" />
 
 <h3>Plain Text Attribution</h3>
-<input type="text" size="50" readonly="true" value=" should be stored for attribution text generation" onclick="this.select()" />
+<input type="text" size="50" readonly="true" value="{{ citation.attribution_text }}" onclick="this.select()" />
 
 <h3>Permalink for this Citation</h3>
 <a href="{% url citation_view citation.urlkey %}">{{ citation.canonical_url }}</a>
@@ -44,23 +50,21 @@ Cited by <a href="{% url profile_view citation.cited_by %}">{{ citation.cited_by
 <a href="{% url citation_redirect citation.urlkey %}">{{ citation.canonical_url }}r/</a>
 
 <h3>Metadata</h3>
-<ul>
+<ul style="margin-top:5px;">
 {% for metadata in citation.metadata.all %}
-  <li><span style="width:75px;">{{ metadata.key }}:</span>{{ metadata.value }}</li>
+  <li><span style="width:75px;">{{ metadata.key|capfirst }} :</span> {{ metadata.value }}</li>
 {% endfor %}
-{% for triple in citation.triples %}
-  {% rdfslabel triple %}
-{% endfor %}
-
   <li>{{ add_metadata_form.key }} : {{ add_metadata_form.value }}</li>
 </ul>
 
+{% if citation.reusers.count %}
 <h3>Used by:</h3>
 <ul>
 {% for resuer in citation.reusers.all %}
   <li>{{ reuser }}</li>
 {% endfor %}
 </ul>
+{% endif %}
 
 <h3>Add Reuser</h3>
 <p>If this work has been used elsewhere on the web, post the permalink for the page below.</p>
