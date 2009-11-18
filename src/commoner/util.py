@@ -183,7 +183,7 @@ import re
 def ccuri2dict(uri):
     """Take a license uri and convert it into a dictionary of values."""
     std_base = 'http://creativecommons.org/licenses/'
-    cc0_base = 'http://creativecommons.org/publicdomain/zero/'
+    cc0_base = 'http://creativecommons.org/publicdomain/'
     
     # minor error checking
     
@@ -210,6 +210,8 @@ def ccuri2dict(uri):
             raise ValueError, "Malformed Creative Commons URI: <%s>" % uri
 
     retval = dict( code=info_list[0] )
+    
+    
     if len(info_list) > 1:
         retval['version'] = info_list[1]
     if len(info_list) > 2:
