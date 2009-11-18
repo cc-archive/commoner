@@ -229,7 +229,7 @@ def attributionHTML(subject, license_url, attribURL=None, attribName=None):
        # Only valid CC licenses are supported
        return u''
 
-    div = '<div xmlns:cc="http://creativecommons.org/ns#" about="%s">%%s' % subject
+    div = '<div xmlns:cc="http://creativecommons.org/ns#" about="%s">%%s</div>' % subject
     if attribURL:
         attrib = '<a rel="cc:attributionURL"%%shref="%s">%%s</a>' % attribURL
         if attribName:
