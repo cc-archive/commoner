@@ -187,12 +187,16 @@ def ccuri2dict(uri):
     
     # minor error checking
     
-    if not ( uri.startswith(std_base) or uri.startswith(cc0_base) ):
+    if uri.startswith(std_base):
+        raw_info = uri[len(std_base):].rstrip('/')
+
+    elif uri.startswith(cc0_base) :
+        raw_info = uri[len(cc0_base):].rstrip('/')
+
+    else:
         raise ValueError, "Malformed Creative Commons URI: <%s>" % uri
 
     license_info = {}
-    raw_info = uri[len(base):]
-    raw_info = raw_info.rstrip('/')
 
     # support urls with deed language
     langre = re.compile("^deed.[\w]{2}$")
