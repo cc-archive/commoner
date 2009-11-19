@@ -178,49 +178,72 @@ BASE62 = string.letters + string.digits
 def base62string(length):
     return ''.join([random.choice(BASE62) for i in range(0,length)])
 
+class CCLicenseError(Exception):
+    pass
+
 """ taken from cc.license._lib.functions """
-import re
 def ccuri2dict(uri):
-    """Take a license uri and convert it into a dictionary of values."""
+    """Take a license uri and convert it into a dictionary of values.
+
+    >>> sorted(ccuri2dict('http://creativecommons.org/licenses/by/3.0/deed.en').items())
+    [('code', 'by'), ('jurisdiction', 'Unported'), ('version', '3.0')]
+    >>> sorted(ccuri2dict('http://creativecommons.org/licenses/by/3.0/').items())
+    [('code', 'by'), ('jurisdiction', 'Unported'), ('version', '3.0')]
+    >>> sorted(ccuri2dict('http://creativecommons.org/licenses/by/3.0/us/').items())
+    [('code', 'by'), ('jurisdiction', 'us'), ('version', '3.0')]
+    >>> sorted(ccuri2dict('http://creativecommons.org/licenses/by/3.0/us').items())
+    ------------------------------------------------------------
+    Traceback (most recent call last):
+    ...
+    CCLicenseError: Malformed Creative Commons URI: <http://creativecommons.org/licenses/by/3.0/us>
+    >>> sorted(ccuri2dict('http://creativecommons.org/licenses/by/3.0').items())
+    ------------------------------------------------------------
+    Traceback (most recent call last):
+    ...
+    CCLicenseError: Malformed Creative Commons URI: <http://creativecommons.org/licenses/by/3.0>
+    >>> sorted(ccuri2dict('http://creativecommons.org/publicdomain/zero/1.0/').items())
+    [('code', 'CC0'), ('jurisdiction', None), ('version', '1.0')]
+    >>> sorted(ccuri2dict('http://creativecommons.org/publicdomain/zero/').items())
+    ------------------------------------------------------------
+    Traceback (most recent call last):
+    ...
+    CCLicenseError: Malformed Creative Commons URI: <http://creativecommons.org/publicdomain/zero/>
+    """
+    
     std_base = 'http://creativecommons.org/licenses/'
-    cc0_base = 'http://creativecommons.org/publicdomain/'
-    
-    # minor error checking
-    
-    if uri.startswith(std_base):
-        raw_info = uri[len(std_base):].rstrip('/')
+    cc0_base = 'http://creativecommons.org/publicdomain/zero/'
 
-    elif uri.startswith(cc0_base) :
-        raw_info = uri[len(cc0_base):].rstrip('/')
+    if 'deed' in uri:
+        uri = uri[:uri.rindex('deed')]
 
-    else:
-        raise ValueError, "Malformed Creative Commons URI: <%s>" % uri
-
-    license_info = {}
-
-    # support urls with deed language
-    langre = re.compile("^deed.[\w]{2}$")
-    
-    info_list = raw_info.split('/') 
-
-    if len(info_list) not in (1,2,3):
-        if len(info_list) == 4 and re.match(langre, info_list[3]):
-            pass
-        else:
-            raise ValueError, "Malformed Creative Commons URI: <%s>" % uri
-
-    retval = dict( code=info_list[0] )
-    
-    
-    if len(info_list) > 1:
-        retval['version'] = info_list[1]
-    if len(info_list) > 2:
-        if not re.match(langre, info_list[2]):
+    if uri.startswith(std_base) and uri.endswith('/'):
+        raw_info = uri[len(std_base):]
+        raw_info = raw_info.rstrip('/')
+        info_list = raw_info.split('/')
+        
+        if len(info_list) not in (2,3):
+            raise CCLicenseError, "Malformed Creative Commons URI: <%s>" % uri
+            
+        retval = dict( code=info_list[0], jurisdiction='Unported' )
+        if len(info_list) > 1:
+            retval['version'] = info_list[1]
+        if len(info_list) > 2:
             retval['jurisdiction'] = info_list[2]
 
-    # XXX perform any validation on the dict produced?
-    return retval
+        return retval
+    
+    elif uri.startswith(cc0_base) and uri.endswith('/'):
 
+        retval = { 'code':'CC0', 'jurisdiction': None }
+        retval['version'] = uri[len(cc0_base):].split('/')[0]
+        if retval['version'] is '':
+            raise CCLicenseError, "Malformed Creative Commons URI: <%s>" % uri
+        return retval
+
+    else:
+        raise CCLicenseError, "Malformed Creative Commons URI: <%s>" % uri
+        
+        
 def attributionHTML(subject, license_url, attribURL=None, attribName=None):
 
     try:
