@@ -242,12 +242,20 @@ def ccuri2dict(uri):
 
     else:
         raise CCLicenseError, "Malformed Creative Commons URI: <%s>" % uri
-        
+
+def licenseName(code):
+    """ Function that takes a code for a CC license and returns a string of its
+    title.  This function incomplete at the moment and will only return a short
+    representation for the name of a license (e.g. 'CC0' or 'CC BY-SA') """
+    if code == 'CC0':
+        return 'CC0'
+    else:
+        return 'CC %s' % code.upper()
         
 def attributionHTML(subject, license_url, attribURL=None, attribName=None):
 
     try:
-       cclicense = ccuri2dict(license_url)
+       ccl = ccuri2dict(license_url)
     except ValueError, e:
        # Only valid CC licenses are supported
        return u''
@@ -263,19 +271,20 @@ def attributionHTML(subject, license_url, attribURL=None, attribName=None):
         attrib = '<span property="cc:attributionName">%s</span>' % attribName
     else:
         attrib = '<span>%s</span>' % subject
-    attrib += ' / <a rel="license" href="%s">CC %s</a>' % (license_url,
-                                                           cclicense['code'].upper(),)
+    attrib += ' / <a rel="license" href="%s">%s</a>' % (license_url,
+                                                           licenseName(ccl['code']))
+    
 
     return unicode(div % attrib)     
 
 def attributionText(subject, license_url, title=None, attribURL=None, attribName=None):
     try:
-       cclicense = ccuri2dict(license_url)
+       ccl = ccuri2dict(license_url)
     except ValueError, e:
        # Only valid CC licenses are supported
        return u''
     attrib = title or subject
     if attribName:
         attrib += " by %s" % attribName
-    attrib += ", available under a CC %s license." % cclicense['code'].upper()
+    attrib += ", available under a %s license." % licenseName(ccl['code'])
     return unicode(attrib)
