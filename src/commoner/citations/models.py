@@ -74,21 +74,39 @@ class Citation(models.Model):
     def license(self):
         """ shorthand and mneumonic accessor for license_url """
         return self.license_url
+    @property
+    def cclicensed(self):
+        """ Technically a license url could come in that is not a cc url """
+        print "http://creativecommons.org" in self.license_url
+        return "http://creativecommons.org" in self.license_url
     
     """
-    Retrieve licensing information for the cited work
+    Retrieve licensing information for the cited work.
+    If the citation does not have a license url store in the model, then
+    to avoid any RDF store interaction, just return some plain attribution text.
     """
+    def _licensed(attrib_func):
+        def conditioned_func(self):
+            if not self.cclicensed:
+                return ''
+            return attrib_func(self)
+        return conditioned_func
+    
     @property
+    @_licensed
     def attributionName(self):
         return helper.get_attribution_name(self.triples(), self.resolved_url)
     @property
+    @_licensed
     def attributionURL(self):
         return helper.get_attribution_url(self.triples(), self.resolved_url)
     @property
+    @_licensed
     def attribution_html(self):
         return attributionHTML(self.resolved_url, self.license_url,
                                self.attributionURL, self.attributionName)
     @property
+    @_licensed
     def attribution_text(self):
         return attributionText(self.resolved_url, self.license_url, self.title,
                                self.attributionURL, self.attributionName)
