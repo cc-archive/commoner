@@ -35,6 +35,8 @@ setup(
                         'simplejson',
                         'python-dateutil',
                         'South',
+                        'amqplib',
+                        'carrot',
                         ],
                         
     dependency_links=['http://download.zope.org/distribution/',
