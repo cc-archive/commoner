@@ -19,14 +19,18 @@
 
 {% block body %}
 
-
-
 <h1>{% if citation.title %}{{ citation.title }}{% else %}Untitled{% endif %} (<a href="{{citation.resolved_url}}">link</a>)</h1>
 <br />
+
+
 <a about="{{citation.resolved_url}}" rel="license" href="{{citation.license}}" >
     <img src="{{citation.license|license_button}}" 
 	 alt="{{citation.license|license_code}}" 
 	 style="border:0;" /></a> 
+
+<br />
+<a href="{{ MEDIA_URL }}snapshots/{{citation.urlkey}}.png">
+  <img src="{{ MEDIA_URL }}snapshots/{{ citation.urlkey }}.png" width='175' border='0' /></a>
 
 <p>
 
