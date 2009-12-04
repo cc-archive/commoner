@@ -9,6 +9,9 @@ from django.utils.translation import ugettext_lazy as _
 from django.forms.fields import url_re
 from commoner.scraper.views import _triples
 
+# need to import the signals for them to register
+from commoner.citations.signals import *
+
 from models import Citation, MetaData
 from forms import AddCitationForm, AddReuserForm, AddMetadataForm
 
