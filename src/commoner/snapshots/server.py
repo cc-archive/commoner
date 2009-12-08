@@ -5,6 +5,7 @@ from commoner.snapshots import renderer
 
 from django.conf import settings
 import os
+import sys
 
 class SnapshotConsumer(Consumer):
 
@@ -34,13 +35,14 @@ class SnapshotConsumer(Consumer):
             except renderer.TimeoutError, te:
                 # need to track this...
                 # this returns unsupported message errors???
-                # message.requeue()
+                message.reject()
                 return 
                 
-            except renderer.LoadingError, le:
+            except (renderer.InvalidURLError, renderer.LoadingError), err:
                 # need to diagnose issue
                 # not support either???
-                # message.reject()
+                print err
+                message.reject()
                 return
                 
             except Exception, e:                
@@ -80,10 +82,8 @@ class SnapshotConsumer(Consumer):
         
         return True
         
-def start():
-
-    """ Entrance point for Consumer daemon """
-
+def main():
+   
     print "Snapshot queue consumer listening..."
 
     conn = DjangoBrokerConnection()
