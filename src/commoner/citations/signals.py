@@ -4,7 +4,7 @@ from commoner.citations import models
 from commoner.snapshots.interface import Snapshot
 
 def queue_snapshot(sender, instance, created, **kwargs):
-    print "queue_snapshot"
+    
     if created:
         # send a snapshot request to the work queue
         s = Snapshot().render(instance.resolved_url, instance.urlkey)

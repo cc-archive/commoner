@@ -77,7 +77,6 @@ class Citation(models.Model):
     @property
     def cclicensed(self):
         """ Technically a license url could come in that is not a cc url """
-        print "http://creativecommons.org" in self.license_url
         return "http://creativecommons.org" in self.license_url
     
     """
