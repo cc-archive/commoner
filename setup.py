@@ -20,6 +20,7 @@ setup(
             'idjango = commoner_i.scripts:manage',
             'renewals = commoner.scripts.send_renewals:main',
             'invites = commoner.scripts.send_invites:main',
+            'snapshots = commoner.snapshots.server:main',
             ]
         },
 
