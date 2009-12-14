@@ -62,14 +62,16 @@ def main():
         is_recurring = False
 
         transaction_id = contrib['trxn_id']
-
+        source = contrib['source']
+        
         # If the field contribution_page_id is 16 (student) then they are
         # automatically a member, else we check if this is a recurring contribution
         # and if it is we calculate the total contribution, else we just look at
         # the field total_amount of the contribution.  If these latter 2 are
         # greater than 50 then they qualify to be a member
-        if contrib['contribution_page_id'] == 16:
-            # This is a student
+        if source.endswith('(Student)') or contrib['contribution_page_id'] == 16:
+            # stemmed from "Join the Commons - Student"
+            # https://support.creativecommons.org/civicrm/contribute/transact?reset=1&id=16
             is_student = True
 
         if contrib['contribution_recur_id']:
@@ -96,7 +98,7 @@ def main():
         elif contrib['contribution_type_id'] == 6:
             if ttl_contrib >= 100:
                 is_member = True
-        elif ttl_contrib >= 50:
+        elif ttl_contrib >= 25:
             is_member = True
 
         if is_member:
@@ -113,7 +115,7 @@ def main():
                 if email:
                     p = PromoCode.objects.create_promo_code(
                             unicode(email['email']), # email addr
-                            unicode(contrib['trxn_id']), # paypal transaction id
+                            unicode(contrib['trxn_id']), # Paypal transaction id
                             contrib['id'],
                             contrib['contribution_recur_id'],
                             PRODUCTION)  # civicrm contribution id
