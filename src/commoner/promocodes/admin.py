@@ -31,6 +31,7 @@ class PromoCodeAdminForm(forms.ModelForm):
 class PromoCodeAdmin(admin.ModelAdmin):
 
     form = PromoCodeAdminForm
+    actions = ["resend_codes"]
 
     list_display = ('recipient', 'code', 'created', 'used')    
     fields = ('code', 'recipient', 'expires', 'transaction_id', 'civicrm_id', 'send_email',)
@@ -43,5 +44,29 @@ class PromoCodeAdmin(admin.ModelAdmin):
         return object.used
     used.short_description = _(u'Redeemed code')
     used.boolean = True
+
+
+    def resend_codes(self, request, queryset):
+        """Resend one or more Codes from the admin interface."""
+    
+        sent = 0
+        already_used = 0
+
+        for code in queryset:
+            if not(code.used):
+                PromoCode.objects.send_invite_letter(code)
+                sent = sent + 1
+            else:
+                already_used = already_used + 1
         
+        message = "%s code(s) sent." % sent
+
+        if already_used:
+            message = "%s %s already used, not re-sent." % (
+                message, already_used)
+
+        self.message_user(request, message)
+
+    resend_codes.short_description = "Resend selected codes."
+
 admin.site.register(PromoCode, PromoCodeAdmin)
