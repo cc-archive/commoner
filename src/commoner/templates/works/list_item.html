@@ -2,6 +2,7 @@
 {% load license %}      
 
 <li>
+  <span about="{{work.owner.get_absolute_url}}/" rel="sioc:owner_of" resource="{{work.url}}"></span>
   <a about="{{work.owner.get_absolute_url}}" 
      rel="sioc:owner_of" href="{{work.url}}">
     <strong property="dct:title">{{work.title}}</strong></a>
@@ -30,6 +31,7 @@
   <a about="{{work.get_absolute_url}}"
      rel="sioc:parent_of" rev="sioc:has_parent"
      href="{{work.url}}" />
+  <span about="{{work.owner.get_absolute_url}}/" rel="sioc:owner_of" resource="{{work.url}}"></span>
   <a about="{{work.owner.get_absolute_url}}"
      rel="sioc:owner_of" rev="sioc:has_owner dct:creator"
      href="{{work.get_absolute_url}}">
