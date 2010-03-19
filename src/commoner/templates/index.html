@@ -33,16 +33,15 @@ participatory culture. By joining the Creative Commons Network, you
 will be joining a worldwide community dedicated to building the
 Commons &mdash; the pool of content, of knowledge, that is freely and
 legally accessible to everyone &mdash; a vital public resource in this
-digital age. <a href="/h/join/">Join 
-today!</a>{% endblocktrans %}
+digital age. Membership in the CC Network is a benefit of donating to Creative Commons at the $75 giving level or above. <a href="https://support.creativecommons.org/donate">Donate Today!</a>{% endblocktrans %}
 </p>
 
 <div id="join_network">
 {% if user.is_authenticated %}
     <h2><a href="{% url profile_view user.username %}">{% trans "My Profile" %}</a></h2>
 {% else %}
-  <h2><a href="/h/join/">
-      {% trans "Join" %}
+  <h2><a href="https://support.creativecommons.org/donate">
+      {% trans "Donate Today" %}
   </a></h2>
 {% endif %}
 </div>
