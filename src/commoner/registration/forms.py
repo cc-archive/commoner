@@ -34,7 +34,10 @@ class BaseRegistrationForm(forms.Form):
                                 max_length=30,
                                 widget=forms.TextInput(attrs=attrs_dict),
                                 label=_(u'Username'),
-                                help_text=_('This will be used to create your OpenID URL'))
+                                help_text=_('This will be used to create your OpenID URL'),
+                                error_messages={
+                                    'invalid': _('Enter a valid username, using only letters and numbers.')
+                                    })
     email = forms.EmailField(widget=forms.TextInput(attrs=dict(attrs_dict,
                                                                maxlength=75)),
                              label=_(u'Email address'),
