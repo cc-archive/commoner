@@ -11,6 +11,19 @@ register = template.Library()
 
 @register.filter
 @stringfilter
+def is_cc(license_url):
+    """Returns True if url is a CC one."""
+    base_urls = [
+        'http://creativecommons.org/licenses',
+        'http://creativecommons.org/publicdomain'
+        ]
+    for url in base_urls:
+        if license_url.startswith(url):
+            return True
+    return False
+
+@register.filter
+@stringfilter
 def license_button(license_url):
     """Return the license button URL for a given license."""
     # strip trailing slash

@@ -40,9 +40,14 @@
   </a> &mdash;
   
   <a about="{{work.url}}" rel="license" href="{{work.license}}" >
+    {% if work.license|is_cc %}
     <img src="{{work.license|license_button}}" 
 	 alt="{{work.license|license_code}}" 
-	 style="border:0;" /></a> 
+	 style="border:0;" />
+    {% else %}
+    license
+    {% endif %}
+</a> 
   
 </li>
 
