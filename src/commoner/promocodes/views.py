@@ -1,17 +1,68 @@
+try:
+    import json
+except:
+    import simplejson as json
+    
+import hashlib
 from datetime import datetime
 
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseServerError
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse
 from django.views.generic.simple import direct_to_template
+from django.conf import settings
 
 from commoner.profiles.models import CommonerProfile
 from commoner.promocodes.forms import PremiumUpgradeForm 
 
 import models
+
+def invite(request):
+    """ Accepts a POST request and transmits an invitation letter and
+    code to the recipient who made the contribution """
+
+    if request.method != 'POST': # respond w/ 500 (415 may be more prudent)
+        return HttpResponseServerError('Method unavailable')
+
+    # POST should carry a JSON string and an HMAC 
+    try:
+        # throws KeyError's
+        data = request.POST['data']
+        hmac = request.POST['hash']
+
+        auth_hash = hashlib.sha1()
+        # might want to create another secret for this purpose
+        auth_hash.update(settings.SECRET_KEY) 
+        auth_hash.update(str(data))
+        
+        assert auth_hash.hexdigest() == str(hmac) # POST var's are unicode
+        
+    except:
+        return HttpResponseServerError('Cannot verify authenticity of data')
+
+    try:
+        contrib = json.loads(data)
+
+        if not models.PromoCode.objects.contribution_is_unique(contrib['id']):
+            return HttpResponseServerError(
+                'Invitation already created for contribution %s' % contrib['id'])
+        
+        code = models.PromoCode.objects.create_promo_code(
+            email=unicode(contrib['email']),
+            trxn_id=unicode(contrib['trxn_id']),
+            contrib_id=int(contrib['id']),
+            send_email=bool(contrib['send']),
+            )
+
+        return HttpResponse(json.dumps(
+            dict(url=reverse('redeem_code', args=[code]))
+            ))
+        
+    except Exception, e:
+        return HttpResponseServerError('Invalid data: %s' % e)
 
 @login_required
 def account_upgrade(request):

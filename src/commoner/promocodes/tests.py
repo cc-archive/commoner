@@ -1,8 +1,16 @@
 # tests for commoner.promocodes
 from datetime import date, datetime
 
+try:
+    import json
+except ImportError:
+    import simplejson as json
+from hashlib import sha1
+import itertools
+
 from django.test import TestCase
 from django.core import mail
+from django.conf import settings
 from django.core.urlresolvers import reverse
 
 from commoner.profiles.models import CommonerProfile
@@ -302,10 +310,123 @@ class TestPromoCodeRenewals(TestCase):
         self.assertEquals(response.context[0]['profile'].expires.date(),
                      date.today().replace(date.today().year + 1))
         
+class TestInvites(TestCase):
+
+    def _gen_hmac(self, key, data):
+
+        sha_hash = sha1()
+        sha_hash.update(key)
+        sha_hash.update(data)
+
+        return sha_hash.hexdigest()
+
+    def setUp(self):
+
+        self.data = json.dumps({
+            'email' : 'test@example.com',
+            'trxn_id': 100,
+            'id': 1000,
+            'send': True
+            })
+
+        self.hmac = self._gen_hmac(settings.SECRET_KEY, self.data)
+        
+    def test_200_invite_response(self):
+        """ Verify that successful invitations respond with 200 status code """
+        
+        r = self.client.post('/a/invite/',
+                             {'data': self.data, 'hash': self.hmac})
+
+        code = PromoCode.objects.latest('pk')
+                
+        self.assertEquals(r.status_code, 200)
+        self.assertEquals(r.content, '{"url": "/a/redeem/%s/"}' % code)
+        self.assertEquals(len(mail.outbox), 1)
+        
+
+    def test_500_duplicate(self):
+        """ Only one invite can be generate for a contribution """
+        r = self.client.post('/a/invite/',
+                             {'data': self.data, 'hash': self.hmac})
+
+        code = PromoCode.objects.latest('pk')
+        
+        self.assertEquals(r.status_code, 200)
+        self.assertEquals(r.content, '{"url": "/a/redeem/%s/"}' % code)
+        self.assertEquals(len(mail.outbox), 1)
+
+        # should fail on duplicate contribution
+        r = self.client.post('/a/invite/',
+                             {'data': self.data, 'hash': self.hmac})
+        self.assertEquals(r.status_code, 500)
+        self.assertEquals(r.content, 'Invitation already created for contribution 1000')
+        self.assertEquals(len(mail.outbox), 1) # one 1 message sent for this test case
+
+    def test_500_invalid_hmac(self):
+        """ Invalid hash keys return 500 response """
+        r = self.client.post('/a/invite/',
+                             {'data': self.data, 'hash': '1234567890abcdef'})
+        self.assertEquals(r.status_code, 500)
+        self.assertEquals(r.content, 'Cannot verify authenticity of data')
+        self.assertEquals(len(mail.outbox), 0) # one 1 message sent for this test case
+
+    def test_500_only_POST_support(self):
+        """ Non-POST requests result in 500 responses """
+
+        r = self.client.get('/a/invite/')
+        self.assertEquals(r.status_code, 500)
+        self.assertEquals(r.content, 'Method unavailable')
+
+    def test_all_parameters_required(self):
+        """ Fails if 'hash' or 'data' are not in the POST-data """
+
+        r = self.client.post('/a/invite/',
+                             {'data': self.data })
+        self.assertEquals(r.status_code, 500)
+        self.assertEquals(r.content, 'Cannot verify authenticity of data')
+
+
+        r = self.client.post('/a/invite/',
+                             {'hash': self.hmac })
+        self.assertEquals(r.status_code, 500)
+        self.assertEquals(r.content, 'Cannot verify authenticity of data')
         
         
-        
+    def test_data_required_keys(self):
+        """ Fails unless all `data` keys are set """
+
+        # generate all possible combinations of lengths 1,2,3 of
+        # the 4 required params
+        contrib = json.loads(self.data)
+        for i in range(1,len(contrib.keys())):
+            for combo in itertools.combinations(contrib.keys(), i):
+                data = json.dumps(dict([(k, contrib[k]) for k in combo]))
+                r = self.client.post('/a/invite/',
+                                     {'hash': self._gen_hmac(settings.SECRET_KEY,data),
+                                      'data': data })
             
-            
+                self.assertEquals(r.status_code, 500)
+                self.assert_(r.content.startswith('Invalid data'))
+
+    def test_contrib_id_is_number(self):
+        """ Fail unless the id is None or an Integer """
+
+        data = json.loads(self.data)
+        data['id'] = 'testing'
+        data = json.dumps(data)
+        hmac = self._gen_hmac(settings.SECRET_KEY,data)
+
+        r = self.client.post('/a/invite/', {'data': data, 'hash': hmac})
+        self.assertEquals(r.status_code, 500)
+        self.assert_(r.content.startswith('Invalid data'))
+
+        # string integers are acceptable
+        data = json.loads(self.data)
+        data['id'] = '110'
+        data = json.dumps(data)
+        hmac = self._gen_hmac(settings.SECRET_KEY,data)
+
+        r = self.client.post('/a/invite/', {'data': data, 'hash': hmac})
+        self.assertEquals(r.status_code, 200)
         
         

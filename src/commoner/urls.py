@@ -85,6 +85,10 @@ urlpatterns = patterns(
     # informational page on how a user may use the code
     url(r'^a/redeem/(?P<code>[\w\d]{8})/$', 'commoner.promocodes.views.redeem_code',
         name='redeem_code'),
+
+    # POST endpoint for creating codes and sending invitations letters
+    url(r'^a/invite/$', 'commoner.promocodes.views.invite',
+        name='create_code'),
     
     # Message ack view
     url(r'^a/ack/(?P<message_id>\d+)', 
