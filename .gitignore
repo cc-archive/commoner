@@ -11,3 +11,4 @@ commoner.pid
 commoner_testing
 src/commoner.egg-info
 docs/_build
+src/commoner/secret-key.txt
