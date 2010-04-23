@@ -23,7 +23,7 @@ DATABASE_HOST = ''             # Set to empty string for localhost. Not used wit
 DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
 
 if DEBUG:
-    DATABASE_NAME=os.path.join(os.path.dirname(__file__), '..', '..', 'commoner_testing')
+    DATABASE_NAME='commoner_testing'
 
 TIME_ZONE = 'America/Chicago'
 
@@ -45,6 +45,8 @@ ADMIN_MEDIA_PREFIX = '/admin_media/'
 
 # Don't share this with anybody.
 SECRET_KEY = 'your-secret-key-here'
+# Read the secret key file used for hashing the invitation requests
+INVITE_KEY = open(os.path.join(os.path.dirname(__file__),'secret-key.txt')).read()
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',

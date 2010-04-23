@@ -329,7 +329,7 @@ class TestInvites(TestCase):
             'send': True
             })
 
-        self.hmac = self._gen_hmac(settings.SECRET_KEY, self.data)
+        self.hmac = self._gen_hmac(settings.INVITE_KEY, self.data)
         
     def test_200_invite_response(self):
         """ Verify that successful invitations respond with 200 status code """
@@ -402,7 +402,7 @@ class TestInvites(TestCase):
             for combo in itertools.combinations(contrib.keys(), i):
                 data = json.dumps(dict([(k, contrib[k]) for k in combo]))
                 r = self.client.post('/a/invite/',
-                                     {'hash': self._gen_hmac(settings.SECRET_KEY,data),
+                                     {'hash': self._gen_hmac(settings.INVITE_KEY,data),
                                       'data': data })
             
                 self.assertEquals(r.status_code, 500)
@@ -414,7 +414,7 @@ class TestInvites(TestCase):
         data = json.loads(self.data)
         data['id'] = 'testing'
         data = json.dumps(data)
-        hmac = self._gen_hmac(settings.SECRET_KEY,data)
+        hmac = self._gen_hmac(settings.INVITE_KEY,data)
 
         r = self.client.post('/a/invite/', {'data': data, 'hash': hmac})
         self.assertEquals(r.status_code, 500)
@@ -424,7 +424,7 @@ class TestInvites(TestCase):
         data = json.loads(self.data)
         data['id'] = '110'
         data = json.dumps(data)
-        hmac = self._gen_hmac(settings.SECRET_KEY,data)
+        hmac = self._gen_hmac(settings.INVITE_KEY,data)
 
         r = self.client.post('/a/invite/', {'data': data, 'hash': hmac})
         self.assertEquals(r.status_code, 200)

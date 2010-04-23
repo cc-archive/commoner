@@ -35,7 +35,7 @@ def invite(request):
 
         auth_hash = hashlib.sha1()
         # might want to create another secret for this purpose
-        auth_hash.update(settings.SECRET_KEY) 
+        auth_hash.update(settings.INVITE_KEY) 
         auth_hash.update(str(data))
         
         assert auth_hash.hexdigest() == str(hmac) # POST var's are unicode
@@ -79,7 +79,7 @@ def account_upgrade(request):
 
             promo_code = form.save()
             
-            promo = models.PromoCode.objects.mark_as_used(code=promo_code.code,
+            promo = models.PromoCode.objects.mark_as_used(code=xpromo_code.code,
                                                    user=request.user)
 
             upgrading = profile.free
