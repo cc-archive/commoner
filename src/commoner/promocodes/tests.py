@@ -325,6 +325,8 @@ class TestInvites(TestCase):
         self.data = json.dumps({
             'email' : 'test@example.com',
             'trxn_id': 100,
+            'amount': settings.INVITE_AMOUNT,
+            'contribution_recur_id': 0,
             'id': 1000,
             'send': True
             })
@@ -359,7 +361,7 @@ class TestInvites(TestCase):
         r = self.client.post('/a/invite/',
                              {'data': self.data, 'hash': self.hmac})
         self.assertEquals(r.status_code, 500)
-        self.assertEquals(r.content, 'Invitation already created for contribution 1000')
+        self.assertEquals(r.content, 'Invitation already created')
         self.assertEquals(len(mail.outbox), 1) # one 1 message sent for this test case
 
     def test_500_invalid_hmac(self):
@@ -430,3 +432,39 @@ class TestInvites(TestCase):
         self.assertEquals(r.status_code, 200)
         
         
+    def test_insufficient_amount(self):
+        """ Fail for contributions below invitation amount. """
+
+        data = json.loads(self.data)
+        data['amount'] = settings.INVITE_AMOUNT - 10 # subtract 10 bucks
+        data = json.dumps(data)
+        hmac = self._gen_hmac(settings.INVITE_KEY,data)
+
+        r = self.client.post('/a/invite/', {'data': data, 'hash': hmac})
+        self.assertEquals(r.status_code, 500)
+        self.assert_(r.content.startswith('Insufficient amount'))
+
+    def test_recurring_contributions_amount(self):
+        """ Verify that recurring contributions generate invitations. """
+        
+        data = json.loads(self.data)
+        data['contribution_recur_id'] = 42
+        data['amount'] = settings.INVITE_AMOUNT / 12 
+        data = json.dumps(data)
+        hmac = self._gen_hmac(settings.INVITE_KEY,data)
+        
+        r = self.client.post('/a/invite/', {'data': data, 'hash': hmac})
+        self.assertEquals(r.status_code, 200)
+
+        data = json.loads(self.data)
+        data['id'] = 1001 # looks new 
+        data['contribution_recur_id'] = 42 # part as same contrib as above
+        data['amount'] = settings.INVITE_AMOUNT / 12 
+        data = json.dumps(data)
+        hmac = self._gen_hmac(settings.INVITE_KEY,data)
+
+        r = self.client.post('/a/invite/', {'data': data, 'hash': hmac})
+        self.assertEquals(r.status_code, 500)
+        self.assertEquals(r.content, 'Invitation already created')
+
+

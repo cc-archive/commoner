@@ -47,6 +47,8 @@ ADMIN_MEDIA_PREFIX = '/admin_media/'
 SECRET_KEY = 'your-secret-key-here'
 # Read the secret key file used for hashing the invitation requests
 INVITE_KEY = open(os.path.join(os.path.dirname(__file__),'secret-key.txt')).read()
+# Contribution giving level for invites
+INVITE_AMOUNT = 75.00
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',

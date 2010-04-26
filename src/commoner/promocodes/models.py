@@ -54,12 +54,22 @@ class PromoCodeManager(models.Manager):
 
         # safe to create a code for
         return True
+
+    def contribution_is_sufficient(self, amount, recurring=False):
+        """ Returns True for contributions large enough for invites """
+        return amount >= settings.INVITE_AMOUNT or \
+               recurring and ( (amount * 12) >= settings.INVITE_AMOUNT )
     
     def create_promo_code(self, email=None, trxn_id=None, contrib_id=None,
                           recurring_id=None, send_email=True):
 
         """ Manager method that will handle promo code creation triggered
-        by the script running on the CiviCRM databse. """
+        by the script running on the CiviCRM databse.
+
+        Note: recurring_id is deprecated with current use of this method, this
+        field was usefull in preventing dup.s when we were polling Civi
+        to generate codes 
+        """
 
         # need to generate a random code and verify that it is unique
         # rarely will this loop get executed
