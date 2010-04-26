@@ -46,7 +46,8 @@ ADMIN_MEDIA_PREFIX = '/admin_media/'
 # Don't share this with anybody.
 SECRET_KEY = 'your-secret-key-here'
 # Read the secret key file used for hashing the invitation requests
-INVITE_KEY = open(os.path.join(os.path.dirname(__file__),'secret-key.txt')).read()
+INVITE_KEY = open(os.path.join(os.path.dirname(__file__),
+                               'secret-key.txt')).read().trim()
 # Contribution giving level for invites
 INVITE_AMOUNT = 75.00
 
