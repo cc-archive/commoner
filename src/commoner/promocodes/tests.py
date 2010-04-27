@@ -325,7 +325,7 @@ class TestInvites(TestCase):
         self.data = json.dumps({
             'email' : 'test@example.com',
             'trxn_id': 100,
-            'amount': settings.INVITE_AMOUNT,
+            'total_amount': settings.INVITE_AMOUNT,
             'contribution_recur_id': 0,
             'id': 1000,
             'send': True
@@ -393,22 +393,6 @@ class TestInvites(TestCase):
         self.assertEquals(r.status_code, 500)
         self.assertEquals(r.content, 'Cannot verify authenticity of data')
         
-        
-    def test_data_required_keys(self):
-        """ Fails unless all `data` keys are set """
-
-        # generate all possible combinations of lengths 1,2,3 of
-        # the 4 required params
-        contrib = json.loads(self.data)
-        for i in range(1,len(contrib.keys())):
-            for combo in itertools.combinations(contrib.keys(), i):
-                data = json.dumps(dict([(k, contrib[k]) for k in combo]))
-                r = self.client.post('/a/invite/',
-                                     {'hash': self._gen_hmac(settings.INVITE_KEY,data),
-                                      'data': data })
-            
-                self.assertEquals(r.status_code, 500)
-                self.assert_(r.content.startswith('Invalid data'))
 
     def test_contrib_id_is_number(self):
         """ Fail unless the id is None or an Integer """
@@ -436,7 +420,7 @@ class TestInvites(TestCase):
         """ Fail for contributions below invitation amount. """
 
         data = json.loads(self.data)
-        data['amount'] = settings.INVITE_AMOUNT - 10 # subtract 10 bucks
+        data['total_amount'] = settings.INVITE_AMOUNT - 10 # subtract 10 bucks
         data = json.dumps(data)
         hmac = self._gen_hmac(settings.INVITE_KEY,data)
 
@@ -449,7 +433,7 @@ class TestInvites(TestCase):
         
         data = json.loads(self.data)
         data['contribution_recur_id'] = 42
-        data['amount'] = settings.INVITE_AMOUNT / 12 
+        data['total_amount'] = settings.INVITE_AMOUNT / 12 
         data = json.dumps(data)
         hmac = self._gen_hmac(settings.INVITE_KEY,data)
         
@@ -459,7 +443,7 @@ class TestInvites(TestCase):
         data = json.loads(self.data)
         data['id'] = 1001 # looks new 
         data['contribution_recur_id'] = 42 # part as same contrib as above
-        data['amount'] = settings.INVITE_AMOUNT / 12 
+        data['total_amount'] = settings.INVITE_AMOUNT / 12 
         data = json.dumps(data)
         hmac = self._gen_hmac(settings.INVITE_KEY,data)
 

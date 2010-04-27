@@ -45,22 +45,24 @@ def invite(request):
 
     try:
         contrib = json.loads(data)
-                
+
+        recurring_id = contrib.get('contribution_recur_id', None)
+        
         if not models.PromoCode.objects.contribution_is_unique(
-            contrib['id'], contrib['contribution_recur_id']):
+            contrib['id'], recurring_id):
             return HttpResponseServerError(
                 'Invitation already created')
 
         if not models.PromoCode.objects.contribution_is_sufficient(
-            contrib['amount'], bool(contrib['contribution_recur_id'])):
+            contrib['total_amount'], (recurring_id > 0) ):
             return HttpResponseServerError('Insufficient amount')
         
         code = models.PromoCode.objects.create_promo_code(
             email=unicode(contrib['email']),
             trxn_id=unicode(contrib['trxn_id']),
             contrib_id=int(contrib['id']),
-            recurring_id=int(contrib['contribution_recur_id']),
             send_email=bool(contrib['send']),
+            recurring_id=recurring_id,
             )
 
         return HttpResponse(json.dumps(
