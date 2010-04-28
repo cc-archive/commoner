@@ -47,6 +47,7 @@ def invite(request):
         contrib = json.loads(data)
 
         recurring_id = contrib.get('contribution_recur_id', None)
+        send_email = bool(int(request.POST.get('send', 1)))
         
         if not models.PromoCode.objects.contribution_is_unique(
             contrib['id'], recurring_id):
@@ -61,7 +62,7 @@ def invite(request):
             email=unicode(contrib['email']),
             trxn_id=unicode(contrib['trxn_id']),
             contrib_id=int(contrib['id']),
-            send_email=bool(contrib['send']),
+            send_email=send_email,
             recurring_id=recurring_id,
             )
 

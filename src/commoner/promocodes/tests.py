@@ -328,7 +328,6 @@ class TestInvites(TestCase):
             'total_amount': settings.INVITE_AMOUNT,
             'contribution_recur_id': 0,
             'id': 1000,
-            'send': True
             })
 
         self.hmac = self._gen_hmac(settings.INVITE_KEY, self.data)
@@ -452,3 +451,17 @@ class TestInvites(TestCase):
         self.assertEquals(r.content, 'Invitation already created')
 
 
+    def test_dont_send_email(self):
+        """ If `send` sent in POST as False, don't send invite email """
+
+        r = self.client.post('/a/invite/',
+                             {'data': self.data,
+                              'hash': self.hmac,
+                              'send': 0 })
+
+        code = PromoCode.objects.latest('pk')
+                
+        self.assertEquals(r.status_code, 200)
+        self.assertEquals(r.content, '{"url": "/a/redeem/%s/"}' % code)
+        self.assertEquals(len(mail.outbox), 0)
+    
