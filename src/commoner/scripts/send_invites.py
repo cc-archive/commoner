@@ -64,16 +64,6 @@ def main():
         transaction_id = contrib['trxn_id']
         source = contrib['source']
         
-        # If the field contribution_page_id is 16 (student) then they are
-        # automatically a member, else we check if this is a recurring contribution
-        # and if it is we calculate the total contribution, else we just look at
-        # the field total_amount of the contribution.  If these latter 2 are
-        # greater than 50 then they qualify to be a member
-        if source.endswith('(Student)') or contrib['contribution_page_id'] == 16:
-            # stemmed from "Join the Commons - Student"
-            # https://support.creativecommons.org/civicrm/contribute/transact?reset=1&id=16
-            is_student = True
-
         if contrib['contribution_recur_id']:
             is_recurring = True
             transaction_id = str(contrib['contribution_recur_id'])
@@ -87,20 +77,8 @@ def main():
             ttl_contrib = contrib['total_amount']
 
         # If the total is more than 50, then they qualify to be a member
-        is_member = False
+        is_member = ttl_contrib >= 75 or is_recurring
         
-        if is_student:
-            if ttl_contrib >= 25:
-                is_member = True
-        elif is_recurring:
-            if ttl_contrib >= 8.33:
-                is_member = True
-        elif contrib['contribution_type_id'] == 6:
-            if ttl_contrib >= 100:
-                is_member = True
-        elif ttl_contrib >= 25:
-            is_member = True
-
         if is_member:
             contact = tbl_contact.select(contact_id == contrib['contact_id']).execute().fetchone()
             email = tbl_email.select(email_id == contrib['contact_id']).execute().fetchone()
