@@ -88,7 +88,7 @@ def account_upgrade(request):
 
             promo_code = form.save()
             
-            promo = models.PromoCode.objects.mark_as_used(code=xpromo_code.code,
+            promo = models.PromoCode.objects.mark_as_used(code=promo_code.code,
                                                    user=request.user)
 
             upgrading = profile.free
