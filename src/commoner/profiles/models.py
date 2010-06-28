@@ -59,7 +59,8 @@ class CommonerProfile(models.Model):
     photo = models.ImageField(_("Photo"), storage=get_storage(), 
                               upload_to='p', blank=True, null=True)
 
-    homepage = models.URLField(_("Homepage"), max_length=255, blank=True)
+    homepage = models.URLField(_("Homepage"), verify_exists=False,
+                               max_length=255, blank=True)
     location = models.CharField(_("Location"), max_length=255, blank=True)
 
     story = models.TextField(blank=True)
